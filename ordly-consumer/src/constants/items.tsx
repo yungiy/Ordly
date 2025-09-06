@@ -14,7 +14,6 @@ export interface OrderItem {
 }
 
 export const ITEMS: OrderItem[] = [
-  // COFFEE
   {
     id: 1,
     category: 'COFFEE',
