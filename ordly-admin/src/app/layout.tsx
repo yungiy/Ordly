@@ -15,7 +15,11 @@ export default function RootLayout({
   return (
     <html lang='ko'>
       <body>
-        <MainLayout>{children}</MainLayout>
+        <MainLayout>
+          {children}
+          <div id='modal-id' />
+          <div id='toast-id' />
+        </MainLayout>
       </body>
     </html>
   );
