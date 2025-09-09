@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import SideBar from './side-bar';
 import Header from './header';
+import { twMerge } from 'tailwind-merge';
 
 type Props = { children: React.ReactNode };
 
@@ -13,9 +14,10 @@ export default function MainLayout({ children }: Props) {
   return (
     <div className='flex h-screen'>
       <div
-        className={`fixed inset-y-0 left-0 z-30 w-52 bg-gray-800 transform ${
+        className={twMerge(
+          'fixed inset-y-0 left-0 z-30 w-60 bg-gray-800 transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0',
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } transition-transform duration-300 ease-in-out md:relative md:translate-x-0`}
+        )}
       >
         <SideBar toggleSidebar={toggleSidebar} />
       </div>
