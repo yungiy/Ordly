@@ -11,13 +11,13 @@ export default function SideBar({ toggleSidebar }: Props) {
     <div className='bg-gray-900 text-white w-60 min-h-screen p-4'>
       <div className='flex justify-between items-center mb-4'>
         <div className='text-2xl text-amber-400 font-extrabold font-serif'>
-          ordly admin
+          ShopName
         </div>
         <button onClick={toggleSidebar} className='md:hidden'>
           <X/>
         </button>
       </div>
-      <nav className='text-xl font-extrabold px-2 rounded'>
+      <nav className='text-xl font-extrabold'>
         <ul className='flex flex-col gap-5'>
           {SIDEBAR_PATH.map((item: any) => (
             <li key={item.path}>

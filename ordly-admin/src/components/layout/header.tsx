@@ -6,13 +6,13 @@ type Props = {
 
 export default function Header({ toggleSidebar }: Props) {
   return (
-    <header className='bg-white p-4 flex gap-4 items-center'>
-      <div className='md:hidden'>
-        <button onClick={toggleSidebar}>
-          <Menu />
-        </button>
+    <header className='bg-slate-50 p-4 flex items-center'>
+      <button onClick={toggleSidebar} className="text-gray-600 md:hidden">
+        <Menu size={28} />
+      </button>
+      <div className='text-2xl text-gray-800 font-bold md:ml-0 ml-4'>
+        ShopName
       </div>
-      <div className='text-2xl text-gray-600 font-bold'>Dashboard</div>
     </header>
   );
 }
