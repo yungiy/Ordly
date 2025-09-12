@@ -1,6 +1,6 @@
 import CardItem from '@/components/common/card-item';
 import Button from '@/components/common/button';
-import { PlusCircle, Tag } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 
 // 쿠폰 데이터 및 타입 정의...
 type CouponStatus = '활성' | '기간 만료';
@@ -39,31 +39,31 @@ const sampleCoupons: Coupon[] = [
 export default function PromotionPage() {
   return (
     <div className='flex flex-col flex-1 gap-4 p-4 sm:p-2 lg:p-4'>
-      {/* 1. 쿠폰 사용 통계 섹션 */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-        <CardItem title='가장 많이 사용된 쿠폰'>
-          <div className='flex items-center gap-4'>
-            <Tag className='w-8 h-8 text-blue-500' />
-            <div>
-              <p className='font-semibold text-lg'>오픈 기념 1,000원 할인</p>
-              <p className='text-gray-600'>총 250회 사용</p>
-            </div>
-          </div>
-        </CardItem>
+      {/* 1. 쿠폰 KPI 섹션 */}
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
         <CardItem title='쿠폰으로 할인된 총액'>
-          <p className='text-3xl font-bold text-green-600'>₩ 432,500</p>
+          <p className='text-2xl font-bold text-green-600'>₩ 432,500</p>
+        </CardItem>
+        <CardItem title='쿠폰 기여 매출'>
+          <p className='text-2xl font-bold text-blue-600'>₩ 3,120,000</p>
+        </CardItem>
+        <CardItem title='총 사용 횟수'>
+          <p className='text-2xl font-bold'>591 회</p>
+        </CardItem>
+        <CardItem title='평균 회수율'>
+          <p className='text-2xl font-bold'>35%</p>
         </CardItem>
       </div>
 
-
-      <div className='flex flex-col h-full'>
-        <CardItem className='h-full'>
-          <div className='flex justify-between items-center mb-4'>
-            <h2 className='text-xl font-bold text-gray-800'>전체 쿠폰 목록</h2>
-            <Button className='w-auto h-auto bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 flex items-center gap-2'>
-              <PlusCircle size={20} />새 쿠폰 추가
-            </Button>
-          </div>
+      {/* 2. 쿠폰 목록 테이블 */}
+      <CardItem className='flex-grow flex flex-col'>
+        <div className='flex justify-between items-center mb-4'>
+          <h2 className='text-xl font-bold text-gray-800'>전체 쿠폰 목록</h2>
+          <Button className='w-auto h-auto bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 flex items-center gap-2'>
+            <PlusCircle size={20} />새 쿠폰 추가
+          </Button>
+        </div>
+        <div className='flex-grow overflow-y-auto'>
           <table className='w-full text-left'>
             <thead>
               <tr className='border-b'>
@@ -100,8 +100,8 @@ export default function PromotionPage() {
               ))}
             </tbody>
           </table>
-        </CardItem>
-      </div>
+        </div>
+      </CardItem>
     </div>
   );
 }

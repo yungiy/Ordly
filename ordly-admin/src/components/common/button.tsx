@@ -7,7 +7,7 @@ export default function Button(props: Props) {
   return (
     <button
       className={twMerge(
-        'h-14 w-full rounded-sm bg-white  text-black disabled:bg-light-gray',
+        'w-full rounded-sm bg-white text-black',
         className,
       )}
       {...rest}
