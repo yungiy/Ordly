@@ -10,7 +10,7 @@ export default function OrderItem({ order }: Props) {
     <div className='flex justify-between items-center'>
       <div>
         <p className='font-bold text-lg text-gray-800'>
-           {order.items[0].name}
+           {order.items[0]?.name ?? '항목 없음'}
         </p>
         <p className='text-sm text-gray-500'>주문번호: {order.orderNumber}</p>
       </div>
