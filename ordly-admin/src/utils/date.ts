@@ -13,8 +13,7 @@
 
 export const getMonthDetails = (year: number, month: number) => {
   const firstDay = new Date(year, month, 1).getDay();
-  const dayInMonth = new Date(year, month + 1, 0).getDate();
-  return { firstDay, dayInMonth };
+  return { firstDay };
 };
 
 export const calendarGrid = (year: number, month: number): Date[][] => {

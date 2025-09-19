@@ -1,5 +1,3 @@
-// /components/common/calendar/CalendarHeader.tsx
-
 type Props = {
   year: number;
   month: number; 
