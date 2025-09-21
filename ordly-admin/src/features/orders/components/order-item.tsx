@@ -16,10 +16,10 @@ export default function OrderItem({ order }: Props) {
       </div>
 
       <div className='flex gap-2'>
-        <Button className='px-2 border rounded-full text-gray-800 hover:bg-gray-300'>
+        <Button className='px-2 text-sm border rounded-xl text-gray-800'>
           상세
         </Button>
-        <Button className='px-2 border rounded-full text-gray-800 hover:bg-gray-300'>
+        <Button className='px-2 border text-sm rounded-xl text-gray-800'>
           완료
         </Button>
       </div>

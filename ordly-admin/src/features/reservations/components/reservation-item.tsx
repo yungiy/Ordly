@@ -1,4 +1,4 @@
-import { CheckCircle, Phone, XCircle } from 'lucide-react';
+import { Phone } from 'lucide-react';
 import { Reservation, ReservationStatus } from '@/types/types';
 
 const statusStyles: { [key in ReservationStatus]: string } = {
@@ -7,26 +7,26 @@ const statusStyles: { [key in ReservationStatus]: string } = {
   cancelled: 'bg-red-100 text-red-800',
 };
 
-interface Props {
+type Props = {
   reservation: Reservation;
-}
+};
 
 export default function ReservationItem({ reservation }: Props) {
   return (
-    <li className='p-1 flex flex-col gap-2'>
+    <li className='flex flex-col gap-1'>
       <div className='flex justify-between'>
         <div>
-          <p className='font-bold text-lg text-gray-900'>
+          <p className='font-bold text-gray-900'>
             {reservation.time} - {reservation.name} 님 ({reservation.partySize}
             명)
           </p>
-          <div className='flex items-center gap-2 mt-1 text-sm text-gray-600'>
-            <Phone size={14} />
+          <div className='flex items-center gap-2 text-sm text-gray-600'>
+            <Phone size={12} />
             <span>{reservation.phone}</span>
           </div>
         </div>
         <span
-          className={`inline-flex items-center text-xs font-semibold px-2 rounded-full ${
+          className={`flex my-2 px-2 items-center rounded-3xl text-xs ${
             statusStyles[reservation.status]
           }`}
         >

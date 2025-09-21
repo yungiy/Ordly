@@ -1,6 +1,6 @@
 import CardItem from '@/components/common/card-item';
 
-interface Props {
+type Props = {
   title: string;
   value: string;
 }

@@ -1,4 +1,3 @@
-import MainLayout from '@/components/layout/main-layout';
 import type { Metadata } from 'next';
 import '../styles/globals.css';
 
@@ -15,11 +14,8 @@ export default function RootLayout({
   return (
     <html lang='ko'>
       <body>
-        <MainLayout>
-          {children}
-          <div id='modal-id' />
-          <div id='toast-id' />
-        </MainLayout>
+        {children}
+        <div id='modal-id' />
       </body>
     </html>
   );

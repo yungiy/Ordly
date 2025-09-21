@@ -3,23 +3,23 @@ import { PlusCircle } from 'lucide-react';
 import { Coupons } from '@/types/types';
 import CardItem from '@/components/common/card-item';
 
-interface Props {
+type Props = {
   coupons: Coupons[];
 }
 
 export default function CouponTable({ coupons }: Props) {
   return (
     <CardItem className='flex-grow flex flex-col'>
-      <div className='flex justify-between items-center mb-4'>
+      <div className='flex items-center justify-between mb-4'>
         <h2 className='text-xl font-bold text-gray-800'>전체 쿠폰 목록</h2>
-        <Button className='w-auto h-auto bg-yellow-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 flex items-center gap-2'>
+        <Button className='h-auto w-auto bg-amber-400 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2'>
           <PlusCircle size={20} />새 쿠폰 추가
         </Button>
       </div>
       <div className='flex-grow overflow-y-auto'>
         <table className='w-full text-left'>
           <thead>
-            <tr className='border-b'>
+            <tr className='border-b border-b-gray-300'>
               <th className='p-2'>쿠폰 이름</th>
               <th className='p-2'>타입</th>
               <th className='p-2'>상태</th>
@@ -29,7 +29,7 @@ export default function CouponTable({ coupons }: Props) {
           </thead>
           <tbody>
             {coupons.map((coupon) => (
-              <tr key={coupon.id} className='border-b last:border-b-0'>
+              <tr key={coupon.id} className='border-b border-b-gray-300 last:border-b-0'>
                 <td className='p-2 font-medium'>{coupon.name}</td>
                 <td className='p-2'>{coupon.type}</td>
                 <td className='p-2'>
@@ -45,7 +45,7 @@ export default function CouponTable({ coupons }: Props) {
                 </td>
                 <td className='p-2'>{coupon.usedCount}회</td>
                 <td className='p-2'>
-                  <button className='text-blue-600 hover:underline'>수정</button>
+                  <Button className='flex font-semibold text-blue-600'>수정</Button>
                 </td>
               </tr>
             ))}
