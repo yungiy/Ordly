@@ -14,7 +14,7 @@ export default function CardItem({ title, children, className, ...rest }: Props)
 
   return (
     <div className={classes} {...rest}>
-      {title && <h3 className='font-semibold mb-2 text-gray-800'>{title}</h3>}
+      {title && <h3 className='font-bold text-xl pb-2 text-gray-800'>{title}</h3>}
       <div className='text-gray-600'>{children}</div>
     </div>
   );

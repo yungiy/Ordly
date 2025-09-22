@@ -5,7 +5,7 @@ export type Order = {
   totalPrice: string;
   status: 'pending' | 'cooking' | 'done' | 'cencel';
   items: OrderItemDetail[];
-  createdAt: string; 
+  createdAt: string;
 };
 
 export type CouponStatus = '활성' | '기간 만료';
@@ -17,14 +17,14 @@ export type Coupons = {
   type: CouponType;
   status: CouponStatus;
   usedCount: number;
-}
+};
 
 export type OrderItemDetail = {
   id: number;
   name: string;
   quantity: number;
   price: string;
-}
+};
 
 export type ReservationStatus = 'confirmed' | 'completed' | 'cancelled';
 
@@ -36,4 +36,14 @@ export type Reservation = {
   phone: string;
   request?: string;
   status: ReservationStatus;
-}
+};
+
+export type Menus = {
+  id: number;
+  category: string;
+  name: string;
+  description?: string;
+  price: number;
+  image?: string;
+  isAvailable: boolean; // 판매 상태
+};

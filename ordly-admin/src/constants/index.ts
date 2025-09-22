@@ -1,5 +1,5 @@
 export const SIDEBAR_PATH = [
-  { path: '/dashboard', label: '대시보드' },
+  { path: '/', label: '대시보드' },
   { path: '/orders', label: '주문관리' },
   { path: '/coupons', label: '쿠폰관리' },
   { path: '/menus', label: '메뉴관리' },

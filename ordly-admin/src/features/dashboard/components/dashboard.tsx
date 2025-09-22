@@ -40,7 +40,7 @@ const sampleCompletedOrders: Order[] = [
   },
 ];
 
-export default async function Dashboard() {
+export default function Dashboard() {
   return (
     <div className='grid grid-cols-1 md:grid-cols-3 md:grid-rows-[auto_1fr] h-full gap-4 p-4 sm:p-2 lg:p-4'>
       <div className='md:col-span-1 flex-grow'>
