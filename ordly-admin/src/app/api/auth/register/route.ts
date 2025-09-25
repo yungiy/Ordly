@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     }
 
     // 3. 비밀번호 해싱
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 12);
 
     // 4. 새로운 Admin 생성
     await prisma.admin.create({
