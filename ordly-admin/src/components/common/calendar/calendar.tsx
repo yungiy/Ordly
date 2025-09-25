@@ -10,7 +10,7 @@
 
 'use client';
 
-import { useCalendar } from '@/hook/useCalendar';
+import { useCalendar } from '@/hooks/useCalendar.hooks';
 import CalendarHeader from './calendar-header';
 import CalendarGrid from './calendar-grid';
 
