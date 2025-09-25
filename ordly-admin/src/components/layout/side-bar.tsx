@@ -26,7 +26,7 @@ export default function SideBar({ toggleSidebar }: Props) {
         </div>
         <nav className='text-xl font-extrabold'>
           <ul className='flex flex-col gap-5'>
-            {SIDEBAR_PATH.map((item: any) => (
+            {SIDEBAR_PATH.map((item: { path: string; label: string }) => (
               <li key={item.path}>
                 <Link
                   href={item.path}
