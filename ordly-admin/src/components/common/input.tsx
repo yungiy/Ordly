@@ -11,6 +11,7 @@ const Input = forwardRef(
     return (
       <input
         ref={ref}
+        autoComplete='off'
         className={twMerge(
           'h-11 w-full text-black rounded-sm px-4 font-medium focus:outline-none',
           className,

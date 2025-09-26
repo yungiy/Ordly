@@ -4,21 +4,7 @@ import { useAuthStore } from '@/store/auth.store';
 import { useRouter } from 'next/navigation';
 import { LoginRequest, RegisterRequest } from '@/types/types';
 import { useEffect } from 'react';
-
-const registerApi = async (data: RegisterRequest) => {
-  const res = await fetch('/api/auth/register', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.message || '회원가입에 실패했습니다.');
-  }
-  return res.json();
-};
+import { registerApi } from '@/features/auth/api/auth.api';
 
 export const useAuth = () => {
   const router = useRouter();

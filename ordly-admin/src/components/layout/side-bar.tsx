@@ -40,13 +40,12 @@ export default function SideBar({ toggleSidebar }: Props) {
         </nav>
       </div>
 
-      {/* 로그아웃 버튼 */}
       <Button
         onClick={logout}
         className='flex items-center gap-2 text-xl font-extrabold transition-all duration-300'
       >
         <LogOut size={24} />
-        <span>로그아웃</span>
+        로그아웃
       </Button>
     </div>
   );
