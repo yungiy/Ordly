@@ -7,6 +7,12 @@ const statusStyles: { [key in ReservationStatus]: string } = {
   cancelled: 'bg-red-100 text-red-800',
 };
 
+const statusLabels: { [key in ReservationStatus]: string } = {
+  confirmed: '확정',
+  completed: '방문완료',
+  cancelled: '취소',
+};
+
 type Props = {
   reservation: Reservation;
 };
@@ -14,11 +20,10 @@ type Props = {
 export default function ReservationItem({ reservation }: Props) {
   return (
     <li className='flex flex-col gap-1'>
-      <div className='flex justify-between'>
+      <div className='flex justify-between items-center'>
         <div>
           <p className='font-bold text-gray-900'>
-            {reservation.time} - {reservation.name} 님 ({reservation.partySize}
-            명)
+            {reservation.time} - {reservation.name} 님 ({reservation.partySize}명)
           </p>
           <div className='flex items-center gap-2 text-sm text-gray-600'>
             <Phone size={12} />
@@ -26,13 +31,11 @@ export default function ReservationItem({ reservation }: Props) {
           </div>
         </div>
         <span
-          className={`flex my-2 px-2 items-center rounded-3xl text-xs ${
+          className={`flex my-2 px-3 py-1 items-center rounded-full text-xs font-semibold ${
             statusStyles[reservation.status]
           }`}
         >
-          {reservation.status === 'confirmed' && '예정'}
-          {reservation.status === 'completed' && '완료'}
-          {reservation.status === 'cancelled' && '취소'}
+          {statusLabels[reservation.status]}
         </span>
       </div>
     </li>

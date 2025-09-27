@@ -13,6 +13,7 @@ import {
   deleteCoupon,
   CreateCouponDto,
 } from '../api/coupons.api';
+import CouponSkeleton from '@/components/common/coupon-skeleton';
 
 export default function Coupons() {
   const queryClient = useQueryClient();
@@ -89,7 +90,7 @@ export default function Coupons() {
     }
   };
 
-  if (isLoading) return <div className='text-center justify-center flex'>Loading...</div>;
+  if (isLoading) return <CouponSkeleton />
   if (isError) return <div>Error loading coupons: {error.message}</div>;
 
   return (
