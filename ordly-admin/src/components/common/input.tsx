@@ -2,7 +2,7 @@ import { ForwardedRef, forwardRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface Props extends Omit<React.ComponentPropsWithRef<'input'>, 'type'> {
-  type: 'text' | 'password' | 'email' | 'search';
+  type: 'text' | 'password' | 'email' | 'search' | 'number' | 'date';
 }
 
 const Input = forwardRef(

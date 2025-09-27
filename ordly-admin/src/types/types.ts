@@ -1,8 +1,10 @@
 // 회원가입 요청 시 사용되는 타입
 export type RegisterRequest = {
   name: string;
-  phone: string;
   password: string;
+  storeName: string;
+  storeAddress: string;
+  storePhone: string;
 };
 
 // 로그인 요청 시 사용되는 타입
@@ -60,3 +62,30 @@ export type Menus = {
   image?: string;
   isAvailable: boolean; // 판매 상태
 };
+
+import 'next-auth';
+import { DefaultSession } from 'next-auth';
+
+declare module 'next-auth' {
+  interface Session {
+    user?: {
+      id?: string;
+      storeId?: string;
+      storeName?: string;
+    } & DefaultSession['user'];
+  }
+
+  interface User {
+    storeId?: string;
+    storeName?: string;
+  }
+}
+
+declare module 'next-auth/jwt' {
+  /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
+  interface JWT {
+    id?: string;
+    storeId?: string;
+    storeName?: string;
+  }
+}

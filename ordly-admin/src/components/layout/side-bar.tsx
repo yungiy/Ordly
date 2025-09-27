@@ -11,14 +11,15 @@ type Props = {
 };
 
 export default function SideBar({ toggleSidebar }: Props) {
-  const { logout } = useAuth();
+  const { logout, session } = useAuth();
+  const storeName = session?.user?.storeName || 'Ordly';
 
   return (
     <div className='bg-gray-900 text-white w-60 min-h-screen p-4 flex flex-col justify-between'>
       <div>
         <div className='flex justify-between items-center mb-4'>
           <div className='text-2xl text-amber-400 font-extrabold font-serif'>
-            ShopName
+            {storeName}
           </div>
           <button onClick={toggleSidebar} className='md:hidden'>
             <X />
