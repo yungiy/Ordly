@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { description, discountType, discountValue, validFrom, validUntil } = body;
 
-    const code = `COUPON${Date.now()}`;
+    const code = `COUPON${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
     const storeId = session.user.storeId as string;
 
     const newCoupon = await prisma.coupon.create({
