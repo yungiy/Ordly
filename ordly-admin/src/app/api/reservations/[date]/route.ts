@@ -23,17 +23,14 @@ export async function GET(
       return NextResponse.json({ error: 'Date parameter is required' }, { status: 400 });
     }
 
-    const selectedDate = new Date(date);
-    selectedDate.setHours(0, 0, 0, 0);
+    const [year, month, day] = date.split('-').map(Number);
+    const selectedDate = new Date(Date.UTC(year, month - 1, day));
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const now = new Date();
+    const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 
-    const startOfDay = new Date(date);
-    startOfDay.setUTCHours(0, 0, 0, 0);
-
-    const endOfDay = new Date(date);
-    endOfDay.setUTCHours(23, 59, 59, 999);
+    const startOfDay = selectedDate;
+    const endOfDay = new Date(Date.UTC(year, month - 1, day, 23, 59, 59, 999));
 
     let statusFilter: ReservationStatus[];
 
