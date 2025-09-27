@@ -38,7 +38,7 @@ const transformReservation = (
   }
 
   return {
-    id: index, // types.ts의 id가 number이므로 index 사용
+    id: res.id, // Prisma에서 제공하는 고유 id 사용
     time: new Date(res.reservationTime).toLocaleTimeString('ko-KR', {
       hour: '2-digit',
       minute: '2-digit',
