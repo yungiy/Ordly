@@ -1,6 +1,6 @@
 import OrderStatus from '@/features/orders/components/order-status';
 import { Order } from '@/types/types';
-import SalesChart from '../../statistics/components/sales-chart';
+import SalesChart from '../statistics/components/sales-chart';
 import ReservationList from '@/features/reservations/components/reservation-list';
 
 const sampleInProgressOrders: Order[] = [

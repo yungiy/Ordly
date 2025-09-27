@@ -1,36 +1,113 @@
-import type { Coupons } from '@/types/types';
-import CouponStats from './coupons-stats';
-import CouponTable from './coupons-tables';
+'use client';
 
-const sampleCoupons: Coupons[] = [
-  {
-    id: 1,
-    name: '신규 고객 10% 할인',
-    type: '정률',
-    status: '활성',
-    usedCount: 152,
-  },
-  {
-    id: 2,
-    name: '배달비 무료 쿠폰',
-    type: '정액',
-    status: '활성',
-    usedCount: 89,
-  },
-  {
-    id: 3,
-    name: '오픈 기념 1,000원 할인',
-    type: '정액',
-    status: '기간 만료',
-    usedCount: 250,
-  },
-];
+import { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { Coupon } from '@prisma/client';
+import CouponTable from './coupons-tables';
+import AddCouponModal, { CouponFormData } from './add-coupons';
+import { useApiMutation } from '@/hooks/useApiMutation.hooks';
+import {
+  getCoupons,
+  createCoupon,
+  updateCoupon,
+  deleteCoupon,
+  CreateCouponDto,
+} from '../api/coupons.api';
 
 export default function Coupons() {
+  const queryClient = useQueryClient();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingCoupon, setEditingCoupon] = useState<Coupon | null>(null);
+
+  const { data: coupons = [], isLoading, isError, error } = useQuery<Coupon[]>({ 
+    queryKey: ['coupons'], 
+    queryFn: getCoupons 
+  });
+
+  const invalidateCouponsQuery = () => {
+    queryClient.invalidateQueries({ queryKey: ['coupons'] });
+  };
+
+  const createCouponMutation = useApiMutation(createCoupon, {
+    onSuccess: () => {
+      invalidateCouponsQuery();
+      handleCloseModal();
+    },
+  });
+
+  const updateCouponMutation = useApiMutation(updateCoupon, {
+    onSuccess: () => {
+      invalidateCouponsQuery();
+      handleCloseModal();
+    },
+  });
+
+  const deleteCouponMutation = useApiMutation(deleteCoupon, {
+    onSuccess: () => {
+      invalidateCouponsQuery();
+    },
+  });
+
+  const handleOpenAddModal = () => {
+    setEditingCoupon(null);
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = (id: string) => {
+    const couponToEdit = coupons.find((c) => c.id === id);
+    if (couponToEdit) {
+      setEditingCoupon(couponToEdit);
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingCoupon(null);
+  };
+
+  const handleDelete = (id: string) => {
+    if (window.confirm('정말로 이 쿠폰을 삭제하시겠습니까?')) {
+      deleteCouponMutation.mutate(id);
+    }
+  };
+
+  const handleSubmit = (data: CouponFormData) => {
+    const couponPayload = {
+      description: data.description,
+      discountType: data.discountType,
+      discountValue: Number(data.discountValue),
+      validFrom: new Date(data.validFrom),
+      validUntil: new Date(data.validUntil),
+    };
+
+    if (editingCoupon) {
+      const updatePayload = { ...couponPayload, isActive: editingCoupon.isActive };
+      updateCouponMutation.mutate({ id: editingCoupon.id, data: updatePayload });
+    } else {
+      createCouponMutation.mutate(couponPayload as CreateCouponDto);
+    }
+  };
+
+  if (isLoading) return <div className='text-center justify-center flex'>Loading...</div>;
+  if (isError) return <div>Error loading coupons: {error.message}</div>;
+
   return (
-    <div className='flex flex-col flex-1 gap-4 p-4 sm:p-2 lg:p-4'>
-      <CouponStats />
-      <CouponTable coupons={sampleCoupons} />
+    <div className='flex flex-col p-4 h-full'>
+      <CouponTable
+        coupons={coupons}
+        onAddNewCoupon={handleOpenAddModal}
+        onEdit={handleOpenEditModal}
+        onDelete={handleDelete}
+      />
+      {isModalOpen && (
+        <AddCouponModal
+          open={isModalOpen}
+          onClose={handleCloseModal}
+          onSubmit={handleSubmit}
+          initialData={editingCoupon}
+        />
+      )}
     </div>
   );
 }

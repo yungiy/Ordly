@@ -1,5 +1,3 @@
-'use client';
-
 import { useEffect } from 'react';
 import Portal from './portal';
 
@@ -30,13 +28,9 @@ export default function Modal({ open, onClose, children }: Props) {
 
   return (
     <Portal>
-      <div
-        role='dialog'
-        aria-modal='true'
-        className='fixed inset-0 z-50 flex items-center justify-center'
-      >
-        <div className='absolute inset-0 bg-black/50' onClick={onClose} />
-        <div className='relative z-10 rounded-lg bg-white p-6 shadow-lg'>
+      <div className='fixed inset-0 z-50 flex items-center justify-center'>
+        <div className='absolute inset-0 bg-black/50' />
+        <div className='relative rounded-lg bg-white w-xl p-8 shadow-lg'>
           {children}
         </div>
       </div>

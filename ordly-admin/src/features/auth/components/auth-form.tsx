@@ -71,7 +71,6 @@ export default function AuthForm() {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
-        {/* 공통 필드: 사용자 이름 */}
         <div>
           <Input
             type='text'
@@ -97,7 +96,6 @@ export default function AuthForm() {
             </p>
           )}
         </div>
-        {/* 회원가입 전용 필드: 비밀번호 확인 */}
         {mode === 'register' && (
           <div>
             <Input
@@ -119,7 +117,6 @@ export default function AuthForm() {
           </div>
         )}
 
-        {/* 회원가입 전용 필드 */}
         {mode === 'register' && (
           <>
             <div className='my-4 border-t border-gray-200' />
