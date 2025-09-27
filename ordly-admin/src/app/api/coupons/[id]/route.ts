@@ -46,7 +46,7 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
       data: {
         description,
         discountType,
-        discountValue,
+        discountValue: Number(discountValue),
         validFrom: new Date(validFrom),
         validUntil: new Date(validUntil),
         isActive,
