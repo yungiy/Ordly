@@ -1,16 +1,3 @@
-/*
- *
- * @purpose
- * - 이 모듈은 React나 특정 UI 프레임워크에 의존하지 않는 순수 TypeScript 날짜 계산 함수들을 제공
- * - JavaScript의 네이티브 `Date` 객체를 사용하여 캘린더 표시에 필요한 모든 계산을 수행
- * - 프로젝트 전반에서 재사용될 수 있는 유틸리티 함수를 포함
- *
- * @functions
- * - getMonthDetails(year, month): 특정 연월의 시작 요일과 총 일수를 계산하여 반환
- * - generateCalendarGrid(year, month): `getMonthDetails`를 사용하여 6주치(42일)에 해당하는
- * 날짜들이 포함된 2차원 Date 배열을 생성
- */
-
 export const getMonthDetails = (year: number, month: number) => {
   const firstDay = new Date(year, month, 1).getDay();
   return { firstDay };
@@ -30,4 +17,11 @@ export const calendarGrid = (year: number, month: number): Date[][] => {
     grid.push(week);
   }
   return grid;
+};
+
+export const formatDateToYYYYMMDD = (date: Date) => {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
 };

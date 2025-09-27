@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../../auth/[...nextauth]/route';
 
-const prisma = new PrismaClient();
-
-// Helper function to check ownership
-async function verifyCouponOwnership(couponId: string, userId: string): Promise<boolean> {
+async function verifyCouponOwnership(
+  couponId: string,
+  userId: string
+): Promise<boolean> {
   const coupon = await prisma.coupon.findUnique({
     where: { id: couponId },
     select: { storeId: true },
@@ -14,7 +14,10 @@ async function verifyCouponOwnership(couponId: string, userId: string): Promise<
   return coupon?.storeId === userId;
 }
 
-export async function PUT(req: NextRequest, context: { params: { id: string } }) {
+export async function PUT(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
   const session = await getServerSession(authOptions);
   // @ts-ignore
   if (!session || !session.user?.storeId) {
@@ -39,7 +42,14 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
     }
 
     const body = await req.json();
-    const { description, discountType, discountValue, validFrom, validUntil, isActive } = body;
+    const {
+      description,
+      discountType,
+      discountValue,
+      validFrom,
+      validUntil,
+      isActive,
+    } = body;
 
     const updatedCoupon = await prisma.coupon.update({
       where: { id: id },
@@ -63,7 +73,10 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
   }
 }
 
-export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
+export async function DELETE(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
   const session = await getServerSession(authOptions);
   // @ts-ignore
   if (!session || !session.user?.storeId) {
