@@ -11,12 +11,10 @@ export async function GET(
   try {
     const session = await getServerSession(authOptions);
 
-    // @ts-ignore
-    if (!session || !session.user?.storeId) {
+    if (!session?.user?.storeId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    // @ts-ignore
-    const storeId = session.user.storeId as string;
+    const storeId = session.user.storeId;
 
     const { date } = params;
     if (!date) {
