@@ -1,11 +1,8 @@
-
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]/route';
 import crypto from 'crypto';
-
-const prisma = new PrismaClient();
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -39,7 +36,8 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { description, discountType, discountValue, validFrom, validUntil } = body;
+    const { description, discountType, discountValue, validFrom, validUntil } =
+      body;
 
     const code = `COUPON${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
     const storeId = session.user.storeId as string;
