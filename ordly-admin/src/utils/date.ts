@@ -8,7 +8,7 @@ export const calendarGrid = (year: number, month: number): Date[][] => {
   const grid: Date[][] = [];
   let currentDay = 1 - firstDay;
 
-  for (let i = 0; i < 6; i++) { // 6주
+  for (let i = 0; i < 5; i++) { // 5주
     const week: Date[] = [];
     for (let j = 0; j < 7; j++) { // 7일
       week.push(new Date(year, month, currentDay));

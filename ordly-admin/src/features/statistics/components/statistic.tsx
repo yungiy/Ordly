@@ -1,8 +1,6 @@
-import HourlySalesChart from './hourly-sales-chart';
+import HourlySalesChart from './statistic-item';
 import PopMenuList from './pop-menu-list';
-import SalesChart from './sales-chart';
 import StatisticCalendar from './statistic-calendar';
-import StatisticGrid from './statistic-grid';
 
 const popularMenus = [
   { rank: 1, name: '아메리카노', orders: 125 },
@@ -24,9 +22,7 @@ export default function StatisticPage() {
         </div>
       </div>
       <div className='lg:col-span-2 flex flex-col gap-4'>
-        <StatisticGrid />
         <HourlySalesChart />
-        <SalesChart />
       </div>
     </div>
   );

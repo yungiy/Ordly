@@ -9,18 +9,26 @@ type Props = {
   onDateClick: (date: Date) => void;
 };
 
-export default function CalendarGrid({ monthGrid, currentMonth, selectedDate, onDateClick }: Props) {
+export default function CalendarGrid({
+  monthGrid,
+  currentMonth,
+  selectedDate,
+  onDateClick,
+}: Props) {
   return (
     <div>
-      <div className="grid grid-cols-7">
+      <div className='grid grid-cols-7'>
         {DAYS_OF_WEEK.map((day) => (
-          <div key={day} className="text-center font-semibold text-sm text-gray-500 py-2">
+          <div
+            key={day}
+            className='text-center font-semibold text-gray-500 py-2'
+          >
             {day}
           </div>
         ))}
       </div>
-      
-      <div className="grid grid-cols-7 gap-1 h-full">
+
+      <div className='grid grid-cols-7'>
         {monthGrid.map((week, i) =>
           week.map((date, j) => (
             <DayCell

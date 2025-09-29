@@ -11,7 +11,7 @@ export default function DayCell({ date, currentMonth, selectedDate, onDateClick 
   const isCurrentMonth = date.getMonth() === currentMonth;
 
   const getCellClasses = () => {
-    let classes = 'flex items-start justify-start p-2 text-sm rounded-lg transition-colors aspect-square';
+    let classes = 'flex items-start justify-start p-2 text-black font-bold rounded-lg transition-colors aspect-square';
     
     if (!isCurrentMonth) {
       classes += ' text-gray-300';
@@ -36,7 +36,7 @@ export default function DayCell({ date, currentMonth, selectedDate, onDateClick 
       className={getCellClasses()} 
       onClick={() => isCurrentMonth && onDateClick(date)}
     >
-      <span className="font-semibold">{date.getDate()}</span>
+      <span>{date.getDate()}</span>
     </div>
   );
 }

@@ -1,14 +1,9 @@
 import CardItem from '@/components/common/card-item';
 
-type Props = {
-  title: string;
-  value: string;
-}
-
-export default function StatisticItem({ title, value }: Props) {
+export default function StatisticItem() {
   return (
-    <CardItem title={title}>
-      <span className='text-xl font-bold'>{value}</span>
+    <CardItem>
+      <p>내용을 입력해주세요</p>
     </CardItem>
   );
 }
