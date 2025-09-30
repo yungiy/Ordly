@@ -56,7 +56,7 @@ export default function Dashboard() {
       </div>
 
       <div className='md:col-span-2'>
-        < HourlySalesChart />
+        <HourlySalesChart />
       </div>
     </div>
   );
