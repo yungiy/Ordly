@@ -44,7 +44,7 @@ export type OrderItemDetail = {
 export type ReservationStatus = 'confirmed' | 'completed' | 'cancelled';
 
 export type Reservation = {
-  id: number;
+  id: string;
   time: string;
   name: string;
   partySize: number;

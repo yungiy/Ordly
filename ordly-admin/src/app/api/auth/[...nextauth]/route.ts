@@ -58,20 +58,15 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        // @ts-ignore
         token.storeId = user.storeId;
-        // @ts-ignore
         token.storeName = user.storeName;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        // @ts-ignore
         session.user.id = token.id;
-        // @ts-ignore
         session.user.storeId = token.storeId;
-        // @ts-ignore
         session.user.storeName = token.storeName;
       }
       return session;

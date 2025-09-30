@@ -11,7 +11,7 @@ import {
   Reservation as FrontendReservation,
   ReservationStatus as FrontendReservationStatus,
 } from '@/types/types';
-import ReservationSkeleton from '@/components/common/reservation-skeleton';
+import ReservationSkeleton from '@/components/skeleton/reservation-skeleton';
 
 type Props = {
   reservations: PrismaReservation[] | undefined;
@@ -19,7 +19,7 @@ type Props = {
   selectedDate: Date | null;
 };
 
-// Prisma Reservation 타입을 Frontend Reservation 타입으로 변환하는 함수
+
 const transformReservation = (
   res: PrismaReservation,
   index: number,
@@ -38,7 +38,7 @@ const transformReservation = (
   }
 
   return {
-    id: res.id, // Prisma에서 제공하는 고유 id 사용
+    id: res.id,
     time: new Date(res.reservationTime).toLocaleTimeString('ko-KR', {
       hour: '2-digit',
       minute: '2-digit',

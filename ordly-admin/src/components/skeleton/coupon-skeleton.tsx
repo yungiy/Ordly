@@ -5,15 +5,12 @@ export default function CouponSkeleton() {
     <div className='flex flex-col p-4 h-full'>
       <CardItem>
         <div className='animate-pulse'>
-          {/* 헤더 스켈레톤 */}
           <div className='flex justify-between items-center mb-4'>
             <div className='h-7 bg-gray-200 rounded w-1/4'></div>
             <div className='h-10 bg-gray-200 rounded-lg w-32'></div>
           </div>
 
-          {/* 테이블 스켈레톤 */}
           <table className='w-full text-left'>
-            {/* 테이블 헤더 */}
             <thead>
               <tr className='border-b text-gray-400'>
                 <th className='p-2 w-[20%]'>

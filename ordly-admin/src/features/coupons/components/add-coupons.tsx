@@ -103,7 +103,7 @@ export default function AddCouponModal({
             </label>
             <select
               {...register('discountType')}
-              className='py-2.5 rounded-sm w-full border border-gray-400'
+              className='px-2 py-2.5 rounded-sm w-full border border-gray-400'
             >
               <option value='FIXED_AMOUNT'>정액</option>
               <option value='PERCENTAGE'>정률</option>
