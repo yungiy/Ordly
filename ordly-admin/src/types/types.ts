@@ -14,7 +14,7 @@ export type LoginRequest = {
 };
 
 export type Order = {
-  id: number;
+  id: string;
   tableNumber: number;
   orderNumber: number;
   totalPrice: string;
@@ -27,7 +27,7 @@ export type CouponStatus = '활성' | '기간 만료';
 export type CouponType = '정률' | '정액';
 
 export type Coupons = {
-  id: number;
+  id: string;
   name: string;
   type: CouponType;
   status: CouponStatus;
@@ -35,7 +35,7 @@ export type Coupons = {
 };
 
 export type OrderItemDetail = {
-  id: number;
+  id: string;
   name: string;
   quantity: number;
   price: string;
@@ -44,7 +44,7 @@ export type OrderItemDetail = {
 export type ReservationStatus = 'confirmed' | 'completed' | 'cancelled';
 
 export type Reservation = {
-  id: number;
+  id: string;
   time: string;
   name: string;
   partySize: number;
