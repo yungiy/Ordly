@@ -23,13 +23,13 @@ export default function GraphVisualizer() {
   return (
     <div className='flex flex-col space-y-2'>
       <div>
-        <h2 className='text-xl font-bold mb-4'>메뉴별 매출 현황</h2>
+        <h2 className='text-lg font-bold mb-2'>메뉴별 매출 현황</h2>
         <div className='h-[300px]'>
-          <BarChart data={barChartDemoData} dataKey='sales' />
+          <BarChart data={barChartDemoData} dataKey='name'/>
         </div>
       </div>
       <div>
-        <h2 className='text-xl font-bold mb-4'>월별 매출 추이</h2>
+        <h2 className='text-lg font-bold mb-2'>월별 매출 추이</h2>
         <div className='h-[300px]'>
           <LineChart data={lineChartDemoData} dataKey='sales' />
         </div>

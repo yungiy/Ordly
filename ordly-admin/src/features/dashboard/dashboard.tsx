@@ -1,7 +1,7 @@
 import OrderStatus from '@/features/orders/components/order-status';
 import { Order } from '@/types/types';
 import ReservationList from '@/features/reservations/components/reservation-list';
-import HourlySalesChart from '../statistics/components/statistic-item';
+import Graph from '../statistics/components/graph';
 
 const sampleInProgressOrders: Order[] = [
   { 
@@ -52,11 +52,11 @@ export default function Dashboard() {
       </div>
 
       <div className='md:col-span-1 md:row-span-2'>
-        <ReservationList />
+        <ReservationList reservations={undefined} isLoading={false} selectedDate={null} />
       </div>
 
-      <div className='md:col-span-2'>
-        <HourlySalesChart />
+      <div className='md:col-span-2 overflow-auto'>
+        <Graph/>
       </div>
     </div>
   );
