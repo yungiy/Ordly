@@ -54,7 +54,7 @@ export default function MenuForm({ selectedMenu, onClose }: Props) {
           <label className='font-semibold'>설명</label>
           <textarea
             rows={4}
-            className='border border-gray-400'
+            className='border border-gray-400 focus:outline-none px-4 py-2 rounded-md text-black'
             defaultValue={!isNew ? selectedMenu.description : ''}
           />
         </div>
