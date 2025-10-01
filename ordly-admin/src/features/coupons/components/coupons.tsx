@@ -13,7 +13,7 @@ import {
   deleteCoupon,
   CreateCouponDto,
 } from '../api/coupons.api';
-import CouponSkeleton from '@/components/common/coupon-skeleton';
+import CouponSkeleton from '@/components/skeleton/coupon-skeleton';
 
 export default function Coupons() {
   const queryClient = useQueryClient();
