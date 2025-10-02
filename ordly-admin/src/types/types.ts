@@ -64,7 +64,7 @@ export type Menus = {
   name: string;
   description?: string;
   price: number;
-  imageUrl?: Base64URLString;
+  imageBase64?: string;
   status: 'AVAILABLE' | 'SOLDOUT'; 
 };
 

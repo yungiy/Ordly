@@ -5,12 +5,12 @@ import { Category, Menus } from '@/types/types';
 import { useState, useEffect } from 'react';
 import CardItem from '@/components/common/card-item';
 import MenuForm from './menu-form';
-import { useMenus } from '@/hooks/useMenus.hooks';
+import { useGetMenus } from '@/hooks/useMenus.hooks';
 import MenuSkeleton from '@/components/skeleton/menu-skeleton';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function Menu() {
-  const { data: menus, isLoading, isError } = useMenus();
+  const { data: menus, isLoading, isError } = useGetMenus();
   const [selectedMenu, setSelectedMenu] = useState<Menus | 'new' | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const queryClient = useQueryClient();

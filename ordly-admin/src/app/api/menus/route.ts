@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
       const filename = `${Date.now()}-${file.name}`;
       const path = join(process.cwd(), 'public', 'uploads', 'menus', filename);
       await writeFile(path, buffer);
-      createData.imageUrl = `/uploads/menus/${filename}`;
+      (createData as any).imageBase64 = `/uploads/menus/${filename}`;
     }
 
     const newMenu = await prisma.menuItem.create({

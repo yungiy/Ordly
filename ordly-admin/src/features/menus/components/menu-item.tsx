@@ -1,7 +1,9 @@
 import Image from 'next/image';
-import { ImageIcon } from 'lucide-react';
+import { ImageIcon, Trash2 } from 'lucide-react';
 import { Menus } from '@/types/types';
-import { useUpdateMenuStatus } from '@/hooks/useUpdateMenuStatus.hooks';
+import Button from '@/components/common/button';
+import React from 'react';
+import { useDeleteMenu, useUpdateMenuStatus } from '@/hooks/useMenus.hooks';
 
 type Props = {
   item: Menus;
@@ -12,6 +14,7 @@ const formatCurrency = (amount: number) => `₩${amount.toLocaleString()}`;
 
 export default function MenuItem({ item, onSelect }: Props) {
   const { mutate: updateStatus, isPending } = useUpdateMenuStatus();
+  const { mutate: deleteMenu, isPending: isDeleting } = useDeleteMenu();
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation(); // 부모의 onSelect 이벤트 방지
@@ -19,15 +22,22 @@ export default function MenuItem({ item, onSelect }: Props) {
     updateStatus({ id: item.id, status: newStatus });
   };
 
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation(); // 부모의 onSelect 이벤트 방지
+    if (window.confirm('정말로 이 메뉴를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+      deleteMenu(item.id);
+    }
+  };
+
   return (
     <div
       onClick={onSelect}
       className={'flex items-center gap-4 p-2 rounded-lg cursor-pointer scrollbar-hide'}
     >
-      {item.imageUrl ? (
+      {item.imageBase64 ? (
         <div className='bg-gray-200 flex items-center justify-center'>
           <Image
-            src={item.imageUrl}
+            src={item.imageBase64}
             alt={item.name}
             width={80}
             height={80}
@@ -48,7 +58,7 @@ export default function MenuItem({ item, onSelect }: Props) {
         <p className='font-semibold mt-1'>{formatCurrency(item.price)}</p>
       </div>
 
-      <div className='flex items-center'>
+      <div className='flex items-center justify-between gap-2'>
         <label className='relative inline-flex items-center cursor-pointer'>
           <input
             type='checkbox'
@@ -59,6 +69,13 @@ export default function MenuItem({ item, onSelect }: Props) {
           />
           <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500"></div>
         </label>
+        <Button
+          onClick={handleDelete}
+          disabled={isDeleting}
+          className='border border-gray-400 rounded-4xl disabled:opacity-50'
+        >
+          <Trash2 size={20} color='black' className='m-1' />
+        </Button>
       </div>
     </div>
   );
