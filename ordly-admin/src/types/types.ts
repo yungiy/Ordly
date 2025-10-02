@@ -53,14 +53,19 @@ export type Reservation = {
   status: ReservationStatus;
 };
 
+export type Category = {
+  id: string;
+  name: string;
+};
+
 export type Menus = {
-  id: number;
-  category: string;
+  id: string;
+  category: Category;
   name: string;
   description?: string;
   price: number;
-  image?: string;
-  isAvailable: boolean; // 판매 상태
+  imageUrl?: Base64URLString;
+  status: 'AVAILABLE' | 'SOLDOUT'; 
 };
 
 import 'next-auth';

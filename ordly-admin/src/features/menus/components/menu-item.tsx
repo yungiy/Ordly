@@ -1,30 +1,44 @@
 import Image from 'next/image';
 import { ImageIcon } from 'lucide-react';
 import { Menus } from '@/types/types';
+import { useUpdateMenuStatus } from '@/hooks/useUpdateMenuStatus.hooks';
 
 type Props = {
   item: Menus;
-  onSelect: ()=> void;
-}
+  onSelect: () => void;
+};
 
 const formatCurrency = (amount: number) => `₩${amount.toLocaleString()}`;
 
-export default function MenuItem({ item,onSelect }: Props) {
+export default function MenuItem({ item, onSelect }: Props) {
+  const { mutate: updateStatus, isPending } = useUpdateMenuStatus();
+
+  const handleStatusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation(); // 부모의 onSelect 이벤트 방지
+    const newStatus = e.target.checked ? 'AVAILABLE' : 'SOLDOUT';
+    updateStatus({ id: item.id, status: newStatus });
+  };
+
   return (
-    <div onClick={onSelect} className='flex items-center gap-4 p-2 rounded-lg cursor-pointer'>
-      <div className='w-20 h-20 rounded-md bg-gray-200 flex items-center justify-center'>
-        {item.image ? (
+    <div
+      onClick={onSelect}
+      className={'flex items-center gap-4 p-2 rounded-lg cursor-pointer scrollbar-hide'}
+    >
+      {item.imageUrl ? (
+        <div className='bg-gray-200 flex items-center justify-center'>
           <Image
-            src={item.image}
+            src={item.imageUrl}
             alt={item.name}
             width={80}
             height={80}
-            className='object-cover rounded-md'
+            className='rounded-md object-cover aspect-square'
           />
-        ) : (
-          <ImageIcon className='w-8 h-8 text-gray-400' />
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className='w-20 h-20 items-center justify-center flex bg-gray-200 rounded-md text-gray-400'>
+          <ImageIcon size={60} />
+        </div>
+      )}
 
       <div className='flex-grow'>
         <p className='font-bold text-gray-800'>{item.name}</p>
@@ -38,7 +52,9 @@ export default function MenuItem({ item,onSelect }: Props) {
         <label className='relative inline-flex items-center cursor-pointer'>
           <input
             type='checkbox'
-            defaultChecked={item.isAvailable}
+            checked={item.status === 'AVAILABLE'}
+            onChange={handleStatusChange}
+            disabled={isPending}
             className='sr-only peer'
           />
           <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500"></div>

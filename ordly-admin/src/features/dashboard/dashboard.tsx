@@ -5,22 +5,22 @@ import Graph from '../statistics/components/graph';
 
 const sampleInProgressOrders: Order[] = [
   { 
-    id: 1, 
+    id: '1', 
     tableNumber: 3,
     orderNumber: 101,
     status: 'cooking',
-    items: [{id: 1, name: '아메리카노', quantity: 2, price: '4000'}], 
+    items: [{id: '1', name: '아메리카노', quantity: 2, price: '4000'}], 
     totalPrice: '8000', 
     createdAt: '2025-09-13 18:50:15'
   },
   { 
-    id: 2, 
+    id: '2', 
     tableNumber: 5,
     orderNumber: 102,
     status: 'cooking',
     items: [
-      {id: 2, name: '치즈케이크', quantity: 1, price: '4000'}, 
-      {id: 3, name: '카페라떼', quantity: 1, price: '4000'}
+      {id: '2', name: '치즈케이크', quantity: 1, price: '4000'}, 
+      {id: '3', name: '카페라떼', quantity: 1, price: '4000'}
     ], 
     totalPrice: '11000', 
     createdAt: '2025-09-13 18:55:45' 
@@ -30,11 +30,11 @@ const sampleInProgressOrders: Order[] = [
 
 const sampleCompletedOrders: Order[] = [
   { 
-    id: 4, 
+    id: '4', 
     tableNumber: 1,
     orderNumber: 98,
     status: 'done',
-    items: [{id: 4, name: '감바스', quantity: 1, price: '4000'}], 
+    items: [{id: '4', name: '감바스', quantity: 1, price: '4000'}], 
     totalPrice: '12000', 
     createdAt: '2025-09-13 18:25:00' 
   },

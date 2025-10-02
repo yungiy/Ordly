@@ -12,19 +12,19 @@ type Props = {
 
 export default function MenuList({ menus, onAddNewMenu, onSelectMenu }: Props) {
   const groupedMenus = menus.reduce((index, menu) => {
-    (index[menu.category] = index[menu.category] || []).push(menu);
+    (index[menu.category.name] = index[menu.category.name] || []).push(menu);
     return index;
   }, {} as Record<string, Menus[]>);
 
   return (
-    <CardItem className='h-full flex flex-col'>
+    <CardItem className='flex flex-col overflow-auto'>
       <div className='flex justify-between items-center mb-4'>
         <h2 className='text-2xl font-bold'>메뉴 목록</h2>
         <Button onClick={onAddNewMenu} className='w-auto h-auto bg-yellow-400 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2'>
           <PlusCircle size={20} />새 메뉴 추가
         </Button>
       </div>
-      <div className='flex-grow overflow-y-auto pr-2'>
+      <div className='pr-2 overflow-auto'>
         {Object.entries(groupedMenus).map(([category, items]) => (
           <div key={category} className='mb-6'>
             <h3 className='font-bold text-lg text-gray-700 border-b border-b-gray-400 pb-2 mb-3'>
