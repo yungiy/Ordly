@@ -10,7 +10,12 @@ type Props = {
   onDelete: (id: string) => void;
 };
 
-export default function CouponTable({ coupons, onAddNewCoupon, onEdit, onDelete }: Props) {
+export default function CouponTable({
+  coupons,
+  onAddNewCoupon,
+  onEdit,
+  onDelete,
+}: Props) {
   return (
     <CardItem className='flex-grow flex flex-col'>
       <div className='flex items-center justify-between mb-4'>
@@ -31,32 +36,39 @@ export default function CouponTable({ coupons, onAddNewCoupon, onEdit, onDelete 
               <th className='p-2'>타입</th>
               <th className='p-2'>할인 값</th>
               <th className='p-2'>유효 기간</th>
-              <th className='p-2'>상태</th>
               <th className='p-2'>작업</th>
             </tr>
           </thead>
           <tbody>
             {coupons.map((coupon) => (
-              <tr key={coupon.id} className='border-b border-b-gray-300 last:border-b-0'>
+              <tr
+                key={coupon.id}
+                className='border-b border-b-gray-300 last:border-b-0'
+              >
                 <td className='p-2 font-medium'>{coupon.description}</td>
                 <td className='p-2'>{coupon.code}</td>
-                <td className='p-2'>{coupon.discountType === 'FIXED_AMOUNT' ? '정액' : '정률'}</td>
-                <td className='p-2'>{String(coupon.discountValue)}</td>
-                <td className='p-2'>{`${new Date(coupon.validFrom).toISOString().split('T')[0]} ~ ${new Date(coupon.validUntil).toISOString().split('T')[0]}`}</td>
                 <td className='p-2'>
-                  <span
-                    className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                      coupon.isActive
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-gray-100 text-gray-800'
-                    }`}
-                  >
-                    {coupon.isActive ? '활성' : '비활성'}
-                  </span>
+                  {coupon.discountType === 'FIXED_AMOUNT' ? '정액' : '정률'}
                 </td>
+                <td className='p-4'>{String(coupon.discountValue)}</td>
+                <td className='p-2'>{`${
+                  new Date(coupon.validFrom).toISOString().split('T')[0]
+                } ~ ${
+                  new Date(coupon.validUntil).toISOString().split('T')[0]
+                }`}</td>
                 <td className='p-2 flex gap-2'>
-                  <Button onClick={() => onEdit(coupon.id)} className='flex font-semibold text-blue-600'>수정</Button>
-                  <Button onClick={() => onDelete(coupon.id)} className='flex font-semibold text-red-600'>삭제</Button>
+                  <Button
+                    onClick={() => onEdit(coupon.id)}
+                    className='flex font-semibold text-blue-600'
+                  >
+                    수정
+                  </Button>
+                  <Button
+                    onClick={() => onDelete(coupon.id)}
+                    className='flex font-semibold text-red-600'
+                  >
+                    삭제
+                  </Button>
                 </td>
               </tr>
             ))}

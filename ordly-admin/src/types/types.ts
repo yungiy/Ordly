@@ -1,4 +1,3 @@
-// 회원가입 요청 시 사용되는 타입
 export type RegisterRequest = {
   name: string;
   password: string;
@@ -7,7 +6,6 @@ export type RegisterRequest = {
   storePhone: string;
 };
 
-// 로그인 요청 시 사용되는 타입
 export type LoginRequest = {
   name: string;
   password: string;
