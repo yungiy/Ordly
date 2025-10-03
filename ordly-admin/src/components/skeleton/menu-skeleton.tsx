@@ -38,8 +38,6 @@ export default function MenuPageSkeleton() {
         </CardItem>
       </div>
 
-      {/* 2. 우측 메뉴 추가/선택 스켈레톤 카드 */}
-      {/* [수정 없음] md:col-span-1은 2단 그리드에서도 절반을 의미하므로 그대로 둡니다. */}
       <div className='md:col-span-1'>
         <CardItem className='animate-pulse flex flex-col h-full text-center'>
           <div className='h-4 bg-gray-200 rounded w-5/6 mb-2'></div>
