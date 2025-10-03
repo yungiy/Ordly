@@ -36,7 +36,7 @@ export default function CouponTable({
               <th className='p-2'>타입</th>
               <th className='p-2'>할인 값</th>
               <th className='p-2'>유효 기간</th>
-              <th className='p-2 text-center'>작업</th>
+              <th className='p-2'>작업</th>
             </tr>
           </thead>
           <tbody>
@@ -50,22 +50,22 @@ export default function CouponTable({
                 <td className='p-2'>
                   {coupon.discountType === 'FIXED_AMOUNT' ? '정액' : '정률'}
                 </td>
-                <td className='p-2'>{String(coupon.discountValue)}</td>
+                <td className='p-4'>{String(coupon.discountValue)}</td>
                 <td className='p-2'>{`${
                   new Date(coupon.validFrom).toISOString().split('T')[0]
                 } ~ ${
                   new Date(coupon.validUntil).toISOString().split('T')[0]
                 }`}</td>
-                <td className='flex gap-1'>
+                <td className='p-2 flex gap-2'>
                   <Button
                     onClick={() => onEdit(coupon.id)}
-                    className='flex font-semibold text-blue-500'
+                    className='flex font-semibold text-blue-600'
                   >
                     수정
                   </Button>
                   <Button
                     onClick={() => onDelete(coupon.id)}
-                    className='flex font-semibold text-red-500'
+                    className='flex font-semibold text-red-600'
                   >
                     삭제
                   </Button>
