@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-interface MenuStoreState {
+type MenuStoreState = {
   isFormOpen: boolean;
   editingMenuId: string | null;
   openForm: (menuId?: string) => void;

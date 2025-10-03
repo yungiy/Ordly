@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useAuthStore } from '@/store/auth.store';
 import { useRouter } from 'next/navigation';
-import { LoginRequest, RegisterRequest } from '@/types/types';
+import { LoginRequest } from '@/types/types';
 import { useEffect } from 'react';
 import { registerApi } from '@/features/auth/api/auth.api';
 

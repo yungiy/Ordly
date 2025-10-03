@@ -1,4 +1,3 @@
-// 회원가입 요청 시 사용되는 타입
 export type RegisterRequest = {
   name: string;
   password: string;
@@ -7,7 +6,6 @@ export type RegisterRequest = {
   storePhone: string;
 };
 
-// 로그인 요청 시 사용되는 타입
 export type LoginRequest = {
   name: string;
   password: string;
@@ -53,14 +51,19 @@ export type Reservation = {
   status: ReservationStatus;
 };
 
+export type Category = {
+  id: string;
+  name: string;
+};
+
 export type Menus = {
-  id: number;
-  category: string;
+  id: string;
+  category: Category;
   name: string;
   description?: string;
   price: number;
-  image?: string;
-  isAvailable: boolean; // 판매 상태
+  imageBase64?: string;
+  status: 'AVAILABLE' | 'SOLDOUT'; 
 };
 
 import 'next-auth';

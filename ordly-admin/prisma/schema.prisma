@@ -1,0 +1,180 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  password  String // 해시 처리된 비밀번호
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  storeId String
+  store   Store  @relation(fields: [storeId], references: [id])
+}
+
+// 매장 모델
+model Store {
+  id           String        @id @default(cuid())
+  name         String        @unique @db.VarChar(255)
+  address      String
+  phone        String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  users        User[]
+  categories   Category[]
+  coupons      Coupon[]
+  reservations Reservation[]
+  orders       Order[]
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  order     Int
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  storeId   String
+  store     Store      @relation(fields: [storeId], references: [id])
+  menuItems MenuItem[]
+}
+
+model MenuItem {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  price       Decimal    @db.Decimal(10, 2)
+
+  imageUrl    String?    @db.Text 
+  status      MenuStatus @default(AVAILABLE)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  categoryId String
+  category   Category    @relation(fields: [categoryId], references: [id])
+  orderItems OrderItem[]
+}
+
+model Order {
+  id         String      @id @default(cuid())
+  status     OrderStatus
+  totalPrice Decimal     @db.Decimal(10, 2)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  storeId    String
+  store      Store       @relation(fields: [storeId], references: [id])
+  orderItems OrderItem[]
+  payment    Payment?
+  usedCoupon UsedCoupon?
+}
+
+model OrderItem {
+  id           String   @id @default(cuid())
+  quantity     Int
+  priceAtOrder Decimal  @db.Decimal(10, 2)
+  createdAt    DateTime @default(now())
+
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id])
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+}
+
+model Payment {
+  id          String        @id @default(cuid())
+  amount      Decimal       @db.Decimal(10, 2)
+  method      String
+  status      PaymentStatus
+  impUid      String?       @unique
+  merchantUid String        @unique
+  createdAt   DateTime      @default(now())
+
+  orderId String @unique
+  order   Order  @relation(fields: [orderId], references: [id])
+}
+
+model Coupon {
+  id            String       @id @default(cuid())
+  code          String       @unique
+  description   String
+  discountType  DiscountType
+  discountValue Decimal      @db.Decimal(10, 2)
+  validFrom     DateTime     // 유효기간 시작일
+  validUntil    DateTime     // 유효기간 만료일
+  isActive      Boolean      @default(true) // 쿠폰 활성화 여부
+  createdAt     DateTime     @default(now())
+
+  storeId     String
+  store       Store        @relation(fields: [storeId], references: [id])
+  usedCoupons UsedCoupon[]
+}
+
+model UsedCoupon {
+  discountAmount Decimal  @db.Decimal(10, 2) // 실제 할인된 금액
+  createdAt      DateTime @default(now())
+
+  orderId  String @unique // 적용된 주문
+  order    Order  @relation(fields: [orderId], references: [id])
+  couponId String
+  coupon   Coupon @relation(fields: [couponId], references: [id])
+
+  @@id([orderId, couponId])
+}
+
+model Reservation {
+  id              String            @id @default(cuid())
+  customerName    String
+  customerPhone   String
+  numberOfGuests  Int
+  reservationTime DateTime
+  status          ReservationStatus
+  createdAt       DateTime          @default(now())
+
+  storeId String
+  store   Store  @relation(fields: [storeId], references: [id])
+}
+
+/// 메뉴 판매 상태
+enum MenuStatus {
+  AVAILABLE // 판매중
+  SOLDOUT // 품절
+}
+
+/// 주문 진행 상태
+enum OrderStatus {
+  PENDING // 주문 대기
+  PREPARING // 준비중
+  COMPLETED // 완료
+  CANCELED // 취소
+}
+
+/// 결제 진행 상태
+enum PaymentStatus {
+  PENDING // 결제 대기
+  SUCCESS // 결제 성공
+  FAILED // 결제 실패
+}
+
+/// 쿠폰 할인 유형
+enum DiscountType {
+  FIXED_AMOUNT // 정액 할인
+  PERCENTAGE // 정률 할인
+}
+
+/// 예약 진행 상태
+enum ReservationStatus {
+  REQUESTED // 예약 요청
+  CONFIRMED // 예약 확정
+  CANCELED // 예약 취소
+}
