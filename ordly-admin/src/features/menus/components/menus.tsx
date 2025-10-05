@@ -4,15 +4,18 @@ import MenuList from './menu-list';
 import { Category, Menus } from '@/types/types';
 import { useState, useEffect } from 'react';
 import CardItem from '@/components/common/card-item';
-import MenuForm from './menu-form';
-import { useGetMenus } from '@/hooks/useMenus.hooks';
-import MenuSkeleton from '@/components/skeleton/menu-skeleton';
 import { useQueryClient } from '@tanstack/react-query';
+import MenuForm from './menu-form';
+import { useGetMenus, useDeleteMenu } from '@/hooks/useMenus.hooks';
+import MenuSkeleton from '@/components/skeleton/menu-skeleton';
+import DeleteMenuModal from './delete-menu-modal';
 
 export default function Menu() {
   const { data: menus, isLoading, isError } = useGetMenus();
   const [selectedMenu, setSelectedMenu] = useState<Menus | 'new' | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [menuToDelete, setMenuToDelete] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -31,6 +34,8 @@ export default function Menu() {
     fetchCategories();
   }, []);
 
+  const { mutate: deleteMenu, isPending: isDeleting } = useDeleteMenu();
+
   const handleSelectMenu = (menu: Menus) => {
     setSelectedMenu(menu);
   };
@@ -48,6 +53,28 @@ export default function Menu() {
     handleCloseForm();
   };
 
+  const handleDeleteRequest = (id: string) => {
+    setMenuToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (menuToDelete) {
+      deleteMenu(menuToDelete, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['menus'] });
+          handleCloseDeleteModal();
+          setSelectedMenu(null);
+        },
+      });
+    }
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setMenuToDelete(null);
+  };
+
   if (isLoading) {
     return <MenuSkeleton />;
   }
@@ -63,6 +90,7 @@ export default function Menu() {
           menus={menus || []}
           onSelectMenu={handleSelectMenu}
           onAddNewMenu={handleAddNewMenu}
+          onDeleteRequest={handleDeleteRequest}
         />
       </div>
 
@@ -82,6 +110,12 @@ export default function Menu() {
           </CardItem>
         )}
       </div>
+      <DeleteMenuModal
+        open={isDeleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleConfirmDelete}
+        isDeleting={isDeleting}
+      />
     </div>
   );
 }

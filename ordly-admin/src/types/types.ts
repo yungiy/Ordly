@@ -16,7 +16,7 @@ export type Order = {
   tableNumber: number;
   orderNumber: number;
   totalPrice: string;
-  status: 'pending' | 'cooking' | 'done' | 'cencel';
+  status: '준비중' | '조리중' | '완료' | '취소';
   items: OrderItemDetail[];
   createdAt: string;
 };
@@ -62,7 +62,7 @@ export type Menus = {
   name: string;
   description?: string;
   price: number;
-  imageBase64?: string;
+  imageUrl?: string;
   status: 'AVAILABLE' | 'SOLDOUT'; 
 };
 

@@ -27,7 +27,11 @@ export async function GET() {
         name: 'asc',
       },
     });
-    return NextResponse.json(menus);
+    const serializedMenus = menus.map(menu => ({
+      ...menu,
+      price: menu.price.toNumber(),
+    }));
+    return NextResponse.json(serializedMenus);
   } catch (error) {
     console.error('Error fetching menus:', error);
     return NextResponse.json(
@@ -66,14 +70,21 @@ export async function POST(req: NextRequest) {
     };
 
     if (file) {
+      console.log('--- [DEBUG] Image file received ---');
+      console.log('File name:', file.name);
+      console.log('File size:', file.size);
+      console.log('File type:', file.type);
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
       const filename = `${Date.now()}-${file.name}`;
       const path = join(process.cwd(), 'public', 'uploads', 'menus', filename);
+      console.log('Saving image to path:', path);
       await writeFile(path, buffer);
-      (createData as any).imageBase64 = `/uploads/menus/${filename}`;
+      createData.imageUrl = `/uploads/menus/${filename}`;
+      console.log('Image URL set to:', createData.imageUrl);
     }
 
+    console.log('--- [DEBUG] Creating menu with data ---', createData);
     const newMenu = await prisma.menuItem.create({
       data: createData,
       include: {

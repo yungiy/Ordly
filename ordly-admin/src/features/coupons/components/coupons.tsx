@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Coupon } from '@prisma/client';
 import CouponTable from './coupons-tables';
 import AddCouponModal, { CouponFormData } from './add-coupons';
+import DeleteCouponModal from './delete-coupon-modal';
 import { useApiMutation } from '@/hooks/useApiMutation.hooks';
 import {
   getCoupons,
@@ -19,10 +20,17 @@ export default function Coupons() {
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingCoupon, setEditingCoupon] = useState<Coupon | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [couponToDelete, setCouponToDelete] = useState<string | null>(null);
 
-  const { data: coupons = [], isLoading, isError, error } = useQuery<Coupon[]>({ 
-    queryKey: ['coupons'], 
-    queryFn: getCoupons 
+  const {
+    data: coupons = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery<Coupon[]>({
+    queryKey: ['coupons'],
+    queryFn: getCoupons,
   });
 
   const invalidateCouponsQuery = () => {
@@ -49,11 +57,6 @@ export default function Coupons() {
     },
   });
 
-  const handleOpenAddModal = () => {
-    setEditingCoupon(null);
-    setIsModalOpen(true);
-  };
-
   const handleOpenEditModal = (id: string) => {
     const couponToEdit = coupons.find((c) => c.id === id);
     if (couponToEdit) {
@@ -62,15 +65,31 @@ export default function Coupons() {
     }
   };
 
+  const handleOpenAddModal = () => {
+    setEditingCoupon(null);
+    setIsModalOpen(true);
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setEditingCoupon(null);
   };
 
   const handleDelete = (id: string) => {
-    if (window.confirm('정말로 이 쿠폰을 삭제하시겠습니까?')) {
-      deleteCouponMutation.mutate(id);
+    setCouponToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (couponToDelete) {
+      deleteCouponMutation.mutate(couponToDelete);
     }
+    handleCloseDeleteModal();
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setCouponToDelete(null);
   };
 
   const handleSubmit = (data: CouponFormData) => {
@@ -83,14 +102,20 @@ export default function Coupons() {
     };
 
     if (editingCoupon) {
-      const updatePayload = { ...couponPayload, isActive: editingCoupon.isActive };
-      updateCouponMutation.mutate({ id: editingCoupon.id, data: updatePayload });
+      const updatePayload = {
+        ...couponPayload,
+        isActive: editingCoupon.isActive,
+      };
+      updateCouponMutation.mutate({
+        id: editingCoupon.id,
+        data: updatePayload,
+      });
     } else {
       createCouponMutation.mutate(couponPayload as CreateCouponDto);
     }
   };
 
-  if (isLoading) return <CouponSkeleton />
+  if (isLoading) return <CouponSkeleton />;
   if (isError) return <div>Error loading coupons: {error.message}</div>;
 
   return (
@@ -109,6 +134,11 @@ export default function Coupons() {
           initialData={editingCoupon}
         />
       )}
+      <DeleteCouponModal
+        open={isDeleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 }

@@ -60,8 +60,12 @@ export async function PUT(
       const filename = `${Date.now()}-${file.name}`;
       const path = join(process.cwd(), 'public', 'uploads', 'menus', filename);
       await writeFile(path, buffer);
-      (updateData as any).imageBase64 = `/uploads/menus/${filename}`;
-      // TODO: Optionally delete the old image
+      updateData.imageUrl = `/uploads/menus/${filename}`;
+
+      if (existingMenu.imageUrl) {
+        const oldImagePath = join(process.cwd(), 'public', existingMenu.imageUrl);
+        await unlink(oldImagePath).catch(err => console.error(`Failed to delete old image: ${oldImagePath}`, err));
+      }
     }
 
     const updatedMenu = await prisma.menuItem.update({
@@ -72,7 +76,11 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json(updatedMenu);
+    const serializedMenu = {
+      ...updatedMenu,
+      price: updatedMenu.price.toNumber(),
+    };
+    return NextResponse.json(serializedMenu);
   } catch (error) {
     console.error('Error updating menu:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
@@ -107,8 +115,8 @@ export async function DELETE(
       return NextResponse.json({ error: 'Menu not found or access denied' }, { status: 404 });
     }
     
-    if (menuItem.imageBase64) {
-      const imagePath = join(process.cwd(), 'public', menuItem.imageBase64);
+    if (menuItem.imageUrl) {
+      const imagePath = join(process.cwd(), 'public', menuItem.imageUrl);
       try {
         await unlink(imagePath);
       } catch (fileError) {

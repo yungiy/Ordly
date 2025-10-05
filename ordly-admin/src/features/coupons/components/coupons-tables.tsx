@@ -50,7 +50,7 @@ export default function CouponTable({
                 <td className='p-2'>
                   {coupon.discountType === 'FIXED_AMOUNT' ? '정액' : '정률'}
                 </td>
-                <td className='p-4'>{String(coupon.discountValue)}</td>
+                <td className='p-2'>{String(coupon.discountValue)}</td>
                 <td className='p-2'>{`${
                   new Date(coupon.validFrom).toISOString().split('T')[0]
                 } ~ ${
