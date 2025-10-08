@@ -4,10 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import CardItem from '@/components/common/card-item';
 import ReservationItem from './reservation-item';
-import {
-  Reservation as PrismaReservation,
-  ReservationStatus as PrismaReservationStatus,
-} from '@prisma/client';
+import { Reservation as PrismaReservation } from '@prisma/client';
 import {
   Reservation as FrontendReservation,
   ReservationStatus as FrontendReservationStatus,
@@ -15,12 +12,13 @@ import {
 import ReservationSkeleton from '@/components/skeleton/reservation-skeleton';
 import { getReservationsByDate } from '../api/reservations.api';
 
-const transformReservation = (
-  res: PrismaReservation,
-): FrontendReservation => {
+const transformReservation = (res: PrismaReservation): FrontendReservation => {
   let status: FrontendReservationStatus;
 
-  status = res.status === 'CONFIRMED' || res.status === 'REQUESTED' ? 'confirmed' : 'cancelled';
+  status =
+    res.status === 'CONFIRMED' || res.status === 'REQUESTED'
+      ? 'confirmed'
+      : 'cancelled';
 
   return {
     id: res.id,
@@ -61,11 +59,11 @@ export default function ReservationToday() {
   }, []);
 
   if (!isClient) {
-    return <CardItem title={title}><ReservationSkeleton /></CardItem>;
+    return <ReservationSkeleton />;
   }
 
   if (isLoading) {
-    return <CardItem title={title}><ReservationSkeleton /></CardItem>;
+    return <ReservationSkeleton />;
   }
 
   if (!reservations || reservations.length === 0) {

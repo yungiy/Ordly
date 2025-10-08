@@ -13,8 +13,7 @@ export type LoginRequest = {
 
 export type Order = {
   id: string;
-  tableNumber: number;
-  orderNumber: number;
+  orderNumber: string;
   totalPrice: string;
   status: '준비중' | '조리중' | '완료' | '취소';
   items: OrderItemDetail[];
