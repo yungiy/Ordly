@@ -1,6 +1,5 @@
 import CardItem from '../common/card-item';
 
-
 export default function ReservationSkeleton() {
   return (
     <CardItem>

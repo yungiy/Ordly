@@ -1,6 +1,8 @@
 import { Reservation } from '@prisma/client';
 
-export const getReservationsByDate = async (date: string): Promise<Reservation[]> => {
+export const getReservationsByDate = async (
+  date: string
+): Promise<Reservation[]> => {
   const response = await fetch(`/api/reservations/${date}`);
 
   if (!response.ok) {

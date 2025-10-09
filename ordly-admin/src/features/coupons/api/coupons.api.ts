@@ -1,4 +1,3 @@
-
 import { Coupon } from '@prisma/client';
 
 const API_BASE_URL = '/api';
@@ -28,7 +27,9 @@ export const getCoupons = async (): Promise<Coupon[]> => {
   return handleResponse<Coupon[]>(response);
 };
 
-export const createCoupon = async (couponData: CreateCouponDto): Promise<Coupon> => {
+export const createCoupon = async (
+  couponData: CreateCouponDto
+): Promise<Coupon> => {
   const response = await fetch(`${API_BASE_URL}/coupons`, {
     method: 'POST',
     headers: {

@@ -9,7 +9,12 @@ type Props = {
   onUpdateStatus: (orderId: string, status: Order['status']) => void;
 };
 
-export default function OrderStatus({ title, orders, onOpenModal, onUpdateStatus }: Props) {
+export default function OrderStatus({
+  title,
+  orders,
+  onOpenModal,
+  onUpdateStatus,
+}: Props) {
   return (
     <CardItem title={title}>
       <ul className='flex flex-col gap-3 overflow-auto'>

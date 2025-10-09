@@ -30,7 +30,9 @@ export default function MenuItem({ item, onSelect, onDelete }: Props) {
   return (
     <div
       onClick={onSelect}
-      className={'flex items-center gap-4 p-2 rounded-lg cursor-pointer scrollbar-hide'}
+      className={
+        'flex items-center gap-4 p-2 rounded-lg cursor-pointer scrollbar-hide'
+      }
     >
       {item.imageUrl ? (
         <div className='bg-gray-200 flex items-center justify-center'>

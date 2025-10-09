@@ -80,12 +80,12 @@ export default function Menu() {
   }
 
   if (isError) {
-    return <div>에러가 발생했습니다...</div>
+    return <div>에러가 발생했습니다...</div>;
   }
 
   return (
-    <div className="h-full flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 scrollbar-hide">
-      <div className="md:col-span-1 h-full overflow-hidden scrollbar-hide">
+    <div className='h-full flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 scrollbar-hide'>
+      <div className='md:col-span-1 h-full overflow-hidden scrollbar-hide'>
         <MenuList
           menus={menus || []}
           onSelectMenu={handleSelectMenu}
@@ -94,7 +94,7 @@ export default function Menu() {
         />
       </div>
 
-      <div className="md:col-span-1 h-full overflow-hidden scrollbar-hide">
+      <div className='md:col-span-1 h-full overflow-hidden scrollbar-hide'>
         {selectedMenu ? (
           <MenuForm
             selectedMenu={selectedMenu}
@@ -103,8 +103,8 @@ export default function Menu() {
             categories={categories}
           />
         ) : (
-          <CardItem className="h-full flex items-center justify-center">
-            <p className="text-gray-500">
+          <CardItem className='h-full flex items-center justify-center'>
+            <p className='text-gray-500'>
               왼쪽에서 메뉴를 선택하거나 새 메뉴를 추가하세요.
             </p>
           </CardItem>

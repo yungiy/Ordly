@@ -1,16 +1,8 @@
 import { NextResponse } from 'next/server';
-import { OrderStatus as PrismaOrderStatus } from '@prisma/client';
-import { Order } from '@/types/types';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]/route';
-
-const statusMap: Record<PrismaOrderStatus, Order['status']> = {
-  PENDING: '준비중',
-  PREPARING: '조리중',
-  COMPLETED: '완료',
-  CANCELED: '취소',
-};
+import { transformOrder } from '@/utils/order';
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -20,7 +12,6 @@ export async function GET() {
 
   try {
     const storeId = session.user.storeId;
-
     const ordersFromDb = await prisma.order.findMany({
       where: {
         storeId: storeId,
@@ -37,23 +28,12 @@ export async function GET() {
       },
     });
 
-    const orders: Order[] = ordersFromDb.map((order) => ({
-      id: order.id,
-      orderNumber: order.orderNumber ?? '번호 없음',
-      totalPrice: order.totalPrice.toString(),
-      status: statusMap[order.status],
-      createdAt: order.createdAt.toISOString(),
-      items: order.orderItems.map((item) => ({
-        id: item.id,
-        name: item.menuItem.name,
-        quantity: item.quantity,
-        price: item.priceAtOrder.toString(),
-      })),
-    }));
+    const orders = ordersFromDb.map(transformOrder);
 
     return NextResponse.json(orders);
   } catch (error) {
-    console.error('Failed to fetch orders:', error);
-    return NextResponse.json({ error: 'Failed to fetch orders' }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+    console.error('[GET /api/orders] Error fetching orders:', { errorMessage, error });
+    return NextResponse.json({ error: '주문 목록을 가져오는 데 실패했습니다.' }, { status: 500 });
   }
 }

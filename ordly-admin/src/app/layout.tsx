@@ -20,6 +20,7 @@ export default function RootLayout({
           <QueryProvider>
             {children}
             <div id='modal-root' />
+            <div id='toast-root' />
           </QueryProvider>
         </AuthProvider>
       </body>

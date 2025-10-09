@@ -5,7 +5,7 @@ type MenuStoreState = {
   editingMenuId: string | null;
   openForm: (menuId?: string) => void;
   closeForm: () => void;
-}
+};
 export const useMenuStore = create<MenuStoreState>((set) => ({
   isFormOpen: false,
   editingMenuId: null,

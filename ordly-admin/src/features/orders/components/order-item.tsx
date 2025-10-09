@@ -9,7 +9,11 @@ type Props = {
   onUpdateStatus: (orderId: string, status: Order['status']) => void;
 };
 
-export default function OrderItem({ order, onOpenModal, onUpdateStatus }: Props) {
+export default function OrderItem({
+  order,
+  onOpenModal,
+  onUpdateStatus,
+}: Props) {
   const statusBgColor: Record<Order['status'], string> = {
     준비중: 'bg-blue-50',
     조리중: 'bg-yellow-50',
@@ -43,7 +47,7 @@ export default function OrderItem({ order, onOpenModal, onUpdateStatus }: Props)
     >
       <div>
         <p className='font-bold text-lg text-gray-800'>
-           {order.items[0]?.name ?? '항목 없음'}
+          {order.items[0]?.name ?? '항목 없음'}
         </p>
         <p className='text-sm text-gray-500'>주문번호: {order.orderNumber}</p>
       </div>

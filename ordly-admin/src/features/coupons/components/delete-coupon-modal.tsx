@@ -27,7 +27,10 @@ export default function DeleteCouponModal({ open, onClose, onConfirm }: Props) {
         >
           취소
         </Button>
-        <Button onClick={onConfirm} className='bg-red-500 text-white p-2 font-bold'>
+        <Button
+          onClick={onConfirm}
+          className='bg-red-500 text-white p-2 font-bold'
+        >
           삭제
         </Button>
       </div>

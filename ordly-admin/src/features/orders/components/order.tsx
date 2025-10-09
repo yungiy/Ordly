@@ -1,43 +1,46 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { getOrders, updateOrderStatus } from '../api/orders.api';
+import { useState } from 'react';
 import { Order } from '@/types/types';
 import OrderStatus from './order-status';
 import OrderModal from './order-modal';
+import { useGetOrders, useUpdateOrderStatus } from '@/hooks/useOrders.hooks';
 
 export default function OrderPage() {
-  const [orders, setOrders] = useState<Order[]>([]);
+  const { data: orders = [], isLoading, isError } = useGetOrders();
+  const { mutate: updateStatus } = useUpdateOrderStatus();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const fetchedOrders = await getOrders();
-        setOrders(fetchedOrders);
-      } catch (error) {
-        console.error('주문 목록을 불러오는 데 실패했습니다:', error);
-      }
-    };
-
-    fetchOrders();
-  }, []);
-
-  const handleUpdateOrderStatus = async (orderId: string, status: Order['status']) => {
+  const handleUpdateOrderStatus = async (
+    orderId: string,
+    status: Order['status']
+  ) => {
     try {
-      const updatedOrder = await updateOrderStatus({ id: orderId, status });
-      setOrders((prevOrders) =>
-        prevOrders.map((order) => (order.id === orderId ? { ...order, status: updatedOrder.status } : order))
-      );
+      updateStatus({ id: orderId, status });
     } catch (error) {
       console.error('주문 상태 업데이트에 실패했습니다:', error);
     }
   };
 
+  if (isLoading) {
+    return <div>로딩중</div>;
+  }
+
+  if (isError) {
+    return (
+      <div className='flex items-center justify-center h-full text-red-500'>
+        주문 목록을 불러오는 데 실패했습니다.
+      </div>
+    );
+  }
+
   const pendingOrders = orders.filter((o) => o.status === '준비중');
   const cookingOrders = orders.filter((o) => o.status === '조리중');
-  const doneOrders = orders.filter((o) => o.status === '완료' || o.status === '취소');
+  const doneOrders = orders.filter(
+    (o) => o.status === '완료' || o.status === '취소'
+  );
 
   const handleOpenModal = (order: Order) => {
     setSelectedOrder(order);
@@ -65,10 +68,19 @@ export default function OrderPage() {
           onUpdateStatus={handleUpdateOrderStatus}
         />
         <OrderStatus
-          title='완료' orders={doneOrders} onOpenModal={handleOpenModal} onUpdateStatus={handleUpdateOrderStatus}
+          title='완료'
+          orders={doneOrders}
+          onOpenModal={handleOpenModal}
+          onUpdateStatus={handleUpdateOrderStatus}
         />
       </div>
-      {selectedOrder && <OrderModal open={isModalOpen} onClose={handleCloseModal} order={selectedOrder} />}
+      {selectedOrder && (
+        <OrderModal
+          open={isModalOpen}
+          onClose={handleCloseModal}
+          order={selectedOrder}
+        />
+      )}
     </>
   );
 }

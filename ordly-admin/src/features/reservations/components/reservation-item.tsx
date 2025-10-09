@@ -23,7 +23,8 @@ export default function ReservationItem({ reservation }: Props) {
       <div className='flex justify-between items-center'>
         <div>
           <p className='font-bold text-gray-900'>
-            {reservation.time} - {reservation.name} 님 ({reservation.partySize}명)
+            {reservation.time} - {reservation.name} 님 ({reservation.partySize}
+            명)
           </p>
           <div className='flex items-center gap-2 text-sm text-gray-600'>
             <Phone size={12} />

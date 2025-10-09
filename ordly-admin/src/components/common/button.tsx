@@ -8,7 +8,7 @@ export default function Button(props: Props) {
     <button
       className={twMerge(
         'w-full rounded-sm disabled:opacity-50 cursor-pointer',
-        className,
+        className
       )}
       {...rest}
     >

@@ -1,23 +1,10 @@
 import { NextResponse } from 'next/server';
-import { OrderStatus as PrismaOrderStatus } from '@prisma/client';
-import { Order } from '@/types/types';
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../auth/[...nextauth]/route';
-
-const reverseStatusMap: Record<Order['status'], PrismaOrderStatus> = {
-  준비중: 'PENDING',
-  조리중: 'PREPARING',
-  완료: 'COMPLETED',
-  취소: 'CANCELED',
-};
-
-const statusMap: Record<PrismaOrderStatus, Order['status']> = {
-  PENDING: '준비중',
-  PREPARING: '조리중',
-  COMPLETED: '완료',
-  CANCELED: '취소',
-};
+import { Order } from '@/types/types';
+import { reverseStatusMap, transformOrder } from '@/utils/order';
 
 export async function PATCH(
   request: Request,
@@ -33,18 +20,25 @@ export async function PATCH(
 
   try {
     const body = await request.json();
-    const newStatus: Order['status'] = body.status;
+    const newStatus = body.status as Order['status'];
 
-    if (!newStatus || !reverseStatusMap[newStatus]) {
-      return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
+    // 요청 본문 유효성 검사
+    if (!newStatus || !Object.keys(reverseStatusMap).includes(newStatus)) {
+      return NextResponse.json({ error: '잘못된 상태 값입니다.' }, { status: 400 });
+    }
+
+    const existingOrder = await prisma.order.findUnique({
+      where: { id: orderId, storeId: storeId },
+    });
+
+    if (!existingOrder) {
+      return NextResponse.json({ error: '주문을 찾을 수 없거나 권한이 없습니다.' }, { status: 404 });
     }
 
     const prismaStatus = reverseStatusMap[newStatus];
-
-    const updatedOrderFromDb = await prisma.order.update({
+    const updatedOrderWithItems = await prisma.order.update({
       where: {
         id: orderId,
-        storeId: storeId, // 보안: 자신의 가게 주문만 수정 가능하도록 보장
       },
       data: {
         status: prismaStatus,
@@ -58,23 +52,17 @@ export async function PATCH(
       },
     });
 
-    const updatedOrder: Order = {
-      id: updatedOrderFromDb.id,
-      orderNumber: updatedOrderFromDb.orderNumber ?? '번호 없음',
-      totalPrice: updatedOrderFromDb.totalPrice.toString(),
-      status: statusMap[updatedOrderFromDb.status],
-      createdAt: updatedOrderFromDb.createdAt.toISOString(),
-      items: updatedOrderFromDb.orderItems.map((item) => ({
-        id: item.id,
-        name: item.menuItem.name,
-        quantity: item.quantity,
-        price: item.priceAtOrder.toString(),
-      })),
-    };
+    const updatedOrder = transformOrder(updatedOrderWithItems);
 
     return NextResponse.json(updatedOrder);
   } catch (error) {
-    console.error(`[PATCH /api/orders/${orderId}] - 주문 상태 업데이트 중 에러 발생:`, error);
-    return NextResponse.json({ error: 'Failed to update order status' }, { status: 500 });
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2025') {
+        return NextResponse.json({ error: '주문을 찾을 수 없습니다.' }, { status: 404 });
+      }
+    }
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+    console.error(`[PATCH /api/orders/${orderId}] Error updating order status:`, { errorMessage, error });
+    return NextResponse.json({ error: '주문 상태 업데이트에 실패했습니다.' }, { status: 500 });
   }
 }
