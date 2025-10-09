@@ -1,4 +1,4 @@
-import PayPage from '@/pages/pay-page';
+import PayPage from '@/features/pay/pay-page';
 
 export default function Page() {
   return <PayPage />;

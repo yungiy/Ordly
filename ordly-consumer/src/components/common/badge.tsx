@@ -9,7 +9,7 @@ const badgeColorStyles = {
   gray: 'bg-gray-300 text-gray-900',
 };
 
-export interface BadgeType {
+export type BadgeType = {
   title: string;
   color: keyof typeof badgeColorStyles;
   icon?: ComponentType<{ size?: number; className?: string }>;

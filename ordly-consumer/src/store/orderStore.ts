@@ -2,14 +2,14 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { CartItem } from './cartStore';
 
-export interface Order {
+export type Order = {
   id: string;
   date: Date;
   items: CartItem[];
   totalPrice: number;
 }
 
-interface OrderState {
+type OrderState = {
   orders: Order[];
   addOrder: (items: CartItem[], totalPrice: number) => void;
 }

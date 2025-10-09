@@ -1,9 +1,9 @@
 "use client";
 
-import OrderList from '@/components/order/order-list';
+import OrderList from '@/features/order/order-list';
 import BottomBar from '@/components/layout/bottom-bar';
-import Category from '@/components/order/category';
-import { useCategoryScroll } from '@/hooks/useCategoryScroll';
+import Category from '@/features/order/category';
+import { useCategoryScroll } from '@/hooks/useCategoryScroll.hooks';
 
 export default function HomeClient({ categories }: { categories: string[] }) {
   const { 

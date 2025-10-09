@@ -1,7 +1,7 @@
 import { BadgeType } from '@/components/common/badge';
 import { ThumbsUp, ArrowUpRight, Star, Sparkles, Flame } from 'lucide-react';
 
-export interface OrderItem {
+export type OrderItem = {
   id: number;
   category: string;
   title: string;

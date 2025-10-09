@@ -3,7 +3,7 @@
 import { Minus, Plus } from 'lucide-react';
 import React from 'react';
 
-interface Props {
+type Props = {
   value: number;
   min?: number;
   onChange: (value: number) => void;

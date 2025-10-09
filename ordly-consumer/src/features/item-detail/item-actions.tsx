@@ -10,11 +10,11 @@ import { useCartStore } from '@/store/cartStore';
 import { useToastStore } from '@/store/toastStore';
 import { formatCurrency } from '@/utils/format';
 
-interface Props {
+type Props = {
   id: number;
   price: number;
   title: string;
-}
+};
 
 export default function ItemActions({ id, price, title }: Props) {
   const [quantity, setQuantity] = useState(1);
@@ -35,8 +35,6 @@ export default function ItemActions({ id, price, title }: Props) {
   useEffect(() => {
     motionPrice.set(totalPrice);
   }, [totalPrice, motionPrice]);
-
-
 
   const handleAddToCart = () => {
     addToCart({ id, title, price }, quantity);

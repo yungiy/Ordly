@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 import { Search } from 'lucide-react';
 import Button from '@/components/common/button';
 
-interface Props {
+type Props = {
   categories: string[];
   onCategoryClick: (category: string) => void;
   activeCategory: string;

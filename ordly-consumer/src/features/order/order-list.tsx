@@ -1,8 +1,8 @@
 import { RefObject } from 'react';
-import { ITEMS } from '@/constants/items';
+import { ITEMS } from '@/constants';
 import OrderItem from './order-item';
 
-interface Props {
+type Props = {
   categoryRefs: RefObject<{ [key: string]: HTMLDivElement | null }>;
 }
 

@@ -1,7 +1,7 @@
 import { Download } from 'lucide-react';
 import React from 'react';
 
-export interface Coupon {
+export type Coupon = {
   id: number;
   dDay: string;
   amount: string;
@@ -12,7 +12,7 @@ export interface Coupon {
   endDate: string;
 }
 
-interface Props {
+type Props = {
   coupon: Coupon;
   onDownload: (title: string) => void;
 }

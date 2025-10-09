@@ -1,7 +1,7 @@
 'use client';
 
 import Header from '@/components/layout/header';
-import KakaoMap from '@/components/store/map';
+import KakaoMap from '@/features/store/map';
 
 export default function StorePage() {
   return (

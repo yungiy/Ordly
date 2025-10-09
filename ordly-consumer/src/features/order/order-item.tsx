@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { OrderItem as OrderItemType } from '@/constants/items';
-import Badge from '../common/badge';
+import { OrderItem as OrderItemType } from '@/constants';
+import Badge from '../../components/common/badge';
 
-interface Props {
+type Props = {
   item: OrderItemType;
 }
 

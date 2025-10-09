@@ -1,9 +1,9 @@
 'use client';
 
 import { useToastStore } from '@/store/toastStore';
-import CouponItem, { Coupon } from '@/components/coupon/coupon-item';
+import CouponItem, { Coupon } from '@/features/coupon/coupon-item';
 
-interface Props {
+type Props = {
   coupons: Coupon[];
 }
 

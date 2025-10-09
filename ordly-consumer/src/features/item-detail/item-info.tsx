@@ -1,7 +1,7 @@
 import Badge, { BadgeType } from '@/components/common/badge';
 import { formatCurrency } from '@/utils/format';
 
-interface Props {
+type Props = {
   title: string;
   price: number;
   description: string;

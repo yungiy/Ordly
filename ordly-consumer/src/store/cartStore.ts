@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 
-export interface CartItem {
+export type CartItem = {
   id: number;
   title: string;
   price: number;
   quantity: number;
 }
 
-interface CartState {
+type CartState = {
   items: CartItem[];
   addToCart: (item: Omit<CartItem, 'quantity'>, quantity: number) => void;
   updateItemQuantity: (itemId: number, quantity: number) => void;

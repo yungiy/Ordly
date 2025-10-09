@@ -4,7 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 
-interface Props {
+type Props = {
   title?: string;
   leftContent?: React.ReactNode;
   rightContent?: React.ReactNode;

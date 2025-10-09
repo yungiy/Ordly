@@ -1,10 +1,10 @@
 'use client';
 
 import { notFound, useParams } from 'next/navigation';
-import { ITEMS } from '@/constants/items';
-import ItemImage from '@/components/item-detail/item-image';
-import ItemInfo from '@/components/item-detail/item-info';
-import ItemActions from '@/components/item-detail/item-actions';
+import { ITEMS } from '@/constants';
+import ItemImage from '@/features/item-detail/item-image';
+import ItemInfo from '@/features/item-detail/item-info';
+import ItemActions from '@/features/item-detail/item-actions';
 
 export default function ItemDetailPage() {
   const params = useParams();

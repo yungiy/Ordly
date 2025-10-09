@@ -1,6 +1,6 @@
 'use client';
 import Header from '@/components/layout/header';
-import CartPage from '@/pages/cart-page';
+import CartPage from '@/features/cart/cart-page';
 import { useCartStore } from '@/store/cartStore';
 
 export default function Cart() {
