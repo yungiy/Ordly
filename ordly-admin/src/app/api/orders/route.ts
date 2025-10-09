@@ -1,4 +1,3 @@
-
 import { NextResponse } from 'next/server';
 import { OrderStatus as PrismaOrderStatus } from '@prisma/client';
 import { Order } from '@/types/types';
@@ -40,7 +39,7 @@ export async function GET() {
 
     const orders: Order[] = ordersFromDb.map((order) => ({
       id: order.id,
-      orderNumber: order.orderNumber.toString(),
+      orderNumber: order.orderNumber ?? '번호 없음',
       totalPrice: order.totalPrice.toString(),
       status: statusMap[order.status],
       createdAt: order.createdAt.toISOString(),

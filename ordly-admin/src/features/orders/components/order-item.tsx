@@ -17,11 +17,21 @@ export default function OrderItem({ order, onOpenModal, onUpdateStatus }: Props)
     취소: 'bg-red-50',
   };
 
-  const handleComplete = () => {
-    if (order.status === '준비중') {
-      onUpdateStatus(order.id, '조리중');
-    } else if (order.status === '조리중') {
-      onUpdateStatus(order.id, '완료');
+  const getNextStatus = (): Order['status'] | null => {
+    switch (order.status) {
+      case '준비중':
+        return '조리중';
+      case '조리중':
+        return '완료';
+      default:
+        return null;
+    }
+  };
+
+  const handleStatusUpdate = () => {
+    const nextStatus = getNextStatus();
+    if (nextStatus) {
+      onUpdateStatus(order.id, nextStatus);
     }
   };
   return (
@@ -47,7 +57,7 @@ export default function OrderItem({ order, onOpenModal, onUpdateStatus }: Props)
         </Button>
         {order.status !== '완료' && order.status !== '취소' && (
           <Button
-            onClick={handleComplete}
+            onClick={handleStatusUpdate}
             className='px-2 border text-sm rounded-xl text-gray-800'
           >
             완료
