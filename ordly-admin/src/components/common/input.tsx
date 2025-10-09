@@ -14,12 +14,12 @@ const Input = forwardRef(
         autoComplete='off'
         className={twMerge(
           'h-11 w-full text-black rounded-sm px-4 font-medium focus:outline-none',
-          className,
+          className
         )}
         {...rest}
       />
     );
-  },
+  }
 );
 
 Input.displayName = 'Input';

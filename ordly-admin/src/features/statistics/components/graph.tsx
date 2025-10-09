@@ -3,7 +3,6 @@ import Input from '@/components/common/input';
 import GraphVisualizer from './graph-visualizer';
 
 export default function Graph() {
-
   return (
     <CardItem className='overflow-auto scrollbar-hide'>
       <div className='flex justify-between items-center'>

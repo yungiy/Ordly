@@ -6,11 +6,17 @@ import MenuItem from './menu-item';
 
 type Props = {
   menus: Menus[];
-    onSelectMenu: (menu: Menus) => void;
+  onSelectMenu: (menu: Menus) => void;
+  onDeleteRequest: (id: string) => void;
   onAddNewMenu: () => void;
 };
 
-export default function MenuList({ menus, onAddNewMenu, onSelectMenu }: Props) {
+export default function MenuList({
+  menus,
+  onAddNewMenu,
+  onSelectMenu,
+  onDeleteRequest,
+}: Props) {
   const groupedMenus = menus.reduce((index, menu) => {
     (index[menu.category.name] = index[menu.category.name] || []).push(menu);
     return index;
@@ -20,7 +26,10 @@ export default function MenuList({ menus, onAddNewMenu, onSelectMenu }: Props) {
     <CardItem className='flex flex-col overflow-auto'>
       <div className='flex justify-between items-center mb-4'>
         <h2 className='text-2xl font-bold'>메뉴 목록</h2>
-        <Button onClick={onAddNewMenu} className='w-auto h-auto bg-yellow-400 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2'>
+        <Button
+          onClick={onAddNewMenu}
+          className='w-auto h-auto bg-yellow-400 text-white font-semibold py-2 px-4 rounded-lg flex items-center gap-2'
+        >
           <PlusCircle size={20} />새 메뉴 추가
         </Button>
       </div>
@@ -32,7 +41,12 @@ export default function MenuList({ menus, onAddNewMenu, onSelectMenu }: Props) {
             </h3>
             <div className='flex flex-col gap-2'>
               {items.map((item) => (
-                <MenuItem key={item.id} item={item} onSelect={() => onSelectMenu(item)}  />
+                <MenuItem
+                  key={item.id}
+                  item={item}
+                  onSelect={() => onSelectMenu(item)}
+                  onDelete={onDeleteRequest}
+                />
               ))}
             </div>
           </div>

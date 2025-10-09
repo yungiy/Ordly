@@ -1,3 +1,30 @@
+-- CreateEnum
+CREATE TYPE "public"."MenuStatus" AS ENUM ('AVAILABLE', 'SOLDOUT');
+
+-- CreateEnum
+CREATE TYPE "public"."OrderStatus" AS ENUM ('PENDING', 'PREPARING', 'COMPLETED', 'CANCELED');
+
+-- CreateEnum
+CREATE TYPE "public"."PaymentStatus" AS ENUM ('PENDING', 'SUCCESS', 'FAILED');
+
+-- CreateEnum
+CREATE TYPE "public"."DiscountType" AS ENUM ('FIXED_AMOUNT', 'PERCENTAGE');
+
+-- CreateEnum
+CREATE TYPE "public"."ReservationStatus" AS ENUM ('REQUESTED', 'CONFIRMED', 'CANCELED');
+
+-- CreateTable
+CREATE TABLE "public"."User" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "storeId" TEXT NOT NULL,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateTable
 CREATE TABLE "public"."Store" (
     "id" TEXT NOT NULL,
@@ -8,31 +35,6 @@ CREATE TABLE "public"."Store" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Store_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "public"."Table" (
-    "id" TEXT NOT NULL,
-    "number" INTEGER NOT NULL,
-    "capacity" INTEGER NOT NULL,
-    "status" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "storeId" TEXT NOT NULL,
-
-    CONSTRAINT "Table_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "public"."User" (
-    "id" TEXT NOT NULL,
-    "name" TEXT,
-    "email" TEXT,
-    "role" TEXT NOT NULL DEFAULT 'CUSTOMER',
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -54,7 +56,7 @@ CREATE TABLE "public"."MenuItem" (
     "description" TEXT,
     "price" DECIMAL(10,2) NOT NULL,
     "imageUrl" TEXT,
-    "isAvailable" BOOLEAN NOT NULL DEFAULT true,
+    "status" "public"."MenuStatus" NOT NULL DEFAULT 'AVAILABLE',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "categoryId" TEXT NOT NULL,
@@ -65,12 +67,12 @@ CREATE TABLE "public"."MenuItem" (
 -- CreateTable
 CREATE TABLE "public"."Order" (
     "id" TEXT NOT NULL,
-    "status" TEXT NOT NULL,
+    "orderNumber" TEXT NOT NULL,
+    "status" "public"."OrderStatus" NOT NULL,
     "totalPrice" DECIMAL(10,2) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "tableId" TEXT NOT NULL,
-    "userId" TEXT,
+    "storeId" TEXT NOT NULL,
 
     CONSTRAINT "Order_pkey" PRIMARY KEY ("id")
 );
@@ -92,7 +94,7 @@ CREATE TABLE "public"."Payment" (
     "id" TEXT NOT NULL,
     "amount" DECIMAL(10,2) NOT NULL,
     "method" TEXT NOT NULL,
-    "status" TEXT NOT NULL,
+    "status" "public"."PaymentStatus" NOT NULL,
     "impUid" TEXT,
     "merchantUid" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -106,7 +108,7 @@ CREATE TABLE "public"."Coupon" (
     "id" TEXT NOT NULL,
     "code" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "discountType" TEXT NOT NULL,
+    "discountType" "public"."DiscountType" NOT NULL,
     "discountValue" DECIMAL(10,2) NOT NULL,
     "validFrom" TIMESTAMP(3) NOT NULL,
     "validUntil" TIMESTAMP(3) NOT NULL,
@@ -115,17 +117,6 @@ CREATE TABLE "public"."Coupon" (
     "storeId" TEXT NOT NULL,
 
     CONSTRAINT "Coupon_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "public"."UserCoupon" (
-    "isUsed" BOOLEAN NOT NULL DEFAULT false,
-    "usedAt" TIMESTAMP(3),
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "userId" TEXT NOT NULL,
-    "couponId" TEXT NOT NULL,
-
-    CONSTRAINT "UserCoupon_pkey" PRIMARY KEY ("userId","couponId")
 );
 
 -- CreateTable
@@ -145,17 +136,21 @@ CREATE TABLE "public"."Reservation" (
     "customerPhone" TEXT NOT NULL,
     "numberOfGuests" INTEGER NOT NULL,
     "reservationTime" TIMESTAMP(3) NOT NULL,
-    "status" TEXT NOT NULL,
+    "status" "public"."ReservationStatus" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "storeId" TEXT NOT NULL,
-    "tableId" TEXT,
-    "userId" TEXT,
 
     CONSTRAINT "Reservation_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "public"."User"("email");
+CREATE UNIQUE INDEX "User_name_key" ON "public"."User"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Store_name_key" ON "public"."Store"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Order_orderNumber_key" ON "public"."Order"("orderNumber");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Payment_impUid_key" ON "public"."Payment"("impUid");
@@ -173,7 +168,7 @@ CREATE UNIQUE INDEX "Coupon_code_key" ON "public"."Coupon"("code");
 CREATE UNIQUE INDEX "UsedCoupon_orderId_key" ON "public"."UsedCoupon"("orderId");
 
 -- AddForeignKey
-ALTER TABLE "public"."Table" ADD CONSTRAINT "Table_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "public"."Store"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."User" ADD CONSTRAINT "User_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "public"."Store"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."Category" ADD CONSTRAINT "Category_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "public"."Store"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -182,10 +177,7 @@ ALTER TABLE "public"."Category" ADD CONSTRAINT "Category_storeId_fkey" FOREIGN K
 ALTER TABLE "public"."MenuItem" ADD CONSTRAINT "MenuItem_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "public"."Category"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Order" ADD CONSTRAINT "Order_tableId_fkey" FOREIGN KEY ("tableId") REFERENCES "public"."Table"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."Order" ADD CONSTRAINT "Order_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."Order" ADD CONSTRAINT "Order_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "public"."Store"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."OrderItem" ADD CONSTRAINT "OrderItem_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "public"."Order"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -200,12 +192,6 @@ ALTER TABLE "public"."Payment" ADD CONSTRAINT "Payment_orderId_fkey" FOREIGN KEY
 ALTER TABLE "public"."Coupon" ADD CONSTRAINT "Coupon_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "public"."Store"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."UserCoupon" ADD CONSTRAINT "UserCoupon_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."UserCoupon" ADD CONSTRAINT "UserCoupon_couponId_fkey" FOREIGN KEY ("couponId") REFERENCES "public"."Coupon"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "public"."UsedCoupon" ADD CONSTRAINT "UsedCoupon_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "public"."Order"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -213,9 +199,3 @@ ALTER TABLE "public"."UsedCoupon" ADD CONSTRAINT "UsedCoupon_couponId_fkey" FORE
 
 -- AddForeignKey
 ALTER TABLE "public"."Reservation" ADD CONSTRAINT "Reservation_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "public"."Store"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."Reservation" ADD CONSTRAINT "Reservation_tableId_fkey" FOREIGN KEY ("tableId") REFERENCES "public"."Table"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "public"."Reservation" ADD CONSTRAINT "Reservation_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

@@ -12,7 +12,12 @@ type Props = {
   categories: Category[];
 };
 
-export default function MenuForm({ selectedMenu, onClose, onSuccess, categories }: Props) {
+export default function MenuForm({
+  selectedMenu,
+  onClose,
+  onSuccess,
+  categories,
+}: Props) {
   const isNew = selectedMenu === 'new';
   const title = isNew ? '새 메뉴 추가' : '메뉴 수정';
 
@@ -62,7 +67,9 @@ export default function MenuForm({ selectedMenu, onClose, onSuccess, categories 
     }
 
     try {
-      const url = isNew ? '/api/menus' : `/api/menus/${(selectedMenu as Menus).id}`;
+      const url = isNew
+        ? '/api/menus'
+        : `/api/menus/${(selectedMenu as Menus).id}`;
       const method = isNew ? 'POST' : 'PUT';
 
       const response = await fetch(url, {
@@ -72,12 +79,16 @@ export default function MenuForm({ selectedMenu, onClose, onSuccess, categories 
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || `Failed to ${isNew ? 'create' : 'update'} menu`);
+        throw new Error(
+          errorData.error || `Failed to ${isNew ? 'create' : 'update'} menu`
+        );
       }
 
       onSuccess();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+      setError(
+        err instanceof Error ? err.message : 'An unknown error occurred'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -116,7 +127,7 @@ export default function MenuForm({ selectedMenu, onClose, onSuccess, categories 
                 onChange={(e) => setCategoryId(e.target.value)}
                 required
               >
-                <option value="">카테고리 선택</option>
+                <option value=''>카테고리 선택</option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.name}
@@ -148,11 +159,11 @@ export default function MenuForm({ selectedMenu, onClose, onSuccess, categories 
               <input
                 type='file'
                 onChange={handleImageChange}
-                accept="image/*"
+                accept='image/*'
                 className='w-full border border-gray-400 rounded-md p-2 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200'
               />
             </div>
-            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+            {error && <p className='text-red-500 text-sm mt-2'>{error}</p>}
           </div>
         </div>
 

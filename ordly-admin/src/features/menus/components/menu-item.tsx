@@ -4,15 +4,15 @@ import { Menus } from '@/types/types';
 import Button from '@/components/common/button';
 import React from 'react';
 import { useDeleteMenu, useUpdateMenuStatus } from '@/hooks/useMenus.hooks';
-
 type Props = {
   item: Menus;
   onSelect: () => void;
+  onDelete: (id: string) => void;
 };
 
 const formatCurrency = (amount: number) => `₩${amount.toLocaleString()}`;
 
-export default function MenuItem({ item, onSelect }: Props) {
+export default function MenuItem({ item, onSelect, onDelete }: Props) {
   const { mutate: updateStatus, isPending } = useUpdateMenuStatus();
   const { mutate: deleteMenu, isPending: isDeleting } = useDeleteMenu();
 
@@ -24,20 +24,20 @@ export default function MenuItem({ item, onSelect }: Props) {
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation(); // 부모의 onSelect 이벤트 방지
-    if (window.confirm('정말로 이 메뉴를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
-      deleteMenu(item.id);
-    }
+    onDelete(item.id);
   };
 
   return (
     <div
       onClick={onSelect}
-      className={'flex items-center gap-4 p-2 rounded-lg cursor-pointer scrollbar-hide'}
+      className={
+        'flex items-center gap-4 p-2 rounded-lg cursor-pointer scrollbar-hide'
+      }
     >
-      {item.imageBase64 ? (
+      {item.imageUrl ? (
         <div className='bg-gray-200 flex items-center justify-center'>
           <Image
-            src={item.imageBase64}
+            src={item.imageUrl}
             alt={item.name}
             width={80}
             height={80}

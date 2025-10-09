@@ -6,7 +6,6 @@ import {
   QueryFunction,
 } from '@tanstack/react-query';
 
-
 export const useApiQuery = <
   TQueryFnData = unknown,
   TError = Error,
@@ -14,7 +13,6 @@ export const useApiQuery = <
 >(
   queryKey: QueryKey,
   queryFn: QueryFunction<TQueryFnData>,
-  // options 객체에서 queryKey와 queryFn은 제외하여 타입 안정성 확보
   options?: Omit<
     UseQueryOptions<TQueryFnData, TError, TData>,
     'queryKey' | 'queryFn'

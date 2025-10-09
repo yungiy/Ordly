@@ -4,15 +4,18 @@ import MenuList from './menu-list';
 import { Category, Menus } from '@/types/types';
 import { useState, useEffect } from 'react';
 import CardItem from '@/components/common/card-item';
-import MenuForm from './menu-form';
-import { useGetMenus } from '@/hooks/useMenus.hooks';
-import MenuSkeleton from '@/components/skeleton/menu-skeleton';
 import { useQueryClient } from '@tanstack/react-query';
+import MenuForm from './menu-form';
+import { useGetMenus, useDeleteMenu } from '@/hooks/useMenus.hooks';
+import MenuSkeleton from '@/components/skeleton/menu-skeleton';
+import DeleteMenuModal from './delete-menu-modal';
 
 export default function Menu() {
   const { data: menus, isLoading, isError } = useGetMenus();
   const [selectedMenu, setSelectedMenu] = useState<Menus | 'new' | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [menuToDelete, setMenuToDelete] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -31,6 +34,8 @@ export default function Menu() {
     fetchCategories();
   }, []);
 
+  const { mutate: deleteMenu, isPending: isDeleting } = useDeleteMenu();
+
   const handleSelectMenu = (menu: Menus) => {
     setSelectedMenu(menu);
   };
@@ -48,25 +53,48 @@ export default function Menu() {
     handleCloseForm();
   };
 
+  const handleDeleteRequest = (id: string) => {
+    setMenuToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (menuToDelete) {
+      deleteMenu(menuToDelete, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['menus'] });
+          handleCloseDeleteModal();
+          setSelectedMenu(null);
+        },
+      });
+    }
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setMenuToDelete(null);
+  };
+
   if (isLoading) {
     return <MenuSkeleton />;
   }
 
   if (isError) {
-    return <div>에러가 발생했습니다...</div>
+    return <div>에러가 발생했습니다...</div>;
   }
 
   return (
-    <div className="h-full flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 scrollbar-hide">
-      <div className="md:col-span-1 h-full overflow-hidden scrollbar-hide">
+    <div className='h-full flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 scrollbar-hide'>
+      <div className='md:col-span-1 h-full overflow-hidden scrollbar-hide'>
         <MenuList
           menus={menus || []}
           onSelectMenu={handleSelectMenu}
           onAddNewMenu={handleAddNewMenu}
+          onDeleteRequest={handleDeleteRequest}
         />
       </div>
 
-      <div className="md:col-span-1 h-full overflow-hidden scrollbar-hide">
+      <div className='md:col-span-1 h-full overflow-hidden scrollbar-hide'>
         {selectedMenu ? (
           <MenuForm
             selectedMenu={selectedMenu}
@@ -75,13 +103,19 @@ export default function Menu() {
             categories={categories}
           />
         ) : (
-          <CardItem className="h-full flex items-center justify-center">
-            <p className="text-gray-500">
+          <CardItem className='h-full flex items-center justify-center'>
+            <p className='text-gray-500'>
               왼쪽에서 메뉴를 선택하거나 새 메뉴를 추가하세요.
             </p>
           </CardItem>
         )}
       </div>
+      <DeleteMenuModal
+        open={isDeleteModalOpen}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleConfirmDelete}
+        isDeleting={isDeleting}
+      />
     </div>
   );
 }

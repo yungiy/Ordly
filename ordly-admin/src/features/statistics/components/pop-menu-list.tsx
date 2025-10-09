@@ -46,7 +46,7 @@ export default function PopMenuList() {
       </div>
       <div className='space-y-3 pt-2'>
         {isLoading ? (
-          <MenuListSkeleton/>
+          <MenuListSkeleton />
         ) : (
           menus?.map((menu) => (
             <PopularMenuItem

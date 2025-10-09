@@ -1,17 +1,21 @@
 import { MouseEventHandler } from 'react';
 import { Menu } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth.hooks';
 type Props = {
   toggleSidebar: MouseEventHandler<HTMLButtonElement>;
 };
 
 export default function Header({ toggleSidebar }: Props) {
+  const { session } = useAuth();
+  const storeName = session?.user?.storeName || 'Ordly';
+
   return (
     <header className='bg-slate-50 p-4 flex items-center'>
-      <button onClick={toggleSidebar} className="text-gray-600 md:hidden">
+      <button onClick={toggleSidebar} className='text-gray-600 md:hidden'>
         <Menu size={28} />
       </button>
       <div className='text-2xl text-gray-800 font-bold md:ml-0 ml-4'>
-        ShopName
+        {storeName}
       </div>
     </header>
   );

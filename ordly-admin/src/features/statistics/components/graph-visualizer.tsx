@@ -25,7 +25,7 @@ export default function GraphVisualizer() {
       <div>
         <h2 className='text-lg font-bold mb-2'>메뉴별 매출 현황</h2>
         <div className='h-[300px]'>
-          <BarChart data={barChartDemoData} dataKey='name'/>
+          <BarChart data={barChartDemoData} dataKey='name' />
         </div>
       </div>
       <div>

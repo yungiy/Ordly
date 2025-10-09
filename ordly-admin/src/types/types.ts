@@ -13,10 +13,9 @@ export type LoginRequest = {
 
 export type Order = {
   id: string;
-  tableNumber: number;
-  orderNumber: number;
+  orderNumber: string;
   totalPrice: string;
-  status: 'pending' | 'cooking' | 'done' | 'cencel';
+  status: '준비중' | '조리중' | '완료' | '취소';
   items: OrderItemDetail[];
   createdAt: string;
 };
@@ -62,7 +61,7 @@ export type Menus = {
   name: string;
   description?: string;
   price: number;
-  imageBase64?: string;
+  imageUrl?: string;
   status: 'AVAILABLE' | 'SOLDOUT'; 
 };
 

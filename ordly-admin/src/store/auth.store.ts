@@ -2,11 +2,11 @@ import { Session } from 'next-auth';
 import { create } from 'zustand';
 
 type AuthState = {
-  session: Session | null; 
-  isAuthenticated: boolean; 
-  setSession: (session: Session | null) => void; 
-  clearSession: () => void; 
-}
+  session: Session | null;
+  isAuthenticated: boolean;
+  setSession: (session: Session | null) => void;
+  clearSession: () => void;
+};
 
 export const useAuthStore = create<AuthState>((set) => ({
   session: null,

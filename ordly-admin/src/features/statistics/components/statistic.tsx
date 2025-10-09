@@ -8,7 +8,7 @@ export default function StatisticPage() {
         <PopMenuList />
       </div>
       <div className='lg:col-span-2 flex flex-col gap-4'>
-        <Graph/>
+        <Graph />
       </div>
     </div>
   );

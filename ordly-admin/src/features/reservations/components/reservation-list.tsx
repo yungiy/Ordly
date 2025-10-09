@@ -19,7 +19,6 @@ type Props = {
   selectedDate: Date | null;
 };
 
-
 const transformReservation = (
   res: PrismaReservation,
   index: number,

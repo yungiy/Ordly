@@ -67,6 +67,7 @@ model MenuItem {
 
 model Order {
   id         String      @id @default(cuid())
+  orderNumber String       @unique
   status     OrderStatus
   totalPrice Decimal     @db.Decimal(10, 2)
   createdAt  DateTime    @default(now())
