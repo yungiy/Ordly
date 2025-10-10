@@ -1,6 +1,6 @@
 import MainHeaders from '@/components/layout/main-headers';
 import Footers from '@/components/layout/footers';
-import HomeClient from './HomeClient';
+import HomeClient from './home-client';
 
 const CATEGORIES = [
   'COFFEE',

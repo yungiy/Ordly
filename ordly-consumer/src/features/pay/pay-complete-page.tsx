@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Header from '@/components/layout/header';
-import { useCartStore } from '@/store/cartStore';
+import { useCartStore } from '@/store/cart.store';
 import { CheckCircle2 } from 'lucide-react';
 
 export default function PayCompletePage() {

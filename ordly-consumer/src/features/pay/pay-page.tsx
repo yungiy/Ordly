@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import Script from 'next/script';
-import { useCartStore } from '@/store/cartStore';
+import { useCartStore } from '@/store/cart.store';
 import Header from '@/components/layout/header';
 import { formatCurrency } from '@/utils/format';
-import { useToastStore } from '@/store/toastStore';
+import { useToastStore } from '@/store/toast.store';
 import { useRouter } from 'next/navigation';
 
 // 아임포트 타입 정의 (window.IMP)

@@ -1,5 +1,4 @@
 import { forwardRef } from 'react';
-import { Search } from 'lucide-react';
 import Button from '@/components/common/button';
 
 type Props = {
@@ -30,9 +29,6 @@ const Classification = forwardRef<HTMLElement, Props>(
             </Button>
           ))}
         </div>
-        <Button className='pl-2 h-auto w-auto bg-transparent text-black border-none shadow-none'>
-          <Search className='h-5 w-5 text-gray-600' />
-        </Button>
       </section>
     );
   }

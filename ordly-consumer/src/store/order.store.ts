@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { CartItem } from './cartStore';
+import type { CartItem } from './cart.store';
 
 export type Order = {
   id: string;

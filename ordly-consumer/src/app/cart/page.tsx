@@ -1,7 +1,7 @@
 'use client';
 import Header from '@/components/layout/header';
 import CartPage from '@/features/cart/cart-page';
-import { useCartStore } from '@/store/cartStore';
+import { useCartStore } from '@/store/cart.store';
 
 export default function Cart() {
   const { clearCart } = useCartStore();

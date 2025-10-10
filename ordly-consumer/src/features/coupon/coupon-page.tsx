@@ -1,6 +1,6 @@
 'use client';
 
-import { useToastStore } from '@/store/toastStore';
+import { useToastStore } from '@/store/toast.store';
 import CouponItem, { Coupon } from '@/features/coupon/coupon-item';
 
 type Props = {

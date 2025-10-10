@@ -1,6 +1,6 @@
 'use client';
 
-import { useToastStore } from '@/store/toastStore';
+import { useToastStore } from '@/store/toast.store';
 import { X } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 
