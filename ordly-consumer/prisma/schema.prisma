@@ -1,0 +1,162 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id        String     @id
+  name      String
+  order     Int
+  createdAt DateTime   @default(now())
+  updatedAt DateTime
+  storeId   String
+  Store     Store      @relation(fields: [storeId], references: [id])
+  MenuItem  MenuItem[]
+}
+
+model Coupon {
+  id            String       @id
+  code          String       @unique
+  description   String
+  discountType  DiscountType
+  discountValue Decimal      @db.Decimal(10, 2)
+  validFrom     DateTime
+  validUntil    DateTime
+  isActive      Boolean      @default(true)
+  createdAt     DateTime     @default(now())
+  storeId       String
+  Store         Store        @relation(fields: [storeId], references: [id])
+  UsedCoupon    UsedCoupon[]
+}
+
+model MenuItem {
+  id          String      @id
+  name        String
+  description String?
+  price       Decimal     @db.Decimal(10, 2)
+  imageUrl    String?
+  status      MenuStatus  @default(AVAILABLE)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime
+  categoryId  String
+  Category    Category    @relation(fields: [categoryId], references: [id])
+  OrderItem   OrderItem[]
+}
+
+model Order {
+  id          String      @id
+  orderNumber String      @unique
+  status      OrderStatus
+  totalPrice  Decimal     @db.Decimal(10, 2)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime
+  storeId     String
+  Store       Store       @relation(fields: [storeId], references: [id])
+  OrderItem   OrderItem[]
+  Payment     Payment?
+  UsedCoupon  UsedCoupon?
+}
+
+model OrderItem {
+  id           String   @id
+  quantity     Int
+  priceAtOrder Decimal  @db.Decimal(10, 2)
+  createdAt    DateTime @default(now())
+  orderId      String
+  menuItemId   String
+  MenuItem     MenuItem @relation(fields: [menuItemId], references: [id])
+  Order        Order    @relation(fields: [orderId], references: [id])
+}
+
+model Payment {
+  id          String        @id
+  amount      Decimal       @db.Decimal(10, 2)
+  method      String
+  status      PaymentStatus
+  impUid      String?       @unique
+  merchantUid String        @unique
+  createdAt   DateTime      @default(now())
+  orderId     String        @unique
+  Order       Order         @relation(fields: [orderId], references: [id])
+}
+
+model Reservation {
+  id              String            @id
+  customerName    String
+  customerPhone   String
+  numberOfGuests  Int
+  reservationTime DateTime
+  status          ReservationStatus
+  createdAt       DateTime          @default(now())
+  storeId         String
+  Store           Store             @relation(fields: [storeId], references: [id])
+}
+
+model Store {
+  id          String        @id
+  name        String        @unique @db.VarChar(255)
+  address     String
+  phone       String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime
+  Category    Category[]
+  Coupon      Coupon[]
+  Order       Order[]
+  Reservation Reservation[]
+  User        User[]
+}
+
+model UsedCoupon {
+  discountAmount Decimal  @db.Decimal(10, 2)
+  createdAt      DateTime @default(now())
+  orderId        String   @unique
+  couponId       String
+  Coupon         Coupon   @relation(fields: [couponId], references: [id])
+  Order          Order    @relation(fields: [orderId], references: [id])
+
+  @@id([orderId, couponId])
+}
+
+model User {
+  id        String   @id
+  name      String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  storeId   String
+  Store     Store    @relation(fields: [storeId], references: [id])
+}
+
+enum DiscountType {
+  FIXED_AMOUNT
+  PERCENTAGE
+}
+
+enum MenuStatus {
+  AVAILABLE
+  SOLDOUT
+}
+
+enum OrderStatus {
+  PENDING
+  PREPARING
+  COMPLETED
+  CANCELED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum ReservationStatus {
+  REQUESTED
+  CONFIRMED
+  CANCELED
+}

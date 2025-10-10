@@ -1,4 +1,4 @@
-import StorePage from '@/pages/store-page';
+import StorePage from '@/features/store/store-page';
 
 export default function Page() {
   return <StorePage />;

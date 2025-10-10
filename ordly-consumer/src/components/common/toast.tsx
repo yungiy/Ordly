@@ -1,16 +1,16 @@
 'use client';
 
-import { useToastStore } from '@/store/toastStore';
+import { useToastStore } from '@/store/toast.store';
 import { X } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 
-interface ToastProps {
+type Props = {
   message: string;
   id: number;
   className?: string;
 }
 
-function Toast({ message, id, className }: ToastProps) {
+function Toast({ message, id, className }: Props) {
   const { hideToast } = useToastStore();
 
   return (
@@ -40,7 +40,7 @@ export function ToastContainer() {
 
   return (
     <div className='max-w-[430px] w-full fixed bottom-20 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 px-4'>
-      {toasts.map((toast) => (
+      {toasts.map((toast: any) => (
         <Toast key={toast.id} id={toast.id} message={toast.message} />
       ))}
     </div>

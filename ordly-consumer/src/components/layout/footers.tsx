@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function footers() {
   return (
-    <>
+    <footer>
       <div className='px-4 py-2 bg-gray-100'>
         <div className='py-2 font-bold text-base text-gray-600'>
           <span>yungiy 개인 프로젝트</span>
@@ -13,15 +13,16 @@ export default function footers() {
           <p>이메일 : devyungiy@gmail.com</p>
         </div>
         <div className='py-4'>
-          <div className='border border-gary' />
+          <div className='border border-gray-200' />
         </div>
         <div className=' text-sm gap-2 flex text-gray-500'>
-          <Link href={''}>개인정보 처리방침</Link>|<Link href={''}>이용약관</Link>
+          <Link href={''}>개인정보 처리방침</Link>|
+          <Link href={''}>이용약관</Link>
         </div>
         <div className='text-sm pt-4 pb-11 font-thin text-gray-500'>
           <p>@ yungiy All rights reserved.</p>
         </div>
       </div>
-    </>
-  )
+    </footer>
+  );
 }

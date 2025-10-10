@@ -1,6 +1,6 @@
 import Header from '@/components/layout/header';
-import CouponPageClient from '@/pages/coupon-page';
-import { Coupon } from '@/components/coupon/coupon-item';
+import CouponPageClient from '@/features/coupon/coupon-page';
+import { Coupon } from '@/features/coupon/coupon-item';
 
 const coupons: Coupon[] = [
   {

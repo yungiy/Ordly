@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { ShoppingCart } from 'lucide-react';
 import Button from '@/components/common/button';
-import { useCartStore } from '@/store/cartStore';
+import { useCartStore } from '@/store/cart.store';
 import AnimatedCounter from '../common/animated-counter';
 
 export default function BottomBar() {
