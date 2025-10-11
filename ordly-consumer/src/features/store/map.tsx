@@ -39,11 +39,6 @@ export default function KakaoMap({ address }: KakaoMapProps) {
                 position: coords,
               });
               map.setCenter(coords);
-            } else {
-              console.error(
-                '주소로 좌표를 변환하는데 실패했습니다:',
-                status
-              );
             }
           });
         }

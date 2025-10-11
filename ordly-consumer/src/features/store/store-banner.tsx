@@ -1,19 +1,32 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
 
-export default function StoreBanner() {
+type Props = {
+  imageUrl?: string | null;
+};
+
+export default function StoreBanner({ imageUrl }: Props) {
   return (
     <div className='relative h-40 w-full'>
-      <Image
-        src='https://picsum.photos/800/200'
-        alt='Seoul Brewery Banner'
-        fill
-        className='object-cover'
-      />
+      {imageUrl ? (
+        <Image
+          src={imageUrl}
+          alt='가게 이미지'
+          fill
+          className='object-cover'
+          priority
+        />
+      ) : (
+        <div className='w-full h-full flex items-center justify-center bg-gray-200'>
+          <Loader2 className='h-8 w-8 text-gray-400 animate-spin' />
+        </div>
+      )}
+
       <div className='absolute top-3 left-3'>
         <Link href='/order-history' className='cursor-pointer'>
-          <div className='flex items-center justify-center rounded-full bg-white/80 text-gray-600 backdrop-blur-sm h-10 w-auto px-2.5 text-sm font-semibold'>
-            <span>주문내역</span>
+          <div className='flex items-center justify-center rounded-2xl bg-white text-gray-800 h-10 w-auto px-2.5 text-sm'>
+            주문내역
           </div>
         </Link>
       </div>

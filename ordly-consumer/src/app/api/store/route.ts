@@ -5,17 +5,20 @@ export async function GET() {
   try {
     const store = await prisma.store.findFirst({
       include: {
-        Category: true,
+        Category: {
+          include: {
+            MenuItem: true,
+          },
+        },
       },
     });
 
     if (!store) {
-      return NextResponse.json({ error: '스토어를 찾을 수 없습니다.' }, { status: 404 });
+      return NextResponse.json({ message: '매장 정보를 찾을 수 없습니다.' }, { status: 404 });
     }
 
     return NextResponse.json(store);
   } catch (error) {
-    console.error('Error fetching store:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ message: '서버 내부 오류가 발생했습니다.' }, { status: 500 });
   }
 }

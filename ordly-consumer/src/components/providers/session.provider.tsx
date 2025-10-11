@@ -18,11 +18,11 @@ export default function SessionProvider({
   );
 
   useEffect(() => {
-    // 이미 세션 확인을 수행했다면 중복 실행 방지
-    if (sessionCheckedRef.current) {
+    sessionChecked = true;
+
+    if (!sessionChecked) {
       return;
     }
-    sessionCheckedRef.current = true;
 
     const manageSession = async () => {
       const {
@@ -39,7 +39,7 @@ export default function SessionProvider({
     };
 
     manageSession();
-  }, [supabase])
+  }, [supabase]);
 
   return <>{children}</>;
 }
