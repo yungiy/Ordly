@@ -9,7 +9,7 @@ type Props = {
   title: string;
 }
 
-export default function ItemImage({ imageUrl, title }: Props) {
+export default function MenuImage({ imageUrl, title }: Props) {
   const router = useRouter();
 
   return (

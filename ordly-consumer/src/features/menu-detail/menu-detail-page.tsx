@@ -2,11 +2,11 @@
 
 import { notFound, useParams } from 'next/navigation';
 import { ITEMS } from '@/constants';
-import ItemImage from '@/features/item-detail/item-image';
-import ItemInfo from '@/features/item-detail/item-info';
-import ItemActions from '@/features/item-detail/item-actions';
+import MenuImage from '@/features/menu-detail/menu-image';
+import MenuInfo from '@/features/menu-detail/menu-info';
+import MenuActions from '@/features/menu-detail/menu-actions';
 
-export default function ItemDetailPage() {
+export default function MenuDetailPage() {
   const params = useParams();
   const { id } = params;
 
@@ -19,15 +19,15 @@ export default function ItemDetailPage() {
   return (
     <div className="flex min-h-screen flex-col bg-white">
       <main className="flex-grow pb-32">
-        <ItemImage imageUrl={item.image} title={item.title} />
-        <ItemInfo
+        <MenuImage imageUrl={item.image} title={item.title} />
+        <MenuInfo
           title={item.title}
           price={item.price}
           description={item.description}
           badge={item.badge}
         />
       </main>
-      <ItemActions id={item.id} price={item.price} title={item.title} />
+      <MenuActions id={item.id} price={item.price} title={item.title} />
     </div>
   );
 }

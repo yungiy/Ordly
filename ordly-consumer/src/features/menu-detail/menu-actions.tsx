@@ -16,7 +16,7 @@ type Props = {
   title: string;
 };
 
-export default function ItemActions({ id, price, title }: Props) {
+export default function MenuActions({ id, price, title }: Props) {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCartStore();
   const { showToast } = useToastStore();
