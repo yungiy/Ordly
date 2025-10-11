@@ -19,10 +19,10 @@ export default function SessionProvider({
 
   useEffect(() => {
     // 이미 세션 확인을 수행했다면 중복 실행 방지
-    if (sessionChecked) {
+    if (sessionCheckedRef.current) {
       return;
     }
-    sessionChecked = true;
+    sessionCheckedRef.current = true;
 
     const manageSession = async () => {
       const {
