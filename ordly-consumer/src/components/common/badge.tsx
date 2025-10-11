@@ -20,6 +20,18 @@ interface Props extends BadgeType {
 }
 
 export default function Badge({ title, color, icon: Icon, className }: Props) {
+  // icon prop이 유효한 React 컴포넌트인지 확인하는 방어적인 로직 추가
+  let ValidIcon: ComponentType<{ size?: number; className?: string }> | undefined = Icon;
+  if (Icon && typeof Icon !== 'function') {
+    console.error(
+      `Badge component received an invalid 'icon' prop. Expected a React component (function/class) or undefined, but got:`,
+      Icon,
+      `Type: ${typeof Icon}. This might be due to an incorrect import (e.g., importing an entire module instead of a specific component).`
+    );
+    // 유효하지 않은 경우 아이콘을 렌더링하지 않도록 undefined로 설정
+    ValidIcon = undefined;
+  }
+
   return (
     <span
       className={twMerge(
@@ -28,9 +40,8 @@ export default function Badge({ title, color, icon: Icon, className }: Props) {
         className,
       )}
     >
-      {Icon && <Icon size={12} />}
+      {ValidIcon && <ValidIcon size={12} />}
       {title}
     </span>
   );
 }
-

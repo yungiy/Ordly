@@ -7,7 +7,7 @@ type Props = {
   order: Order;
 }
 
-function OrderItemCard({ order }: Props) {
+export default function MenuItemCard({ order }: Props) {
   return (
     <div className='bg-white rounded-lg shadow-sm p-4'>
       <div className='border-b pb-2 mb-2 flex justify-between items-center'>
@@ -36,4 +36,3 @@ function OrderItemCard({ order }: Props) {
   );
 }
 
-export default OrderItemCard;

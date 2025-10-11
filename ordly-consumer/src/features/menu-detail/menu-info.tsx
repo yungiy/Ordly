@@ -8,7 +8,7 @@ type Props = {
   badge?: BadgeType;
 }
 
-export default function ItemInfo({ title, price, description, badge }: Props) {
+export default function MenuInfo({ title, price, description, badge }: Props) {
   return (
     <div className="p-6">
       {badge && <div><Badge {...badge} /></div>}
