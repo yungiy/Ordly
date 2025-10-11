@@ -10,8 +10,8 @@ export function useMenus() {
 
   useEffect(() => {
     const getMenus = async () => {
+      setIsLoading(true);
       try {
-        setIsLoading(true);
         const data = await fetchMenus();
         setItems(data);
 
