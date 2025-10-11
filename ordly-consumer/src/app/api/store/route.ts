@@ -10,7 +10,7 @@ export async function GET() {
     });
 
     if (!store) {
-      return NextResponse.json({ error: 'Store not found' }, { status: 404 });
+      return NextResponse.json({ error: '스토어를 찾을 수 없습니다.' }, { status: 404 });
     }
 
     return NextResponse.json(store);
