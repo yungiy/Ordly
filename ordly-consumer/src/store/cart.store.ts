@@ -1,17 +1,17 @@
 import { create } from 'zustand';
 
 export type CartItem = {
-  id: number;
+  id: string;
   title: string;
   price: number;
   quantity: number;
-}
+};
 
 type CartState = {
   items: CartItem[];
   addToCart: (item: Omit<CartItem, 'quantity'>, quantity: number) => void;
-  updateItemQuantity: (itemId: number, quantity: number) => void;
-  removeFromCart: (itemId: number) => void;
+  updateItemQuantity: (itemId: string, quantity: number) => void;
+  removeFromCart: (itemId: string) => void;
   clearCart: () => void;
   getCartTotalQuantity: () => number;
   getCartTotalPrice: () => number;

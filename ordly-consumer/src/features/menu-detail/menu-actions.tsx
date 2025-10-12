@@ -11,8 +11,8 @@ import { useToastStore } from '@/store/toast.store';
 import { formatCurrency } from '@/utils/format';
 
 type Props = {
-  id: number;
-  price: number;
+  id: string;
+  price: any;
   title: string;
 };
 

@@ -17,7 +17,7 @@ function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
       <div className='flex justify-between items-start mb-2'>
         <h3 className='font-bold text-lg'>{item.title}</h3>
         <button
-          onClick={() => onRemove(String(item.id))}
+          onClick={() => onRemove(item.id)}
           className='text-gray-400 hover:text-black'
         >
           <X size={20} />
@@ -26,9 +26,7 @@ function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
       <div className='flex justify-between items-center'>
         <QuantitySelector
           value={item.quantity}
-          onChange={(newQuantity) =>
-            onUpdateQuantity(String(item.id), newQuantity)
-          }
+          onChange={(newQuantity) => onUpdateQuantity(item.id, newQuantity)}
         />
         <span className='font-bold text-lg'>
           {formatCurrency(item.price * item.quantity)}

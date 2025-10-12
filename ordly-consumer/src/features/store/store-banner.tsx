@@ -14,6 +14,7 @@ export default function StoreBanner({ imageUrl }: Props) {
           src={imageUrl}
           alt='가게 이미지'
           fill
+          sizes='(max-width: 430px) 100vw, 430px'
           className='object-cover'
           priority
         />

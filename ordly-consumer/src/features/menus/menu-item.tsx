@@ -12,7 +12,7 @@ type Props = {
 
 export default function MenuItemComponent({ menus }: Props) {
   return (
-    <Link href={`/items/${menus.id}`} className='block hover:bg-gray-50'>
+    <Link href={`/menus/${menus.id}`} className='block hover:bg-gray-50'>
       <div className='flex items-start justify-between py-2'>
         <div className='flex flex-col'>
           <h3 className='text-lg font-bold'>{menus.name}</h3>
@@ -31,6 +31,7 @@ export default function MenuItemComponent({ menus }: Props) {
               src={menus.imageUrl}
               alt={menus.name}
               fill
+              sizes="128px"
               className='object-cover rounded-lg'
             />
           </div>

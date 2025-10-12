@@ -19,11 +19,11 @@ export default function CartPage() {
   };
 
   const handleUpdateQuantity = (id: string, quantity: number) => {
-    updateItemQuantity(parseInt(id, 10), quantity);
+    updateItemQuantity(id, quantity);
   };
 
   const handleRemoveItem = (id: string) => {
-    removeFromCart(parseInt(id, 10));
+    removeFromCart(id);
   };
 
   if (items.length === 0) {

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ChevronLeft } from 'lucide-react';
 
 type Props = {
-  imageUrl?: string;
+  imageUrl?: string | null;
   title: string;
 }
 
