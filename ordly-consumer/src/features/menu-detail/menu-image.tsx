@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation';
 import { ChevronLeft } from 'lucide-react';
 
 type Props = {
-  imageUrl?: string;
+  imageUrl?: string | null;
   title: string;
 }
 
-export default function ItemImage({ imageUrl, title }: Props) {
+export default function MenuImage({ imageUrl, title }: Props) {
   const router = useRouter();
 
   return (

@@ -15,7 +15,7 @@ export function useCategoryScroll(categories: string[]) {
     setActiveCategory(category);
     const ref = categoryRefs.current[category];
     if (ref) {
-      const y = ref.getBoundingClientRect().top + window.scrollY - headerHeight;
+      const y = ref.getBoundingClientRect().top + window.scrollY - headerHeight - 25;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
     setTimeout(() => {

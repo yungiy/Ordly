@@ -11,12 +11,12 @@ import { useToastStore } from '@/store/toast.store';
 import { formatCurrency } from '@/utils/format';
 
 type Props = {
-  id: number;
-  price: number;
+  id: string;
+  price: any;
   title: string;
 };
 
-export default function ItemActions({ id, price, title }: Props) {
+export default function MenuActions({ id, price, title }: Props) {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCartStore();
   const { showToast } = useToastStore();
