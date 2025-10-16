@@ -1,13 +1,9 @@
 import { RefObject } from 'react';
-import { Category, MenuItem } from '@/generated/prisma';
 import MenuItemComponent from './menu-item';
-
-type MenuItemWithCategory = MenuItem & {
-  Category: Category;
-};
+import { MenuItemForClient } from './menus.api';
 
 type Props = {
-  menus: MenuItemWithCategory[];
+  menus: MenuItemForClient[];
   categoryRefs: RefObject<{ [key: string]: HTMLDivElement | null }>;
 };
 
@@ -16,7 +12,7 @@ export default function MenuList({ menus, categoryRefs }: Props) {
   return (
     <div className='px-4 py-2 bg-gray-50'>
       <div className='space-y-6'>
-        {menus.map((item: MenuItemWithCategory) => {
+        {menus.map((item) => {
           const showDivider = item.Category.name !== prevCategory;
           const refProp = showDivider
             ? {

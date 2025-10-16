@@ -1,44 +1,54 @@
 import Header from '@/components/layout/header';
 import CouponPageClient from '@/features/coupon/coupon-page';
 import { Coupon } from '@/features/coupon/coupon-item';
+import { DiscountType } from '@/generated/prisma';
+import { prisma } from '@/lib/prisma';
+import Link from 'next/link';
 
-const coupons: Coupon[] = [
-  {
-    id: 1,
-    dDay: 'D-4',
-    amount: '5,000',
-    currency: '원',
-    title: '7월 회원혜택가 쿠폰',
-    description: '5천원 초과 단일 상품 구매 시 사용 가능, ID당 1회 사용 가능(중복 사용 불가)',
-    startDate: '2021.07.01',
-    endDate: '2021.07.31',
-  },
-  {
-    id: 2,
-    dDay: 'D-4',
-    amount: '10,000',
-    currency: '원',
-    title: '7월 회원혜택가 쿠폰',
-    description: '20만원 이상 단일 상품 구매 시 사용 가능, ID당 1회 사용 가능(중복 사용 불가)',
-    startDate: '2021.07.01',
-    endDate: '2021.07.31',
-  },
-  {
-    id: 3,
-    dDay: 'D-5',
-    amount: '5',
-    currency: '%',
-    title: '특가위크 5% 할인 쿠폰',
-    description: '특가위크 5% 할인 쿠폰',
-    startDate: '2021.07.26',
-    endDate: '2021.08.01',
-  },
-];
+const getCoupons = async (): Promise<Coupon[]> => {
+  const coupons = await prisma.coupon.findMany({
+    where: {
+      isActive: true,
+      validUntil: {
+        gte: new Date(),
+      },
+    },
+  });
 
-export default function Page() {
+   return coupons.map((coupon) => {
+    const today = new Date();
+    const validUntil = new Date(coupon.validUntil);
+    const diffTime = Math.abs(validUntil.getTime() - today.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    return {
+      id: coupon.id,
+      dDay: `D-${diffDays}`,
+      amount: coupon.discountValue.toString(),
+      currency: coupon.discountType === DiscountType.FIXED_AMOUNT ? '원' : '%',
+      title: coupon.title,
+      description: coupon.description,
+      startDate: new Date(coupon.validFrom).toLocaleDateString(),
+      endDate: validUntil.toLocaleDateString(),
+    };
+  });
+};
+export default async function Page() {
+  const coupons = await getCoupons();
   return (
     <div className='flex flex-col h-full bg-gray-50'>
-      <Header title='쿠폰' showBackButton />
+      <Header
+        title='쿠폰'
+        showBackButton
+        rightContent={
+          <Link
+            href='my-coupon'
+            className='text-sm text-gray-600 font-semibold'
+          >
+            보유한 쿠폰
+          </Link>
+        }
+      />
       <main className='flex-grow p-4'>
         <CouponPageClient coupons={coupons} />
       </main>

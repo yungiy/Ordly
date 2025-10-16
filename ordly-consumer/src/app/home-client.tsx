@@ -1,21 +1,36 @@
 'use client';
 
+import { useState } from 'react';
 import MenuList from '@/features/menus/menu-list';
 import BottomBar from '@/components/layout/bottom-bar';
 import Category from '@/features/menus/category';
 import { useCategoryScroll } from '@/hooks/useCategoryScroll.hooks';
-import { useMenus } from '@/hooks/useMenus.hooks';
-import MenusSkeleton from '@/components/skeleton/menus-skeleton';
+import {
+  MenuItemForClient,
+  MenuItemWithCategory,
+} from '@/features/menus/menus.api';
+import { Category as CategoryType } from '@/generated/prisma';
 
-export default function HomeClient() {
-  const { isLoading, error, items, categories } = useMenus();
+type HomeClientProps = {
+  initialMenus: MenuItemWithCategory[];
+};
 
-  const { activeCategory, handleCategoryClick, categoryRefs } = useCategoryScroll(
-    categories.map((c) => c.name)
+export default function HomeClient({ initialMenus }: HomeClientProps) {
+  const [items] = useState<MenuItemForClient[]>(() =>
+    initialMenus.map((item) => ({ ...item, price: Number(item.price) }))
   );
+  const [categories] = useState<CategoryType[]>(() => {
+    const uniqueCategories = Array.from(
+      new Map(
+        initialMenus.map((item) => [item.Category.id, item.Category])
+      ).values()
+    );
+    uniqueCategories.sort((a, b) => a.order - b.order);
+    return uniqueCategories;
+  });
 
-  if (isLoading) return <MenusSkeleton/>
-  if (error) return <div>오류: {error.message}</div>;
+  const { activeCategory, handleCategoryClick, categoryRefs } =
+    useCategoryScroll(categories ? categories.map((c) => c.name) : []);
 
   return (
     <>
@@ -24,7 +39,7 @@ export default function HomeClient() {
         onCategoryClick={handleCategoryClick}
         activeCategory={activeCategory}
       />
-      <MenuList menus={items} categoryRefs={categoryRefs} /> {/* menus prop으로 수정 */}
+      <MenuList menus={items} categoryRefs={categoryRefs} />
       <BottomBar />
     </>
   );

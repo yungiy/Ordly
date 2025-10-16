@@ -42,7 +42,7 @@ model MenuItem {
   imageUrl    String?
   status      MenuStatus  @default(AVAILABLE)
   createdAt   DateTime    @default(now())
-  updatedAt   DateTime
+  updatedAt   DateTime    @updatedAt
   categoryId  String
   Category    Category    @relation(fields: [categoryId], references: [id])
   OrderItem   OrderItem[]
