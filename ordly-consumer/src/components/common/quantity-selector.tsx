@@ -7,7 +7,7 @@ type Props = {
   value: number;
   min?: number;
   onChange: (value: number) => void;
-}
+};
 
 function QuantitySelector({ value, min = 1, onChange }: Props) {
   const handleDecrease = () => onChange(Math.max(min, value - 1));
@@ -22,7 +22,9 @@ function QuantitySelector({ value, min = 1, onChange }: Props) {
       >
         <Minus size={16} />
       </button>
-      <span className='w-8 text-center text-lg font-bold text-gray-900'>{value}</span>
+      <span className='w-8 text-center text-lg font-bold text-gray-900'>
+        {value}
+      </span>
       <button
         onClick={handleIncrease}
         className='flex h-7 w-7 items-center justify-center rounded-full bg-gray-200 text-gray-600 transition hover:bg-gray-300'
@@ -31,6 +33,6 @@ function QuantitySelector({ value, min = 1, onChange }: Props) {
       </button>
     </div>
   );
-};
+}
 
 export default QuantitySelector;
