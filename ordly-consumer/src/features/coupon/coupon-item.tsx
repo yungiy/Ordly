@@ -18,7 +18,11 @@ type Props = {
   showDownloadButton?: boolean;
 };
 
-export default function CouponItem({ coupon, onDownload, showDownloadButton = true }: Props) {
+export default function CouponItem({
+  coupon,
+  onDownload,
+  showDownloadButton = true,
+}: Props) {
   return (
     <div className='relative bg-white rounded-lg flex overflow-hidden border border-gray-200/80'>
       <div className='p-3 flex-grow'>
@@ -29,11 +33,15 @@ export default function CouponItem({ coupon, onDownload, showDownloadButton = tr
         </div>
         <p className='text-2xl font-bold text-yellow-500'>
           {coupon.amount}
-          <span className='text-lg font-semibold text-gray-800'>{coupon.currency}</span>
+          <span className='text-lg font-semibold text-gray-800'>
+            {coupon.currency}
+          </span>
           <span className='text-lg font-semibold text-gray-800 ml-1'>할인</span>
         </p>
         <h3 className='font-bold mt-2'>{coupon.title}</h3>
-        <p className='text-xs text-gray-800 max-w-[200px] mt-1'>{coupon.description}</p>
+        <p className='text-xs text-gray-800 max-w-[200px] mt-1'>
+          {coupon.description}
+        </p>
       </div>
       {showDownloadButton && onDownload && (
         <>

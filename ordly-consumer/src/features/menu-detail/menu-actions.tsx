@@ -28,10 +28,6 @@ export default function MenuActions({ id, price, title }: Props) {
     damping: 30,
   });
 
-  const formattedPrice = useTransform(motionPrice, (latest) =>
-    formatCurrency(Math.round(latest))
-  );
-
   useEffect(() => {
     motionPrice.set(totalPrice);
   }, [totalPrice, motionPrice]);
