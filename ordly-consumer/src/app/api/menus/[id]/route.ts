@@ -16,9 +16,13 @@ export async function GET(
       return NextResponse.json({ message: '메뉴를 찾을 수 없습니다.' }, { status: 404 });
     }
 
-    const menu = { ...menuItem, price: menuItem.price.toNumber() };
+    // Decimal 타입을 문자열로 변환하여 직렬화 오류 방지
+    const serializedMenu = {
+      ...menuItem,
+      price: menuItem.price.toString(),
+    };
 
-    return NextResponse.json(menu);
+    return NextResponse.json(serializedMenu);
   } catch (error) {
     return NextResponse.json({ message: '서버 내부 오류가 발생했습니다.' }, { status: 500 });
   }

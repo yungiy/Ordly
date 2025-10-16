@@ -1,13 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Category, MenuItem } from '@/generated/prisma';
-
-type MenuItemWithCategory = MenuItem & {
-  Category: Category;
-};
+import { MenuItemForClient } from './menus.api';
 
 type Props = {
-  menus: MenuItemWithCategory;
+  menus: MenuItemForClient;
 };
 
 export default function MenuItemComponent({ menus }: Props) {
@@ -22,7 +18,7 @@ export default function MenuItemComponent({ menus }: Props) {
             </p>
           )}
           <p className='mt-2 font-semibold'>
-            {Number(menus.price) > 0 ? `₩${Number(menus.price).toLocaleString()}` : ''}
+            {menus.price > 0 ? `₩${menus.price.toLocaleString()}` : ''}
           </p>
         </div>
         {menus.imageUrl && (

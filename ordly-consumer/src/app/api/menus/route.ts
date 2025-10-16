@@ -8,25 +8,26 @@ export type MenuWithCategory = MenuItem & {
 
 export async function GET() {
   try {
+    console.log('A. [/api/menus] GET 요청 받음');
     const menuItems = await prisma.menuItem.findMany({
       include: {
         Category: true,
       },
       orderBy: [{ Category: { order: 'asc' } }, { name: 'asc' }],
     });
+    console.log('B. [/api/menus] Prisma 조회 완료', menuItems);
 
-    if (!menuItems || menuItems.length === 0) {
-      return NextResponse.json({ message: '메뉴를 찾을 수 없습니다.' }, { status: 404 });
-    }
-
-    const menus = menuItems.map((item) => ({
+    const serializedMenus = menuItems.map((item) => ({
       ...item,
-      price: item.price.toNumber(),
+      price: item.price.toString(),
     }));
 
-    return NextResponse.json(menus);
+    return NextResponse.json(serializedMenus);
   } catch (error) {
-    console.error('메뉴 데이터를 가져오는 중 오류 발생:', error);
-    return NextResponse.json({ message: '서버 내부 오류가 발생했습니다.' }, { status: 500 });
+    console.error('C. [/api/menus] 서버 오류 발생:', error);
+    return NextResponse.json(
+      { message: '서버 내부 오류가 발생했습니다.' },
+      { status: 500 }
+    );
   }
 }
