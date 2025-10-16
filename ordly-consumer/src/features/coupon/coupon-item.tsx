@@ -2,7 +2,7 @@ import { Download } from 'lucide-react';
 import React from 'react';
 
 export type Coupon = {
-  id: string;
+  id: number;
   dDay: string;
   amount: string;
   currency: string;
@@ -14,11 +14,10 @@ export type Coupon = {
 
 type Props = {
   coupon: Coupon;
-  onDownload?: (coupon: Coupon) => void;
-  showDownloadButton?: boolean;
+  onDownload: (title: string) => void;
 }
 
-export default function CouponItem({ coupon, onDownload, showDownloadButton = true }: Props) {
+export default function CouponItem({ coupon, onDownload }: Props) {
   return (
     <div className='relative bg-white rounded-lg flex overflow-hidden border border-gray-200/80'>
       <div className='p-4 flex-grow'>
@@ -35,19 +34,19 @@ export default function CouponItem({ coupon, onDownload, showDownloadButton = tr
         <h3 className='font-bold mt-4'>{coupon.title}</h3>
         <p className='text-xs text-gray-800 max-w-[200px] mt-1'>{coupon.description}</p>
       </div>
-      {showDownloadButton && onDownload && (
-        <>
-          <div className='w-24 flex flex-col items-center justify-center text-xs text-gray-800 border-l-2 border-dashed border-gray-200'>
-            <span>{coupon.startDate}</span>
-            <span>~</span>
-            <span>{coupon.endDate}</span>
-            <button onClick={() => onDownload?.(coupon)} className='mt-6 p-2 rounded-full' aria-label={`${coupon.title} 쿠폰 다운로드`}>
-              <Download className='w-8 h-8 text-gray-600' />
-            </button>
-          </div>
-          <div className='absolute top-1/2 -translate-y-1/2 left-[calc(100%-7rem-1px)] -translate-x-1/2 w-4 h-4 bg-gray-50 rounded-full'></div>
-        </>
-      )}
+      <div className='w-24 flex flex-col items-center justify-center text-xs text-gray-800 border-l-2 border-dashed border-gray-200'>
+        <span>{coupon.startDate}</span>
+        <span>~</span>
+        <span>{coupon.endDate}</span>
+        <button 
+          onClick={() => onDownload(coupon.title)}
+          className='mt-6 p-2 rounded-full'
+          aria-label={`${coupon.title} 쿠폰 다운로드`}
+        >
+          <Download className='w-8 h-8 text-gray-600' />
+        </button>
+      </div>
+      <div className='absolute top-1/2 -translate-y-1/2 left-[calc(100%-7rem-1px)] -translate-x-1/2 w-4 h-4 bg-gray-50 rounded-full'></div>
     </div>
   );
 }

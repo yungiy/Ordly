@@ -22,7 +22,6 @@ model Category {
 model Coupon {
   id            String       @id
   code          String       @unique
-  title         String
   description   String
   discountType  DiscountType
   discountValue Decimal      @db.Decimal(10, 2)
