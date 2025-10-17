@@ -22,7 +22,8 @@ export default function PayPage() {
   const { items, getCartTotalPrice, clearCart } = useCartStore();
   const { showToast } = useToastStore();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);  const paymentMethod = 'card';
+  const [loading, setLoading] = useState(false);
+  const paymentMethod = 'card';
   const totalPrice = getCartTotalPrice();
   const iamportKey = process.env.NEXT_PUBLIC_IAMPORT_KEY;
 
@@ -33,7 +34,7 @@ export default function PayPage() {
     }
 
     setLoading(true);
-    let merchant_uid = '';
+    const merchant_uid = `ord_${new Date().getTime()}`;
 
     const itemName =
       items.length > 1
@@ -41,24 +42,6 @@ export default function PayPage() {
         : items[0].title;
 
     window.IMP.init(iamportKey);
-
-    // try {
-    //   const orderResponse = await fetch('/api/orders/create', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ items, totalPrice }),
-    //   });
-
-    //   const orderData = await orderResponse.json();
-    //   if (!orderResponse.ok) {
-    //     throw new Error(orderData.message || '주문 생성에 실패했습니다.');
-    //   }
-    //   merchant_uid = orderData.merchant_uid;
-    // } catch (error: any) {
-    //   showToast(error.message);
-    //   setLoading(false);
-    //   return;
-    // }
 
     const paymentData = {
       pg: 'nice',
@@ -94,10 +77,12 @@ export default function PayPage() {
               showToast(`결제 검증에 실패했습니다: ${data.message}`);
             }
           })
-          .catch((error) => showToast('결제 검증 중 오류가 발생했습니다.'))
+          .catch((error) => {
+            showToast('결제 검증 중 오류가 발생했습니다.');
+          })
           .finally(() => setLoading(false));
       } else {
-        showToast(`결제에 실패했습니다: ${rsp.error_msg}`);
+        showToast(`결제에 실패했습니다: ${rsp.error_msg || '알 수 없는 오류'}`);
         setLoading(false);
       }
     });
