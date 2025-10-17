@@ -8,7 +8,6 @@ import { formatCurrency } from '@/utils/format';
 import { useToastStore } from '@/store/toast.store';
 import { useRouter } from 'next/navigation';
 
-// 아임포트 타입 정의 (window.IMP)
 interface Iamport {
   init: (key: string) => void;
   request_pay: (params: any, callback: (rsp: any) => void) => void;
@@ -20,34 +19,50 @@ declare global {
 }
 
 export default function PayPage() {
-  const { items, getCartTotalPrice } = useCartStore();
+  const { items, getCartTotalPrice, clearCart } = useCartStore();
   const { showToast } = useToastStore();
   const router = useRouter();
-  const [paymentMethod, setPaymentMethod] = useState('');
-  const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = useState(false);  const paymentMethod = 'card';
   const totalPrice = getCartTotalPrice();
   const iamportKey = process.env.NEXT_PUBLIC_IAMPORT_KEY;
 
   const handlePayment = async () => {
-    if (!paymentMethod) {
-      showToast('결제 수단을 선택해주세요.');
-      return;
-    }
     if (!window.IMP || !iamportKey) {
       showToast('결제 모듈 로딩 중이거나, 키가 설정되지 않았습니다.');
       return;
     }
 
     setLoading(true);
+    let merchant_uid = '';
+
+    const itemName =
+      items.length > 1
+        ? `${items[0].title} 외 ${items.length - 1}건`
+        : items[0].title;
+
     window.IMP.init(iamportKey);
 
-    const merchant_uid = `order_${new Date().getTime()}`;
-    const itemName = items.length > 1 ? `${items[0].title} 외 ${items.length - 1}건` : items[0].title;
+    // try {
+    //   const orderResponse = await fetch('/api/orders/create', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ items, totalPrice }),
+    //   });
+
+    //   const orderData = await orderResponse.json();
+    //   if (!orderResponse.ok) {
+    //     throw new Error(orderData.message || '주문 생성에 실패했습니다.');
+    //   }
+    //   merchant_uid = orderData.merchant_uid;
+    // } catch (error: any) {
+    //   showToast(error.message);
+    //   setLoading(false);
+    //   return;
+    // }
 
     const paymentData = {
-      pg: paymentMethod, // 카카오페이: 'kakaopay', 네이버페이: 'naverpay'
-      pay_method: 'card', // 또는 'trans', 'phone' 등
+      pg: 'nice',
+      pay_method: paymentMethod,
       merchant_uid,
       name: itemName,
       amount: totalPrice,
@@ -58,35 +73,55 @@ export default function PayPage() {
 
     window.IMP.request_pay(paymentData, (rsp) => {
       if (rsp.success) {
-        // TODO: 서버에 결제 검증 요청 (rsp.imp_uid, rsp.merchant_uid)
-        console.log('결제 성공:', rsp);
-        // 검증 성공 시 장바구니 비우고 완료 페이지로 이동
-        // clearCart(); 
-        router.push(`/pay/complete?merchant_uid=${rsp.merchant_uid}`);
+        fetch('/api/payments/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            imp_uid: rsp.imp_uid,
+            merchant_uid: rsp.merchant_uid,
+          }),
+        })
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            if (data.status === 'success') {
+              clearCart();
+              router.push(
+                `/pay/complete?merchant_uid=${rsp.merchant_uid}&imp_uid=${rsp.imp_uid}`
+              );
+            } else {
+              showToast(`결제 검증에 실패했습니다: ${data.message}`);
+            }
+          })
+          .catch((error) => showToast('결제 검증 중 오류가 발생했습니다.'))
+          .finally(() => setLoading(false));
       } else {
-        console.error('결제 실패:', rsp);
         showToast(`결제에 실패했습니다: ${rsp.error_msg}`);
+        setLoading(false);
       }
-      setLoading(false);
     });
   };
 
   return (
     <>
-      <Script 
-        src="https://cdn.iamport.kr/v1/iamport.js"
-        strategy="afterInteractive"
+      <Script
+        src='https://cdn.iamport.kr/v1/iamport.js'
+        strategy='afterInteractive'
       />
+
       <div className='flex flex-col h-full bg-gray-50'>
         <Header title='결제하기' showBackButton />
+
         <div className='p-4 space-y-6 flex-grow'>
-          {/* 주문 요약 카드 */}
           <div className='bg-white rounded-lg shadow-sm p-4'>
             <h3 className='text-lg font-bold border-b pb-3 mb-3'>주문 요약</h3>
             <div className='space-y-2 text-gray-700'>
-              {items.map(item => (
+              {items.map((item) => (
                 <div key={item.id} className='flex justify-between'>
-                  <span>{item.title} x{item.quantity}</span>
+                  <span>
+                    {item.title} x{item.quantity}
+                  </span>
                   <span>{formatCurrency(item.price * item.quantity)}</span>
                 </div>
               ))}
@@ -97,31 +132,21 @@ export default function PayPage() {
             </div>
           </div>
 
-          {/* 결제 수단 선택 카드 */}
           <div className='bg-white rounded-lg shadow-sm p-4'>
             <h3 className='text-lg font-bold border-b pb-3 mb-3'>결제 수단</h3>
-            <div className='grid grid-cols-2 gap-4'>
-              <button 
-                onClick={() => setPaymentMethod('kakaopay')}
-                className={`p-4 border-2 rounded-lg text-center font-semibold ${paymentMethod === 'kakaopay' ? 'border-yellow-400 bg-yellow-50' : 'border-gray-200'}`}>
-                카카오페이
-              </button>
-              <button 
-                onClick={() => setPaymentMethod('naverpay')}
-                className={`p-4 border-2 rounded-lg text-center font-semibold ${paymentMethod === 'naverpay' ? 'border-green-500 bg-green-50' : 'border-gray-200'}`}>
-                네이버페이
-              </button>
-            </div>
+            <p className='text-gray-700'>신용카드</p>
           </div>
         </div>
 
-        {/* 하단 결제 버튼 */}
         <div className='p-4 bg-white border-t'>
-          <button 
+          <button
             onClick={handlePayment}
             disabled={loading || items.length === 0}
-            className='w-full bg-black text-white text-lg font-bold py-4 rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed'>
-            {loading ? '결제 진행 중...' : `${formatCurrency(totalPrice)} 결제하기`}
+            className='w-full bg-black text-white text-lg font-bold py-4 rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed'
+          >
+            {loading
+              ? '결제 진행 중...'
+              : `${formatCurrency(totalPrice)} 결제하기`}
           </button>
         </div>
       </div>

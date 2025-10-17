@@ -1,22 +1,60 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Header from '@/components/layout/header';
-import { useCartStore } from '@/store/cart.store';
 import { CheckCircle2 } from 'lucide-react';
+import { useToastStore } from '@/store/toast.store';
 
 export default function PayCompletePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { clearCart } = useCartStore();
-
+  const { showToast } = useToastStore();
+  const [isCanceling, setIsCanceling] = useState(false);
+  
   const merchantUid = searchParams?.get('merchant_uid');
+  const impUid = searchParams?.get('imp_uid');
 
-  // 이 페이지에 진입하면 장바구니를 비웁니다.
   useEffect(() => {
-    clearCart();
-  }, [clearCart]);
+    console.log('--- [PayCompletePage] Component Mounted ---');
+    console.log('[PayCompletePage] URL Search Params:', searchParams?.toString());
+    console.log('[PayCompletePage] Received merchant_uid:', merchantUid);
+  }, [searchParams, merchantUid]);
+
+  const handleCancelPayment = async () => {
+    if (!impUid) {
+      showToast('결제 정보를 찾을 수 없어 취소가 불가능합니다.');
+      return;
+    }
+
+    if (!confirm('정말로 결제를 취소하시겠습니까?')) {
+      return;
+    }
+
+    setIsCanceling(true);
+    try {
+      const response = await fetch('/api/payments/cancel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          imp_uid: impUid,
+          reason: '사용자 변심',
+        }),
+      });
+
+      const result = await response.json();
+      if (result.code === 0) {
+        showToast('결제가 성공적으로 취소되었습니다.');
+        router.push('/order-history');
+      } else {
+        showToast(`결제 취소에 실패했습니다: ${result.message}`);
+      }
+    } catch (error) {
+      showToast('결제 취소 중 오류가 발생했습니다.');
+    } finally {
+      setIsCanceling(false);
+    }
+  };
 
   return (
     <div className='flex flex-col h-full bg-gray-50'>
