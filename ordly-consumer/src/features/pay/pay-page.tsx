@@ -22,8 +22,7 @@ export default function PayPage() {
   const { items, getCartTotalPrice, clearCart } = useCartStore();
   const { showToast } = useToastStore();
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const paymentMethod = 'card';
+  const [loading, setLoading] = useState(false);  const paymentMethod = 'card';
   const totalPrice = getCartTotalPrice();
   const iamportKey = process.env.NEXT_PUBLIC_IAMPORT_KEY;
 
@@ -32,8 +31,10 @@ export default function PayPage() {
       showToast('결제 모듈 로딩 중이거나, 키가 설정되지 않았습니다.');
       return;
     }
+
     setLoading(true);
-    const merchant_uid = `ord_${new Date().getTime()}`;
+    let merchant_uid = '';
+
     const itemName =
       items.length > 1
         ? `${items[0].title} 외 ${items.length - 1}건`
@@ -41,51 +42,67 @@ export default function PayPage() {
 
     window.IMP.init(iamportKey);
 
-    window.IMP.request_pay(
-      {
-        pg: 'nice',
-        pay_method: paymentMethod,
-        merchant_uid,
-        name: itemName,
-        amount: totalPrice, // 장바구니 총액 사용
-        buyer_name: '테스트 구매자',
-        buyer_tel: '010-1234-5678',
-        buyer_email: 'test@example.com',
-      },
-      (rsp) => {
-        if (rsp.success) {
-          fetch('/api/payments/verify', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              imp_uid: rsp.imp_uid,
-              merchant_uid: rsp.merchant_uid,
-            }),
+    // try {
+    //   const orderResponse = await fetch('/api/orders/create', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ items, totalPrice }),
+    //   });
+
+    //   const orderData = await orderResponse.json();
+    //   if (!orderResponse.ok) {
+    //     throw new Error(orderData.message || '주문 생성에 실패했습니다.');
+    //   }
+    //   merchant_uid = orderData.merchant_uid;
+    // } catch (error: any) {
+    //   showToast(error.message);
+    //   setLoading(false);
+    //   return;
+    // }
+
+    const paymentData = {
+      pg: 'nice',
+      pay_method: paymentMethod,
+      merchant_uid,
+      name: itemName,
+      amount: totalPrice,
+      buyer_name: '테스트 구매자',
+      buyer_tel: '010-1234-5678',
+      buyer_email: 'test@example.com',
+    };
+
+    window.IMP.request_pay(paymentData, (rsp) => {
+      if (rsp.success) {
+        fetch('/api/payments/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            imp_uid: rsp.imp_uid,
+            merchant_uid: rsp.merchant_uid,
+          }),
+        })
+          .then((res) => {
+            return res.json();
           })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.status === 'success') {
-                clearCart();
-                router.push(
-                  `/pay/complete?merchant_uid=${rsp.merchant_uid}&imp_uid=${rsp.imp_uid}`
-                );
-              } else {
-                showToast(`결제 검증에 실패했습니다: ${data.message}`);
-              }
-            })
-            .catch(() => {
-              showToast('결제 검증 중 오류가 발생했습니다.');
-            })
-            .finally(() => setLoading(false));
-        } else {
-          showToast(
-            `결제에 실패했습니다: ${rsp.error_msg || '알 수 없는 오류'}`
-          );
-          setLoading(false);
-        }
+          .then((data) => {
+            if (data.status === 'success') {
+              clearCart();
+              router.push(
+                `/pay/complete?merchant_uid=${rsp.merchant_uid}&imp_uid=${rsp.imp_uid}`
+              );
+            } else {
+              showToast(`결제 검증에 실패했습니다: ${data.message}`);
+            }
+          })
+          .catch((error) => showToast('결제 검증 중 오류가 발생했습니다.'))
+          .finally(() => setLoading(false));
+      } else {
+        showToast(`결제에 실패했습니다: ${rsp.error_msg}`);
+        setLoading(false);
       }
-    );
+    });
   };
+
   return (
     <>
       <Script

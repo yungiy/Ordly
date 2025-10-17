@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useToastStore } from '@/store/toast.store';
 import Header from '@/components/layout/header';
 import { CheckCircle2 } from 'lucide-react';
+import { useToastStore } from '@/store/toast.store';
 
 export default function PayCompletePage() {
   const router = useRouter();
@@ -12,16 +12,30 @@ export default function PayCompletePage() {
   const { showToast } = useToastStore();
   const [isCanceling, setIsCanceling] = useState(false);
   
-  const merchantUid = searchParams.get('merchant_uid');
-  const impUid = searchParams.get('imp_uid');
+  const merchantUid = searchParams?.get('merchant_uid');
+  const impUid = searchParams?.get('imp_uid');
 
-  const handleCancel = async () => {
-    if (!impUid) return;
+  useEffect(() => {
+    console.log('--- [PayCompletePage] Component Mounted ---');
+    console.log('[PayCompletePage] URL Search Params:', searchParams?.toString());
+    console.log('[PayCompletePage] Received merchant_uid:', merchantUid);
+  }, [searchParams, merchantUid]);
+
+  const handleCancelPayment = async () => {
+    if (!impUid) {
+      showToast('결제 정보를 찾을 수 없어 취소가 불가능합니다.');
+      return;
+    }
+
+    if (!confirm('정말로 결제를 취소하시겠습니까?')) {
+      return;
+    }
+
     setIsCanceling(true);
     try {
       const response = await fetch('/api/payments/cancel', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }, 
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           imp_uid: impUid,
           reason: '사용자 변심',
@@ -52,13 +66,6 @@ export default function PayCompletePage() {
         {merchantUid && (
           <p className='text-sm text-gray-500'>주문번호: {merchantUid}</p>
         )}
-        <button
-          onClick={handleCancel}
-          disabled={isCanceling}
-          className='mt-4 text-sm text-gray-500 underline disabled:text-gray-400'
-        >
-          {isCanceling ? '취소 처리 중...' : '결제 취소하기'}
-        </button>
         <button 
           onClick={() => router.push('/order-history')} 
           className='mt-8 px-8 py-3 bg-black text-white rounded-lg font-bold text-lg'
