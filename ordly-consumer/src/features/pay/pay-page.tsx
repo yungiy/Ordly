@@ -34,58 +34,87 @@ export default function PayPage() {
     }
 
     setLoading(true);
-    const merchant_uid = `ord_${new Date().getTime()}`;
 
-    const itemName =
-      items.length > 1
-        ? `${items[0].title} 외 ${items.length - 1}건`
-        : items[0].title;
+    try {
+      const orderPayload = {
+        items: items.map((item) => ({
+          menuItemId: item.id,
+          quantity: item.quantity,
+          priceAtOrder: item.price,
+        })),
+        storeId: 'cmghk30ry000j85u5adupj84d',
+      };
+      console.log('[PayPage] 1. /api/orders 요청 데이터:', orderPayload);
+      const orderResponse = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderPayload),
+      });
 
-    window.IMP.init(iamportKey);
-
-    const paymentData = {
-      pg: 'nice',
-      pay_method: paymentMethod,
-      merchant_uid,
-      name: itemName,
-      amount: totalPrice,
-      buyer_name: '테스트 구매자',
-      buyer_tel: '010-1234-5678',
-      buyer_email: 'test@example.com',
-    };
-
-    window.IMP.request_pay(paymentData, (rsp) => {
-      if (rsp.success) {
-        fetch('/api/payments/verify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            imp_uid: rsp.imp_uid,
-            merchant_uid: rsp.merchant_uid,
-          }),
-        })
-          .then((res) => {
-            return res.json();
-          })
-          .then((data) => {
-            if (data.status === 'success') {
-              clearCart();
-              router.push(
-                `/pay/complete?merchant_uid=${rsp.merchant_uid}&imp_uid=${rsp.imp_uid}`
-              );
-            } else {
-              showToast(`결제 검증에 실패했습니다: ${data.message}`);
-            }
-          })
-          .catch((error) => {
-            showToast('결제 검증 중 오류가 발생했습니다.');
-          })
-          .finally(() => setLoading(false));
-      } else {
-        showToast(`결제에 실패했습니다: ${rsp.error_msg || '알 수 없는 오류'}`);
-        setLoading(false);
+      if (!orderResponse.ok) {
+        const errorData = await orderResponse.json();
+        throw new Error(errorData.message || '주문 생성에 실패했습니다.');
       }
-    });
+
+      const orderData = await orderResponse.json();
+      const { merchant_uid, amount } = orderData;
+
+      const itemName =
+        items.length > 1
+          ? `${items[0].title} 외 ${items.length - 1}건`
+          : items[0].title;
+
+      window.IMP.init(iamportKey);
+
+      const paymentData = {
+        pg: 'nice',
+        pay_method: paymentMethod,
+        merchant_uid,
+        name: itemName,
+        amount, // 서버에서 받은 금액 사용
+        buyer_name: '테스트 구매자',
+        buyer_tel: '010-1234-5678',
+        buyer_email: 'test@example.com',
+      };
+
+      window.IMP.request_pay(paymentData, (rsp) => {
+        if (rsp.success) {
+          const verifyPayload = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              imp_uid: rsp.imp_uid,
+              merchant_uid: rsp.merchant_uid,
+            }),
+          };
+          fetch('/api/payments/verify', verifyPayload)
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.status === 'success') {
+                clearCart();
+                router.push(
+                  `/pay/complete?merchant_uid=${rsp.merchant_uid}&imp_uid=${rsp.imp_uid}`
+                );
+              } else {
+                showToast(`결제 검증에 실패했습니다: ${data.message}`);
+                setLoading(false);
+              }
+            })
+            .catch((error) => {
+              showToast('결제 검증 중 오류가 발생했습니다.');
+              setLoading(false);
+            });
+        } else {
+          showToast(
+            `결제에 실패했습니다: ${rsp.error_msg || '알 수 없는 오류'}`
+          );
+          setLoading(false);
+        }
+      });
+    } catch (error: any) {
+      showToast(error.message || '결제 처리 중 오류가 발생했습니다.');
+      setLoading(false);
+    }
   };
 
   return (
@@ -94,6 +123,12 @@ export default function PayPage() {
         src='https://cdn.iamport.kr/v1/iamport.js'
         strategy='afterInteractive'
       />
+
+      {loading && (
+        <div className='fixed inset-0 bg-opacity-50 flex items-center justify-center z-50'>
+          <div className='w-12 h-12 border-4 border-gray-200 rounded-full animate-spin border-t-blue-500' />
+        </div>
+      )}
 
       <div className='flex flex-col h-full bg-gray-50'>
         <Header title='결제하기' showBackButton />

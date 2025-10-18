@@ -15,6 +15,19 @@ export default function PayCompletePage() {
   const merchantUid = searchParams?.get('merchant_uid');
   const impUid = searchParams?.get('imp_uid');
 
+  useEffect(() => {
+    if (merchantUid) {
+      const existingOrders = JSON.parse(
+        localStorage.getItem('my_orders') || '[]'
+      );
+
+      if (!existingOrders.includes(merchantUid)) {
+        const updatedOrders = [...existingOrders, merchantUid];
+        localStorage.setItem('my_orders', JSON.stringify(updatedOrders));
+      }
+    }
+  }, [merchantUid]);
+
   const handleCancel = async () => {
     if (!impUid) return;
     setIsCanceling(true);

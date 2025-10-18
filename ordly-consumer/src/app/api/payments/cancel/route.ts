@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 export async function POST(req: NextRequest) {
   const { imp_uid, reason, cancel_request_amount } = await req.json();
@@ -43,12 +44,22 @@ export async function POST(req: NextRequest) {
 
     const cancelResult = await cancelPaymentResponse.json();
 
-    // TODO: DB에서 해당 주문의 상태를 'CANCELED'로 업데이트하는 로직을 구현
-    // await updateOrderStatusToCanceled(imp_uid);
+    if (cancelResult.code === 0) {
+      await prisma.payment.update({
+        where: { impUid: imp_uid },
+        data: {
+          status: 'FAILED',
+          Order: {
+            update: {
+              status: 'CANCELED',
+            },
+          },
+        },
+      });
+    }
 
     return NextResponse.json(cancelResult);
   } catch (error) {
-    console.error('Payment cancellation error:', error);
     return NextResponse.json(
       { message: '결제 취소 중 서버 오류가 발생했습니다.' },
       { status: 500 }

@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import cuid from 'cuid';
 
 export async function POST(req: NextRequest) {
-  const { imp_uid } = await req.json();
+  const { imp_uid, merchant_uid } = await req.json();
+  console.log('[API /verify] 1. 요청 받음:', { imp_uid, merchant_uid });
 
   try {
     const getTokenResponse = await fetch(
@@ -38,24 +41,58 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { amount: paidAmount, status: iamportStatus } =
-      paymentDataResult.response;
-    /*
-      TODO: 실제 프로덕션에서는 DB에 저장된 주문 정보를 조회하여 결제 금액을 비교
-      const order = await prisma.order.findUnique({ where: { merchantUid: merchant_uid } });
-      const amountToBePaid = order.amount;
-      if (paidAmount !== amountToBePaid) {
-      // 결제 위변조로 간주하고 결제 취소 로직을 호출
-      return NextResponse.json({ status: 'forgery', message: '결제 위변조가 의심됩니다.' }, { status: 400 });
-      }
-    */
+    const {
+      amount: paidAmount,
+      status: iamportStatus,
+      pay_method: method,
+    } = paymentDataResult.response;
+
+    const order = await prisma.order.findUnique({
+      where: { orderNumber: merchant_uid },
+    });
+
+    if (!order) {
+      // TODO: 해당 주문이 없으면 결제 취소 로직 호출
+      return NextResponse.json(
+        { status: 'error', message: '주문 정보를 찾을 수 없습니다.' },
+        { status: 404 }
+      );
+    }
+
+    const amountToBePaid = order.totalPrice;
+
+    if (paidAmount !== amountToBePaid.toNumber()) {
+      return NextResponse.json(
+        { status: 'forgery', message: '결제 위조가 의심됩니다.' },
+        { status: 400 }
+      );
+    }
 
     if (iamportStatus === 'paid') {
-      // console.log('결제 검증 성공. DB 업데이트 로직 실행 (현재는 생략됨)');
+      await prisma.$transaction([
+        prisma.payment.create({
+          data: {
+            id: cuid(), // id를 직접 생성하여 제공
+            amount: paidAmount,
+            method: method,
+            status: 'SUCCESS',
+            impUid: imp_uid,
+            merchantUid: merchant_uid,
+            orderId: order.id,
+          },
+        }),
+        prisma.order.update({
+          where: { id: order.id },
+          data: {
+            updatedAt: new Date(),
+            status: 'PREPARING',
+          },
+        }),
+      ]);
 
       return NextResponse.json({
         status: 'success',
-        message: '결제가 성공적으로 검증되었습니다.',
+        message: '결제가 성공적으로 처리되었습니다.',
       });
     }
 
@@ -64,7 +101,6 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   } catch (error) {
-    console.error('결제 검증 중 서버 오류 발생:', error);
     return NextResponse.json(
       { status: 'error', message: '서버 오류로 결제 검증에 실패했습니다.' },
       { status: 500 }
