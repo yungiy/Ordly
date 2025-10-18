@@ -10,8 +10,8 @@ type Props = {
 export default function MenuList({ menus, categoryRefs }: Props) {
   let prevCategory = '';
   return (
-    <div className='px-4 py-2 bg-gray-50'>
-      <div className='space-y-6'>
+    <div className='px-2 pb-4 bg-gray-50'>
+      <div className='space-y-3'>
         {menus.map((item) => {
           const showDivider = item.Category.name !== prevCategory;
           const refProp = showDivider

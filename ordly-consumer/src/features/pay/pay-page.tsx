@@ -154,11 +154,14 @@ export default function PayPage() {
 
           <div className='bg-white rounded-lg shadow-sm p-4'>
             <h3 className='text-lg font-bold border-b pb-3 mb-3'>결제 수단</h3>
-            <p className='text-gray-700'>신용카드</p>
+            <div className='text-gray-700 flex flex-col items-center justify-center py-6'>
+              <span>신용카드로 결제 가능합니다.</span>
+              <span>결제하기를 눌러주세요.</span>
+            </div>
           </div>
         </div>
 
-        <div className='p-4 bg-white border-t'>
+        <div className='p-4 bg-white border-t border-gray-200'>
           <button
             onClick={handlePayment}
             disabled={loading || items.length === 0}
