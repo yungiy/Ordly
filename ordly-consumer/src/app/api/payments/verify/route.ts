@@ -4,7 +4,6 @@ import cuid from 'cuid';
 
 export async function POST(req: NextRequest) {
   const { imp_uid, merchant_uid } = await req.json();
-  console.log('[API /verify] 1. 요청 받음:', { imp_uid, merchant_uid });
 
   try {
     const getTokenResponse = await fetch(
@@ -72,7 +71,7 @@ export async function POST(req: NextRequest) {
       await prisma.$transaction([
         prisma.payment.create({
           data: {
-            id: cuid(), // id를 직접 생성하여 제공
+            id: cuid(),
             amount: paidAmount,
             method: method,
             status: 'SUCCESS',

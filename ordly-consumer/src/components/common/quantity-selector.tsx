@@ -2,6 +2,7 @@
 
 import { Minus, Plus } from 'lucide-react';
 import React from 'react';
+import Button from './button';
 
 type Props = {
   value: number;
@@ -15,13 +16,13 @@ function QuantitySelector({ value, min = 1, onChange }: Props) {
 
   return (
     <div className='flex items-center gap-4'>
-      <button
+      <Button
         onClick={handleDecrease}
         className='flex h-7 w-7 items-center justify-center rounded-full bg-gray-200 text-gray-600 transition hover:bg-gray-300 disabled:opacity-50'
         disabled={value <= min}
       >
         <Minus size={16} />
-      </button>
+      </Button>
       <span className='w-8 text-center text-lg font-bold text-gray-900'>
         {value}
       </span>

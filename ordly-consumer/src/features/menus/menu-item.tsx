@@ -6,13 +6,14 @@ import MenuSoldComponent from './menu-sold';
 
 type Props = {
   menus: MenuItemForClient;
+  priority?: boolean;
 };
 
-export default function MenuItemComponent({ menus }: Props) {
+export default function MenuItemComponent({ menus, priority = false }: Props) {
   const isSoldOut = menus.status === MenuStatus.SOLDOUT;
 
   const content = (
-    <div className='flex items-start justify-between'>
+    <div className='flex items-start justify-between px-1'>
       <div className='flex flex-col'>
         <h3 className='text-lg font-bold'>{menus.name}</h3>
         {menus.description && (
@@ -25,11 +26,12 @@ export default function MenuItemComponent({ menus }: Props) {
         </p>
       </div>
       {menus.imageUrl && (
-        <div className='relative ml-4 h-32 w-32 flex-shrink-0'>
+        <div className='relative ml-4 h-32 w-32'>
           <Image
             src={menus.imageUrl}
             alt={menus.name}
             fill
+            priority={priority}
             sizes='128px'
             className='object-cover rounded-lg'
           />

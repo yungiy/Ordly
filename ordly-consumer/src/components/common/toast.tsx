@@ -3,6 +3,7 @@
 import { useToastStore } from '@/store/toast.store';
 import { X } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
+import Button from './button';
 
 type Props = {
   message: string;
@@ -22,7 +23,7 @@ function Toast({ message, id, className }: Props) {
       role='alert'
     >
       <div className='text-sm font-semibold'>{message}</div>
-      <button
+      <Button
         type='button'
         className='-mx-1.5 -my-1.5 bg-yellow-400 text-black hover:text-black rounded-lg inline-flex items-center justify-center h-6 w-6'
         onClick={() => hideToast(id)}
@@ -30,7 +31,7 @@ function Toast({ message, id, className }: Props) {
       >
         <span className='sr-only'>Close</span>
         <X className='w-4 h-4' />
-      </button>
+      </Button>
     </div>
   );
 }

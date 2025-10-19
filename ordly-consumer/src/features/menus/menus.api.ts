@@ -1,4 +1,3 @@
-import 'server-only'; // 이 파일이 서버에서만 사용됨을 명시
 import { Category, MenuItem, MenuStatus } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
 

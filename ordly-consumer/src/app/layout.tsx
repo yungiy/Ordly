@@ -20,13 +20,13 @@ export default function RootLayout({
       <body className='h-dvh w-screen content-center'>
         <QueryProvider>
           <SessionProvider>
-            <main className='relative mx-auto flex h-full max-h-dvh w-full min-w-[360px] max-w-[430px] flex-col bg-white'>
+            <main className='relative mx-auto flex h-full max-h-dvh w-full min-w-[360px] max-w-[400px] flex-col bg-white'>
               {children}
             </main>
             <ToastContainer />
             <Script
               type='text/javascript'
-              strategy='beforeInteractive'
+              strategy='afterInteractive'
               src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_APP_KEY}&libraries=services&autoload=false`}
             />
           </SessionProvider>

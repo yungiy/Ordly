@@ -20,7 +20,7 @@ export function useCategoryScroll(categories: string[]) {
     }
     setTimeout(() => {
       isClickRef.current = false;
-    }, 1000); // 스크롤 애니메이션 시간 동안 observer 비활성화
+    }, 1000); 
   };
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export function useCategoryScroll(categories: string[]) {
   }, []);
 
   useEffect(() => {
-    if (!headerHeight) return; // 헤더 높이가 계산되기 전에 실행 방지
+    if (!headerHeight) return; 
 
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
       if (isClickRef.current) return;
