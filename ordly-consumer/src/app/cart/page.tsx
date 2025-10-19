@@ -1,4 +1,5 @@
 'use client';
+import Button from '@/components/common/button';
 import Header from '@/components/layout/header';
 import CartPage from '@/features/cart/cart-page';
 import { useCartStore } from '@/store/cart.store';
@@ -12,9 +13,9 @@ export default function Cart() {
         title="장바구니" 
         showBackButton 
         rightContent={
-          <button onClick={clearCart} className='text-sm text-gray-600 font-semibold'>
+          <Button onClick={clearCart} className='text-sm text-gray-600 font-semibold'>
             전체삭제
-          </button>
+          </Button>
         }
       />
       <main className="flex-grow overflow-y-auto bg-gray-50">

@@ -1,12 +1,17 @@
 'use client';
 
 import Header from '@/components/layout/header';
+import dynamic from 'next/dynamic';
 import { useQuery } from '@tanstack/react-query';
-import KakaoMap from './map';
 import StoreInfo from './store-info';
 import { fetcher, StoreWithCategories } from './store.api';
 import StoreSkeleton from '@/components/skeleton/store-skeleton';
 import { formatHours } from '@/utils/format-hour';
+
+const KakaoMap = dynamic(() => import('./map'), {
+  ssr: false,
+  loading: () => <div className='w-full h-full bg-gray-200 animate-pulse' />,
+});
 
 export default function StorePage() {
   const { data: store, isLoading } = useQuery<StoreWithCategories>({

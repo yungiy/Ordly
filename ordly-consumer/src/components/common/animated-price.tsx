@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useAnimatedPrice } from '@/hooks/use-animated-price.hooks';
+import { useAnimatedPrice } from '@/hooks/useAnimatedPrice.hooks';
 
 type Props = {
   amount: number;

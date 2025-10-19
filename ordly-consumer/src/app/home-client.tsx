@@ -1,33 +1,26 @@
 'use client';
 
-import { useState } from 'react';
-import MenuList from '@/features/menus/menu-list';
-import BottomBar from '@/components/layout/bottom-bar';
 import Category from '@/features/menus/category';
 import { useCategoryScroll } from '@/hooks/useCategoryScroll.hooks';
-import {
-  MenuItemForClient,
-  MenuItemWithCategory,
-} from '@/features/menus/menus.api';
-import { Category as CategoryType } from '@/generated/prisma';
+import { useMenus } from '@/hooks/useMenus.hooks';
+import dynamic from 'next/dynamic';
+import MenusSkeleton from '@/components/skeleton/menus-skeleton';
 
-type HomeClientProps = {
-  initialMenus: MenuItemWithCategory[];
-};
+const MenuList = dynamic(() => import('@/features/menus/menu-list'), {
+  ssr: false,
+  loading: () => <MenusSkeleton />,
+});
 
-export default function HomeClient({ initialMenus }: HomeClientProps) {
-  const [items] = useState<MenuItemForClient[]>(() =>
-    initialMenus.map((item) => ({ ...item, price: Number(item.price) }))
-  );
-  const [categories] = useState<CategoryType[]>(() => {
-    const uniqueCategories = Array.from(
-      new Map(
-        initialMenus.map((item) => [item.Category.id, item.Category])
-      ).values()
-    );
-    uniqueCategories.sort((a, b) => a.order - b.order);
-    return uniqueCategories;
-  });
+const BottomBar = dynamic(() => import('@/components/layout/bottom-bar'), {
+  ssr: false,
+});
+
+const Footers = dynamic(() => import('@/components/layout/footers'), {
+  ssr: false,
+});
+
+export default function HomeClient() {
+  const { items, categories } = useMenus();
 
   const { activeCategory, handleCategoryClick, categoryRefs } =
     useCategoryScroll(categories ? categories.map((c) => c.name) : []);
@@ -41,6 +34,7 @@ export default function HomeClient({ initialMenus }: HomeClientProps) {
       />
       <MenuList menus={items} categoryRefs={categoryRefs} />
       <BottomBar />
+      <Footers />
     </>
   );
 }

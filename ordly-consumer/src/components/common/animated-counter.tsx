@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useAnimatedCounter } from '@/hooks/use-animated-counter.hooks';
+import { useAnimatedCounter } from '@/hooks/useAnimatedCounter.hooks';
 
 type Props = {
   value: number;

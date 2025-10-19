@@ -9,6 +9,7 @@ import { useSpring, useTransform } from 'framer-motion';
 import { useCartStore } from '@/store/cart.store';
 import { useToastStore } from '@/store/toast.store';
 import { formatCurrency } from '@/utils/format';
+import Button from '@/components/common/button';
 
 type Props = {
   id: string;
@@ -44,7 +45,7 @@ export default function MenuActions({ id, price, title }: Props) {
           <span className='text-lg font-medium text-gray-800'>수량</span>
           <QuantitySelector value={quantity} onChange={setQuantity} />
         </div>
-        <button
+        <Button
           onClick={handleAddToCart}
           className='flex w-full items-center justify-center gap-2 rounded-lg bg-black py-4 text-base font-bold text-white transition'
         >
@@ -52,7 +53,7 @@ export default function MenuActions({ id, price, title }: Props) {
           <span>
             <AnimatedPrice amount={totalPrice} /> 장바구니에 담기
           </span>
-        </button>
+        </Button>
       </div>
     </FixedActionBar>
   );

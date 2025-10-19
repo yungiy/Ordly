@@ -7,7 +7,9 @@ export type MenuItemDetail = Omit<MenuItem, 'price' | 'description'> & {
   description: string | null;
 };
 
-export async function fetchMenuDetail(id: string): Promise<MenuItemDetail | null> {
+export async function fetchMenuDetail(
+  id: string
+): Promise<MenuItemDetail | null> {
   const menuItem = await prisma.menuItem.findUnique({
     where: { id },
     include: {
@@ -18,8 +20,6 @@ export async function fetchMenuDetail(id: string): Promise<MenuItemDetail | null
   if (!menuItem) {
     return null;
   }
-
-  // Prisma의 Decimal 타입을 숫자로, description이 null일 경우를 처리합니다.
   return {
     ...menuItem,
     price: menuItem.price.toNumber(),
