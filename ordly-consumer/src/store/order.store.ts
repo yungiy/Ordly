@@ -26,12 +26,12 @@ export const useOrderStore = create<OrderState>()(
           totalPrice,
         };
         set((state) => ({
-          orders: [newOrder, ...state.orders], // 최신 주문이 위로 오도록 추가
+          orders: [newOrder, ...state.orders], 
         }));
       },
     }),
     {
-      name: 'order-history-storage', // 로컬 스토리지에 저장될 이름
+      name: 'order-history-storage',
     },
   ),
 );

@@ -21,7 +21,7 @@ export const useToastStore = create<ToastState>((set) => ({
 
     setTimeout(() => {
       set((state) => ({ toasts: state.toasts.filter((toast) => toast.id !== id) }));
-    }, 1500); // 1.5초 후에 토스트 자동 제거
+    }, 1500);
   },
   hideToast: (id) => {
     set((state) => ({ toasts: state.toasts.filter((toast) => toast.id !== id) }));

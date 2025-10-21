@@ -34,7 +34,10 @@ export default function PayCompleteClient() {
     if (!impUid) return;
     setIsCanceling(true);
     try {
-      const result = await cancelPayment({ imp_uid: impUid, reason: '사용자 변심' });
+      const result = await cancelPayment({
+        imp_uid: impUid,
+        reason: '사용자 변심',
+      });
       if (result.code === 0) {
         showToast('결제가 성공적으로 취소되었습니다');
         router.push('/order-history');
@@ -42,7 +45,10 @@ export default function PayCompleteClient() {
         showToast('결제 취소에 실패했습니다');
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : '결제 취소 중 오류가 발생했습니다.';
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : '결제 취소 중 오류가 발생했습니다.';
       showToast(errorMessage);
     } finally {
       setIsCanceling(false);
@@ -61,16 +67,16 @@ export default function PayCompleteClient() {
         {merchantUid && (
           <p className='text-sm text-gray-500'>주문번호: {merchantUid}</p>
         )}
-        <Button
+        <button
           onClick={handleCancel}
           disabled={isCanceling}
           className='mt-4 text-gray-500 underline disabled:text-gray-400'
         >
           {isCanceling ? '취소 처리 중...' : '결제 취소하기'}
-        </Button>
+        </button>
         <Button
           onClick={() => router.push('/order-history')}
-          className='mt-8 px-10 py-4 bg-black text-white rounded-lg font-bold text-lg'
+          className='mt-8 px-8 py-4 bg-black text-white rounded-lg font-bold text-lg'
         >
           주문내역 확인하기
         </Button>
