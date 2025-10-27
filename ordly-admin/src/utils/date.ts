@@ -25,3 +25,9 @@ export const formatDateToYYYYMMDD = (date: Date) => {
   const day = date.getDate().toString().padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
+
+export const getWeekOfMonth = (date: Date) => {
+  const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+  const firstDayOfWeek = firstDayOfMonth.getDay();
+  return Math.floor((date.getDate() + firstDayOfWeek - 1) / 7) + 1;
+};
