@@ -3,15 +3,44 @@ import {
   getMenus,
   deleteMenu,
   updateMenuStatus,
+  createMenu,
+  updateMenu,
 } from '@/features/menus/api/menus.api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { MenuStatus } from '@prisma/client';
+import { MenuItem, MenuStatus } from '@prisma/client';
 import { Menus } from '@/types/types';
 
 export const useGetMenus = () => {
   return useQuery({
     queryKey: ['menus'],
     queryFn: getMenus,
+  });
+};
+
+export const useCreateMenu = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<MenuItem, Error, FormData>({
+    mutationFn: createMenu,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['menus'] });
+    },
+  });
+}
+
+type UpdateMenuPayload = {
+  id: string;
+  formData: FormData;
+};
+
+export const useUpdateMenu = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<MenuItem, Error, UpdateMenuPayload>({
+    mutationFn: updateMenu,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['menus'] });
+    },
   });
 };
 

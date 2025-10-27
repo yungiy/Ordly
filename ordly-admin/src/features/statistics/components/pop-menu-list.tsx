@@ -37,7 +37,7 @@ export default function PopMenuList() {
         <select
           value={period}
           onChange={(e) => setPeriod(e.target.value)}
-          className='px-1 py-1 rounded-sm border-2 border-gray-400 text-gray-700 font-semibold focus:outline-none'
+          className='p-2 rounded-sm border border-gray-400 text-gray-700 font-semibold focus:outline-none'
         >
           <option value='monthly'>이번달</option>
           <option value='six-months'>6개월</option>

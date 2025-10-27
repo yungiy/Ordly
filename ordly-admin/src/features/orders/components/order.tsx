@@ -5,6 +5,7 @@ import { Order } from '@/types/types';
 import OrderStatus from './order-status';
 import OrderModal from './order-modal';
 import { useGetOrders, useUpdateOrderStatus } from '@/hooks/useOrders.hooks';
+import OrderSkeleton from '@/components/skeleton/order-skeleton';
 
 export default function OrderPage() {
   const { data: orders = [], isLoading, isError } = useGetOrders();
@@ -25,7 +26,7 @@ export default function OrderPage() {
   };
 
   if (isLoading) {
-    return <div>로딩중</div>;
+    return <OrderSkeleton />
   }
 
   if (isError) {

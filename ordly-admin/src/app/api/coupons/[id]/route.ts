@@ -3,17 +3,6 @@ import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../../auth/[...nextauth]/route';
 
-async function verifyCouponOwnership(
-  couponId: string,
-  userId: string
-): Promise<boolean> {
-  const coupon = await prisma.coupon.findUnique({
-    where: { id: couponId },
-    select: { storeId: true },
-  });
-  return coupon?.storeId === userId;
-}
-
 export async function PUT(
   req: NextRequest,
   context: { params: { id: string } }
