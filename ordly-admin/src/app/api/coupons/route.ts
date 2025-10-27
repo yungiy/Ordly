@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { description, discountType, discountValue, validFrom, validUntil } =
+    const { title, description, discountType, discountValue, validFrom, validUntil } =
       body;
 
     const code = `COUPON${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
 
     const newCoupon = await prisma.coupon.create({
       data: {
+        title,
         code,
         description,
         discountType,
@@ -55,7 +56,6 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json(newCoupon, { status: 201 });
   } catch (error) {
-    console.error('Coupon creation error:', error);
     return NextResponse.json(
       { error: 'Failed to create coupon' },
       { status: 500 }

@@ -1,26 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const mockData = {
-  monthly: [
-    { rank: 1, name: '아메리카노 (ICE)', orders: 152 },
-    { rank: 2, name: '카페라떼 (ICE)', orders: 110 },
-    { rank: 3, name: '치즈케이크', orders: 85 },
-    { rank: 4, name: '소금빵', orders: 76 },
-    { rank: 5, name: 'IPA', orders: 64 },
+  monthly: [ 
+    { rank: 1, name: '아메리카노', orders: 161 }, 
+    { rank: 2, name: '라떼', orders: 123 },       
+    { rank: 3, name: '소금빵', orders: 71 },     
+    { rank: 4, name: '바스크 치즈케이크', orders: 60 },
+    { rank: 5, name: '초코라떼', orders: 55 },   
   ],
-  'six-months': [
-    { rank: 1, name: '아메리카노 (ICE)', orders: 980 },
-    { rank: 2, name: '카페라떼 (ICE)', orders: 750 },
-    { rank: 3, name: '감바스', orders: 540 },
-    { rank: 4, name: '치즈케이크', orders: 521 },
-    { rank: 5, name: '하이볼', orders: 488 },
+  'six-months': [ 
+    { rank: 1, name: '아메리카노', orders: 979 },
+    { rank: 2, name: '라떼', orders: 800 },
+    { rank: 3, name: '스파게티', orders: 567 },    
+    { rank: 4, name: '바스크 치즈케이크', orders: 521 },
+    { rank: 5, name: '망고빙수', orders: 436 },   
   ],
-  yearly: [
-    { rank: 1, name: '아메리카노 (ICE)', orders: 2103 },
-    { rank: 2, name: '카페라떼 (ICE)', orders: 1800 },
-    { rank: 3, name: '하이볼', orders: 1204 },
-    { rank: 4, name: '감바스', orders: 1100 },
-    { rank: 5, name: '치즈케이크', orders: 998 },
+  yearly: [ 
+    { rank: 1, name: '아메리카노', orders: 2204 },
+    { rank: 2, name: '라떼', orders: 1701 },
+    { rank: 3, name: '스파게티', orders: 1311 },
+    { rank: 4, name: '망고빙수', orders: 1152 },
+    { rank: 5, name: '바스크 치즈케이크', orders: 892 },
   ],
 };
 
@@ -36,7 +36,6 @@ export async function GET(req: NextRequest) {
     case 'yearly':
       return NextResponse.json(mockData.yearly);
     default:
-      // period가 null이거나 유효하지 않은 경우 기본값으로 monthly 데이터를 반환합니다.
       return NextResponse.json(mockData.monthly);
   }
 }

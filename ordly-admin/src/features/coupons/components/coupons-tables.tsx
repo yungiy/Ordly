@@ -32,6 +32,7 @@ export default function CouponTable({
           <thead>
             <tr className='border-b border-b-gray-300'>
               <th className='p-2'>쿠폰이름</th>
+              <th className='p-2'>쿠폰설명</th>
               <th className='p-2'>쿠폰코드</th>
               <th className='p-2'>타입</th>
               <th className='p-2'>할인 값</th>
@@ -45,7 +46,8 @@ export default function CouponTable({
                 key={coupon.id}
                 className='border-b border-b-gray-300 last:border-b-0'
               >
-                <td className='p-2 font-medium'>{coupon.description}</td>
+                <td className='p-2 font-semibold'>{coupon.title}</td>
+                <td className='p-2 font-semibold'>{coupon.description}</td>
                 <td className='p-2'>{coupon.code}</td>
                 <td className='p-2'>
                   {coupon.discountType === 'FIXED_AMOUNT' ? '정액' : '정률'}
