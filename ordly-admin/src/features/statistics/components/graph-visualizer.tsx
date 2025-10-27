@@ -84,7 +84,7 @@ export default function GraphVisualizer({ startDate, endDate }: Props) {
       <div>
         <h2 className='text-lg font-bold mb-2'>월별 매출 추이</h2>
         <div className='h-[300px]'>
-          <LineChart data={lineChartData} dataKey='name' />
+          <LineChart data={lineChartData} dataKey='date' />
         </div>
       </div>
     </div>
