@@ -39,9 +39,14 @@ function Toast({ message, id, className }: Props) {
 export function ToastContainer() {
   const { toasts } = useToastStore();
 
+  type Toast = {
+    id: number;
+    message: string;
+  };
+
   return (
     <div className='max-w-[430px] w-full fixed bottom-20 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 px-4'>
-      {toasts.map((toast: any) => (
+      {toasts.map((toast: Toast) => (
         <Toast key={toast.id} id={toast.id} message={toast.message} />
       ))}
     </div>

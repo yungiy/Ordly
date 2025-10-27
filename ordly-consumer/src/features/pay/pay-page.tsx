@@ -12,9 +12,27 @@ import type { CartItem } from '@/store/cart.store';
 import { createOrder, verifyPayment } from './pay.api';
 import Button from '@/components/common/button';
 
+interface IamportRequest {
+  pg?: string;
+  pay_method: string;
+  merchant_uid: string;
+  name: string;
+  amount: number;
+  buyer_name?: string;
+  buyer_tel?: string;
+  buyer_email?: string;
+}
+
+interface IamportResponse {
+  success: boolean;
+  imp_uid: string;
+  merchant_uid: string;
+  error_msg?: string;
+}
+
 interface Iamport {
   init: (key: string) => void;
-  request_pay: (params: any, callback: (rsp: any) => void) => void;
+  request_pay: (params: IamportRequest, callback: (rsp: IamportResponse) => void) => void;
 }
 declare global {
   interface Window {

@@ -35,7 +35,7 @@ export default function MenuDetailPage() {
   return (
     <div className='flex min-h-screen flex-col bg-white'>
       <main className='flex-grow pb-32'>
-        <MenuImage imageUrl={item.imageUrl} title={item.name} />
+       {item.imageUrl && <MenuImage src={item.imageUrl} title={item.name} alt={item.name} />}
         <MenuInfo
           title={item.name}
           price={item.price}

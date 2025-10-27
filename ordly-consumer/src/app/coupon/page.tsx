@@ -13,6 +13,16 @@ const getCoupons = async (): Promise<Coupon[]> => {
         gte: new Date(),
       },
     },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      discountType: true,
+      discountValue: true,
+      validFrom: true,
+      validUntil: true,
+      isActive: true,
+    },
   });
 
    return coupons.map((coupon) => {

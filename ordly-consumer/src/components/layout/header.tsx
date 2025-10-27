@@ -9,7 +9,7 @@ type Props = {
   leftContent?: React.ReactNode;
   rightContent?: React.ReactNode;
   showBackButton?: boolean;
-  onClick?: any;
+  onClick?: () => void;
 };
 
 export default function Header({

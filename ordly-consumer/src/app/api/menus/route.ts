@@ -15,7 +15,7 @@ export async function GET() {
       orderBy: [{ Category: { order: 'asc' } }, { name: 'asc' }],
     });
 
-    const serializedMenus = menuItems.map((item:any) => ({
+    const serializedMenus = menuItems.map((item: MenuWithCategory) => ({
       ...item,
       price: item.price.toString(),
     }));

@@ -1,19 +1,11 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'picsum.photos',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.pexels.com',
+        hostname: 'vbjnhbgklxjsppjuksad.supabase.co', // 여기에 Supabase 호스트 이름 추가
       },
     ],
   },

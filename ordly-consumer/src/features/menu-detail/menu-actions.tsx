@@ -5,15 +5,14 @@ import { ShoppingCart } from 'lucide-react';
 import QuantitySelector from '@/components/common/quantity-selector';
 import AnimatedPrice from '@/components/common/animated-price';
 import FixedActionBar from '@/components/common/fixed-action-bar';
-import { useSpring, useTransform } from 'framer-motion';
+import { useSpring } from 'framer-motion';
 import { useCartStore } from '@/store/cart.store';
 import { useToastStore } from '@/store/toast.store';
-import { formatCurrency } from '@/utils/format';
 import Button from '@/components/common/button';
 
 type Props = {
   id: string;
-  price: any;
+  price: number;
   title: string;
 };
 

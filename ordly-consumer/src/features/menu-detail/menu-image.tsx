@@ -3,13 +3,16 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft } from 'lucide-react';
+import { createSupabaseUrl } from '@/utils/create-supabase-url';
 
 type Props = {
   imageUrl?: string | null;
   title: string;
+  src: string;
+  alt: string;
 }
 
-export default function MenuImage({ imageUrl, title }: Props) {
+export default function MenuImage({ imageUrl, src, alt, title}: Props) {
   const router = useRouter();
 
   return (
@@ -20,7 +23,7 @@ export default function MenuImage({ imageUrl, title }: Props) {
       >
         <ChevronLeft size={24} />
       </button>
-      {imageUrl && <Image src={imageUrl} alt={title} fill className="object-cover" priority />}
+      {imageUrl && <Image src={createSupabaseUrl(src)} alt={alt} fill className='object-cover' />}
     </div>
   );
 }

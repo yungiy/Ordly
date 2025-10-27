@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { MenuItemForClient } from './menus.api';
 import { MenuStatus } from '@/generated/prisma';
 import MenuSoldComponent from './menu-sold';
+import { createSupabaseUrl } from '@/utils/create-supabase-url';
 
 type Props = {
   menus: MenuItemForClient;
@@ -28,7 +29,7 @@ export default function MenuItemComponent({ menus, priority = false }: Props) {
       {menus.imageUrl && (
         <div className='relative ml-4 h-32 w-32'>
           <Image
-            src={menus.imageUrl}
+            src={createSupabaseUrl(menus.imageUrl)}
             alt={menus.name}
             fill
             priority={priority}

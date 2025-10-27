@@ -3,7 +3,7 @@ import { JsonValue } from '@prisma/client/runtime/library';
 type TimeRange = { openTime: string; closeTime: string };
 
 export function formatHours(hours: JsonValue | null): string | null {
-  let parsedHours: any = hours;
+  let parsedHours: unknown = hours;
 
   if (typeof parsedHours === 'string') {
     try {

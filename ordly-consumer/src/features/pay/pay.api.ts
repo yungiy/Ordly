@@ -53,7 +53,7 @@ interface CancelPaymentParams {
 interface CancelPaymentResponse {
   code: number;
   message: string;
-  response?: any;
+  response?: unknown;
 }
 
 export const cancelPayment = async ({
