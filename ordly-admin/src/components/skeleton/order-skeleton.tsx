@@ -1,5 +1,5 @@
 import React from 'react';
-import CardItem from '../common/card-item'; // CardItem 경로를 확인해주세요.
+import CardItem from '../common/card-item';
 
 export default function OrderSkeleton() {
   return (

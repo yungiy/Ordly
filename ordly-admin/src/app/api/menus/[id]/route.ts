@@ -30,7 +30,10 @@ export async function PUT(
     });
 
     if (!existingMenu) {
-      return NextResponse.json({ error: 'Menu not found or access denied' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'Menu not found or access denied' },
+        { status: 404 }
+      );
     }
 
     const data = await req.formData();
@@ -41,7 +44,10 @@ export async function PUT(
     const file = data.get('image') as File | null;
 
     if (!name || !price || !categoryId) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      );
     }
 
     const updateData: Prisma.MenuItemUpdateInput = {
@@ -74,15 +80,19 @@ export async function PUT(
 
       updateData.imageUrl = urlData.publicUrl;
 
-      // 기존 이미지가 있으면 Supabase Storage에서 삭제
       if (existingMenu.imageUrl) {
         try {
-          const oldImageKey = existingMenu.imageUrl.split('/').pop();
-          const oldFilePath = `${session.user.storeId}/${oldImageKey}`;
-          await supabase.storage.from('ordly-menu-images').remove([oldFilePath]);
+          const bucketName = 'ordly-menu-images';
+          const pathParts = existingMenu.imageUrl.split(`/${bucketName}/`);
+          if (pathParts.length > 1) {
+            const oldFilePath = pathParts[1];
+            await supabase.storage.from(bucketName).remove([oldFilePath]);
+          }
         } catch (removeError) {
-          console.error('Failed to delete old image from Supabase:', removeError);
-          // 이미지 삭제에 실패해도 메뉴 업데이트는 계속 진행합니다.
+          console.error(
+            'Failed to delete old image from Supabase:',
+            removeError
+          );
         }
       }
     }
@@ -102,7 +112,10 @@ export async function PUT(
     return NextResponse.json(serializedMenu);
   } catch (error) {
     console.error('Error updating menu:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -131,30 +144,40 @@ export async function DELETE(
     });
 
     if (!menuItem) {
-      return NextResponse.json({ error: 'Menu not found or access denied' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'Menu not found or access denied' },
+        { status: 404 }
+      );
     }
-    
+
     // Supabase Storage에서 이미지 삭제
     if (menuItem.imageUrl) {
       try {
-        const imageKey = menuItem.imageUrl.split('/').pop();
-        const filePath = `${session.user.storeId}/${imageKey}`;
-        await supabase.storage.from('ordly-menu-images').remove([filePath]);
+        const bucketName = 'ordly-menu-images';
+        const pathParts = menuItem.imageUrl.split(`/${bucketName}/`);
+        if (pathParts.length > 1) {
+          const filePath = pathParts[1];
+          await supabase.storage.from(bucketName).remove([filePath]);
+        }
       } catch (removeError) {
         console.error('Failed to delete image from Supabase:', removeError);
-        // 이미지 삭제에 실패해도 DB 삭제는 계속 진행될 수 있습니다.
       }
     }
 
-    // DB에서 메뉴 및 관련 주문 아이템 삭제
     await prisma.$transaction([
       prisma.orderItem.deleteMany({ where: { menuItemId: id } }),
-      prisma.menuItem.delete({ where: { id } })
+      prisma.menuItem.delete({ where: { id } }),
     ]);
 
-    return NextResponse.json({ message: 'Menu deleted successfully' }, { status: 200 });
+    return NextResponse.json(
+      { message: 'Menu deleted successfully' },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Error deleting menu:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
