@@ -1,10 +1,8 @@
 import { Category, MenuItem, MenuStatus } from '@/generated/prisma';
-import { prisma } from '@/lib/prisma';
 
 export type MenuItemWithCategory = Omit<MenuItem, 'price'> & {
-  price: string;
+  price: string; // price 필드를 string으로 명시적으로 오버라이드
   Category: Category;
-  status: MenuStatus;
 };
 
 export type MenuItemForClient = Omit<MenuItemWithCategory, 'price'> & {
@@ -21,21 +19,4 @@ export async function fetchMenus(): Promise<MenuItemWithCategory[]> {
   const data = await response.json();
 
   return data;
-}
-
-export async function getMenusForServer(): Promise<MenuItemWithCategory[]> {
-  const menuItems = await prisma.menuItem.findMany({
-    include: {
-      Category: true,
-    },
-    orderBy: [{ Category: { order: 'asc' } }, { name: 'asc' }],
-  });
-
-
-  const serializedMenus = menuItems.map((item) => ({
-    ...item,
-    price: item.price.toString(),
-  }));
-
-  return serializedMenus;
 }
