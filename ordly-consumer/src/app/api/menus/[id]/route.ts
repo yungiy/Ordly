@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { MenuItem } from '@/generated/prisma';
 
 export async function GET(
   request: NextRequest,
@@ -19,7 +20,7 @@ export async function GET(
       );
     }
 
-    const serializedMenu = {
+    const serializedMenu: Omit<MenuItem, 'price'> & { price: string } = {
       ...menuItem,
       price: menuItem.price.toString(),
     };

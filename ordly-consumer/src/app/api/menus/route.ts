@@ -1,10 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { Category, MenuItem } from '@/generated/prisma';
-
-export type MenuWithCategory = MenuItem & {
-  Category: Category;
-};
+import { MenuItemWithCategory } from '@/features/menus/menus.api';
 
 export async function GET() {
   try {
@@ -15,7 +11,7 @@ export async function GET() {
       orderBy: [{ Category: { order: 'asc' } }, { name: 'asc' }],
     });
 
-    const serializedMenus = menuItems.map((item: MenuWithCategory) => ({
+    const serializedMenus: MenuItemWithCategory[] = menuItems.map((item) => ({
       ...item,
       price: item.price.toString(),
     }));
