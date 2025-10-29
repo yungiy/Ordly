@@ -1,7 +1,6 @@
 'use client';
 
 import Header from '@/components/layout/header';
-import { memo, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import StoreInfo from './store-info';
 import { StoreWithCategories } from './store.api';
@@ -16,26 +15,22 @@ type Props = {
   store: StoreWithCategories;
 };
 
-function StoreDetail({ store }: Props) {
-  const formattedHours = useMemo(() => formatHours(store.hour), [store.hour]);
-
+export default function StoreDetail({ store }: Props) {
   return (
     <div className='flex flex-col h-full bg-gray-50'>
       <Header title={store.name} showBackButton={true} />
       <main className='flex-grow p-4 space-y-4 overflow-y-auto'>
         <div className='bg-white rounded-lg shadow-md overflow-hidden'>
-          <div className='w-full h-48 md:h-64 p-4'>
+          <div className='w-full h-78 md:h-96 p-4'>
             <KakaoMap address={store.address} />
           </div>
           <StoreInfo
             address={store.address}
             phone={store.phone}
-            hours={formattedHours}
+            hours={formatHours(store.hour)}
           />
         </div>
       </main>
     </div>
   );
 }
-
-export default memo(StoreDetail);

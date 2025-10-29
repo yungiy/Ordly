@@ -1,7 +1,5 @@
 import { Category, MenuItem, MenuStatus } from '@/generated/prisma';
 
-export type { Category };
-
 export type MenuItemWithCategory = Omit<MenuItem, 'price'> & {
   price: string;
   Category: Category;

@@ -1,7 +1,6 @@
 'use client';
 
 import CouponBanner from '@/features/coupon/coupon-banner';
-import { useMemo } from 'react';
 import StoreBanner from '@/features/store/store-banner';
 import StoreProfile from '@/features/store/store-profile';
 import { useQuery } from '@tanstack/react-query';
@@ -13,17 +12,13 @@ export default function MainHeaders() {
     queryFn: () => fetcher('/api/store'),
   });
 
-  const { firstMenuImageUrl, storeName } = useMemo(() => {
-    const firstMenuImageUrl = store?.Category?.[0]?.MenuItem?.[0]?.imageUrl;
-    const storeName = store?.name;
-    return { firstMenuImageUrl, storeName };
-  }, [store]);
+  const firstMenuImageUrl = store?.Category?.[0]?.MenuItem?.[0]?.imageUrl;
 
   return (
     <header className='bg-white pb-2'>
       <StoreBanner imageUrl={firstMenuImageUrl} />
       <div className='px-4 pt-4'>
-        <StoreProfile name={storeName} />
+        <StoreProfile name={store?.name} />
         <CouponBanner />
       </div>
     </header>

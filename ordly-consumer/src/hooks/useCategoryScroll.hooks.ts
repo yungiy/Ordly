@@ -62,7 +62,6 @@ export function useCategoryScroll(categories: string[]) {
     activeCategory,
     handleCategoryClick,
     categoryRefs,
-    // 생성된 ref를 반환하여 Category 컴포넌트에 전달할 수 있도록 합니다.
     categoryHeaderRef,
   };
 }

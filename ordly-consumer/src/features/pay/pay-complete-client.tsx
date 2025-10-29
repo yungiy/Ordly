@@ -6,6 +6,7 @@ import Header from '@/components/layout/header';
 import { CheckCircle2 } from 'lucide-react';
 import { useToastStore } from '@/store/toast.store';
 import { cancelPayment } from './pay.api';
+import Button from '@/components/common/button';
 
 export default function PayCompleteClient() {
   const router = useRouter();
