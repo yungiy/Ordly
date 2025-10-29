@@ -5,7 +5,7 @@ import { useToastStore } from '@/store/toast.store';
 import { createOrder, verifyPayment } from '../features/pay/pay.api';
 import type { Iamport, IamportRequest, IamportResponse } from '@/types/iamport';
 
-const STORE_ID = 'cmghk30ry000j85u5adupj84d';
+const STORE_ID = process.env.NEXT_PUBLIC_STORE_ID!;
 
 export function usePayment() {
   const { items, clearCart } = useCartStore();
