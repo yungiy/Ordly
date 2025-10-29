@@ -39,9 +39,7 @@ export default function PayPage() {
         <div className='p-4 space-y-6 flex-grow'>
           <div className='bg-white rounded-lg shadow-sm p-4'>
             <h3 className='text-lg font-bold border-b pb-3 mb-3'>주문 요약</h3>
-            <div className='space-y-2 text-gray-700'>
-              {orderSummary}
-            </div>
+            <div className='space-y-2 text-gray-700'>{orderSummary}</div>
             <div className='border-t mt-4 pt-4 flex justify-between text-xl font-bold'>
               <span>총 결제금액</span>
               <span>{formatCurrency(totalPrice)}</span>
@@ -63,10 +61,14 @@ export default function PayPage() {
             disabled={isProcessing || items.length === 0}
             className='w-full bg-black text-white text-lg font-bold py-4 rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed'
           >
-            {isProcessing && (
-              <Loader2 className='h-5 w-5 animate-spin' />
+            {isProcessing ? (
+              <>
+                <Loader2 className='h-5 w-5 animate-spin' />
+                <span>처리 중...</span>
+              </>
+            ) : (
+              `${formatCurrency(totalPrice)} 결제하기`
             )}
-            {isProcessing ? '처리 중...' : `${formatCurrency(totalPrice)} 결제하기`}
           </Button>
         </div>
       </div>
