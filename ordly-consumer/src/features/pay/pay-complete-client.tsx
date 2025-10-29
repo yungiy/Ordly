@@ -74,12 +74,12 @@ export default function PayCompleteClient() {
         >
           {isCanceling ? '취소 처리 중...' : '결제 취소하기'}
         </button>
-        <Button
+        <button
           onClick={() => router.push('/order-history')}
           className='mt-8 px-8 py-4 bg-black text-white rounded-lg font-bold text-lg'
         >
           주문내역 확인하기
-        </Button>
+        </button>
       </div>
     </div>
   );

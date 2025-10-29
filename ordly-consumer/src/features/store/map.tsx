@@ -72,33 +72,10 @@ export default function KakaoMap({ address }: Props) {
 
   useEffect(() => {
     if (!window.kakao || !window.kakao.maps) {
-      console.error('카카오맵 SDK가 로드되지 않았습니다.');
       return;
     }
 
-    window.kakao.maps.load(() => {
-      if (!mapContainerRef.current) return;
-
-      const geocoder = new window.kakao.maps.services.Geocoder();
-
-      geocoder.addressSearch(address, (result, status) => {
-        if (status !== window.kakao.maps.services.Status.OK || result.length === 0) {
-          console.error(`주소 검색 실패: ${address}, 상태: ${status}`);
-          const defaultCoords = new window.kakao.maps.LatLng(37.5665, 126.9780);
-          displayMap(defaultCoords, '주소를 찾을 수 없어 기본 위치를 표시합니다.');
-          return;
-        }
-
-        if (!mapContainerRef.current) return;
-
-        const coords = new window.kakao.maps.LatLng(
-          Number(result[0].y),
-          Number(result[0].x),
-        );
-
-        displayMap(coords);
-      });
-    });
+    const kakaoMaps = window.kakao.maps;
 
     const displayMap = (coords: KakaoLatLng, errorMessage?: string) => {
       if (!mapContainerRef.current) return;
@@ -107,22 +84,43 @@ export default function KakaoMap({ address }: Props) {
         center: coords,
         level: 3,
       };
-      const map = new window.kakao.maps.Map(mapContainerRef.current, options);
+      const map = new kakaoMaps.Map(mapContainerRef.current, options);
       mapInstanceRef.current = map;
 
-      new window.kakao.maps.Marker({
+      new kakaoMaps.Marker({
         map: map,
         position: coords,
       });
 
       map.setCenter(coords);
 
-      if (errorMessage) {
-          console.warn(errorMessage);
-      }
+      if (errorMessage) console.warn(errorMessage);
     };
 
-  }, [address]);
+    kakaoMaps.load(() => {
+      if (!mapContainerRef.current) return;
+
+      const geocoder = new kakaoMaps.services.Geocoder();
+
+      geocoder.addressSearch(address, (result, status) => {
+        if (status !== kakaoMaps.services.Status.OK || result.length === 0) {
+          const defaultCoords = new kakaoMaps.LatLng(37.5665, 126.978);
+          displayMap(
+            defaultCoords,
+            '주소를 찾을 수 없어 기본 위치를 표시합니다.',
+          );
+          return;
+        }
+
+        const coords = new kakaoMaps.LatLng(
+          Number(result[0].y),
+          Number(result[0].x),
+        );
+
+        displayMap(coords);
+      });
+    });
+  }, [address, typeof window !== 'undefined' && window.kakao]);
 
   return (
     <div

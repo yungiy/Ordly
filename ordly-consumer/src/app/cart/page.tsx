@@ -1,5 +1,4 @@
 'use client';
-import Button from '@/components/common/button';
 import Header from '@/components/layout/header';
 import CartPage from '@/features/cart/cart-page';
 import { useCartStore } from '@/store/cart.store';
@@ -8,17 +7,20 @@ export default function Cart() {
   const { clearCart } = useCartStore();
 
   return (
-    <div className="flex flex-col h-screen">
-      <Header 
-        title="장바구니" 
-        showBackButton 
+    <div className='flex flex-col h-screen'>
+      <Header
+        title='장바구니'
+        showBackButton
         rightContent={
-          <Button onClick={clearCart} className='text-sm text-gray-600 font-semibold'>
+          <button
+            onClick={clearCart}
+            className='text-sm text-gray-600 font-semibold'
+          >
             전체삭제
-          </Button>
+          </button>
         }
       />
-      <main className="flex-grow overflow-y-auto bg-gray-50">
+      <main className='flex-grow overflow-y-auto bg-gray-50'>
         <CartPage />
       </main>
     </div>
