@@ -1,4 +1,6 @@
-export default function MainPageSkeleton() {
+import React from 'react';
+
+function MainPageSkeleton() {
   return (
     <div className='relative min-h-screen bg-gray-50'>
       <div className='space-y-4 p-4 animate-pulse'>
@@ -27,3 +29,5 @@ export default function MainPageSkeleton() {
     </div>
   );
 }
+
+export default React.memo(MainPageSkeleton);
