@@ -94,7 +94,7 @@ export default function KakaoMap({ address }: Props) {
 
       map.setCenter(coords);
 
-      if (errorMessage) return;
+      if (errorMessage) console.warn(errorMessage);
     };
 
     kakaoMaps.load(() => {
