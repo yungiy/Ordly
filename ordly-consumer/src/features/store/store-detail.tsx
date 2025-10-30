@@ -22,7 +22,7 @@ export default function StoreDetail({ store }: Props) {
       <main className='flex-grow p-4 space-y-4 overflow-y-auto'>
         <div className='bg-white rounded-lg shadow-md overflow-hidden'>
           <div className='w-full h-78 md:h-96 p-4'>
-            <KakaoMap address={store.address} />
+            <KakaoMap />
           </div>
           <StoreInfo
             address={store.address}
