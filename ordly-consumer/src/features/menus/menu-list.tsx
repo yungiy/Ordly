@@ -35,7 +35,7 @@ export default function MenuList({ menus, categoryRefs }: Props) {
                   <hr className='flex-grow border-t-2 border-gray-300' />
                 </div>
               )}
-              <MenuItemComponent menus={item} priority={index < 10} />
+              <MenuItemComponent menu={item} priority={index < 5} />
             </div>
           );
         })}

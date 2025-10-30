@@ -51,7 +51,6 @@ export async function POST(req: NextRequest) {
     });
 
     if (!order) {
-      // TODO: 해당 주문이 없으면 결제 취소 로직 호출
       return NextResponse.json(
         { status: 'error', message: '주문 정보를 찾을 수 없습니다.' },
         { status: 404 }

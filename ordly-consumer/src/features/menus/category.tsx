@@ -1,42 +1,41 @@
 'use client';
 
-import { forwardRef } from 'react';
-import Button from '@/components/common/button';
+import { RefObject } from 'react';
 import { Category as CategoryType } from '@/generated/prisma';
 
 type Props = {
   categories: CategoryType[];
   onCategoryClick: (category: string) => void;
   activeCategory: string;
+  categoryHeaderRef: RefObject<HTMLElement | null>;
 };
 
-const Classification = forwardRef<HTMLElement, Props>(
-  ({ categories, onCategoryClick, activeCategory }, ref) => {
-    return (
-      <section
-        ref={ref}
-        className='sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 bg-white px-4 py-3 hide-scrollbar'
-      >
-        <div className='flex items-center gap-2 overflow-x-auto hide-scrollbar'>
-          {categories.map((category) => (
-            <Button
-              key={category.id}
-              onClick={() => onCategoryClick(category.name)}
-              className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold h-auto w-auto ${
-                category.name === activeCategory
-                  ? 'bg-black text-white'
-                  : 'bg-gray-100 text-black hover:bg-black hover:text-white transition-colors'
-              }`}
-            >
-              {category.name}
-            </Button>
-          ))}
-        </div>
-      </section>
-    );
-  }
-);
-
-Classification.displayName = 'Classification';
-
-export default Classification;
+export default function Category({
+  categories,
+  onCategoryClick,
+  activeCategory,
+  categoryHeaderRef,
+}: Props) {
+  return (
+    <section
+      ref={categoryHeaderRef}
+      className='sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 bg-white px-4 py-3 hide-scrollbar'
+    >
+      <div className='flex items-center gap-2 overflow-x-auto hide-scrollbar'>
+        {categories.map((category) => (
+          <button
+            key={category.id}
+            onClick={() => onCategoryClick(category.name)}
+            className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold h-auto w-auto ${
+              category.name === activeCategory
+                ? 'bg-black text-white'
+                : 'bg-gray-100 text-black hover:bg-black hover:text-white transition-colors'
+            }`}
+          >
+            {category.name}
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
