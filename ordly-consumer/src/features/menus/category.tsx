@@ -29,7 +29,7 @@ export default function Category({
             className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold h-auto w-auto ${
               category.name === activeCategory
                 ? 'bg-black text-white'
-                : 'bg-gray-100 text-black hover:bg-black hover:text-white transition-colors'
+                : 'bg-gray-100 text-black hover:bg-black hover:text-white transition-colors duration-300'
             }`}
           >
             {category.name}
