@@ -1,4 +1,6 @@
-export default function MenuDetailSkeleton() {
+import React from 'react';
+
+function MenuDetailSkeleton() {
   return (
     <div className='flex min-h-screen flex-col bg-white animate-pulse'>
       <main className='flex-grow pb-32'>
@@ -26,3 +28,5 @@ export default function MenuDetailSkeleton() {
     </div>
   );
 }
+
+export default React.memo(MenuDetailSkeleton);

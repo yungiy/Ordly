@@ -1,7 +1,7 @@
 import React from 'react';
 
-export default function MenusSkeleton() {
-  const SkeletonItem = () => (
+const SkeletonItem = React.memo(function SkeletonItem() {
+  return (
     <div className='flex items-start justify-between py-2 border-b border-gray-100 last:border-b-0'>
       <div className='flex-grow space-y-3'>
         <div className='h-5 bg-gray-300 rounded-md w-1/2'></div>
@@ -13,7 +13,9 @@ export default function MenusSkeleton() {
       <div className='ml-4 h-28 w-28 flex-shrink-0 bg-gray-200 rounded-lg'></div>
     </div>
   );
+});
 
+function MenusSkeleton() {
   return (
     <div className='animate-pulse px-4 py-2 bg-white'>
       <div className='flex items-center space-x-2 py-2'>
@@ -36,3 +38,5 @@ export default function MenusSkeleton() {
     </div>
   );
 }
+
+export default React.memo(MenusSkeleton);

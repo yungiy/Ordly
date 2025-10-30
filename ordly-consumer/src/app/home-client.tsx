@@ -6,6 +6,7 @@ import { useCategoryScroll } from '@/hooks/useCategoryScroll.hooks';
 import { useMenus } from '@/hooks/useMenus.hooks';
 import dynamic from 'next/dynamic';
 import MenusSkeleton from '@/components/skeleton/menus-skeleton';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const MenuList = dynamic(() => import('@/features/menus/menu-list'), {
   ssr: false,

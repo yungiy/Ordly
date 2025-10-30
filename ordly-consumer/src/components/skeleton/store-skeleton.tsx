@@ -1,4 +1,6 @@
-export default function StoreSkeleton() {
+import React from 'react';
+
+function StoreSkeleton() {
   return (
     <div className='flex flex-col h-full bg-gray-50'>
       <div className='animate-pulse'>
@@ -46,3 +48,5 @@ export default function StoreSkeleton() {
     </div>
   );
 }
+
+export default React.memo(StoreSkeleton);
