@@ -1,6 +1,7 @@
 'use client';
 
 import Category from '@/features/menus/category';
+import { useMemo, useState, useRef, useEffect } from 'react';
 import { useCategoryScroll } from '@/hooks/useCategoryScroll.hooks';
 import { useMenus } from '@/hooks/useMenus.hooks';
 import dynamic from 'next/dynamic';
@@ -12,11 +13,11 @@ const MenuList = dynamic(() => import('@/features/menus/menu-list'), {
   loading: () => <MenusSkeleton />,
 });
 
-const BottomBar = dynamic(() => import('@/components/layout/bottom-bar'), {
+const Footers = dynamic(() => import('@/components/layout/footers'), {
   ssr: false,
 });
 
-const Footers = dynamic(() => import('@/components/layout/footers'), {
+const BottomBar = dynamic(() => import('@/components/layout/bottom-bar'), {
   ssr: false,
 });
 
@@ -30,11 +31,10 @@ export default function HomeClient() {
       (entries) => {
         if (entries[0].isIntersecting) {
           setIsFooterVisible(true);
-
           observer.disconnect();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (footerTriggerRef.current) {
@@ -47,12 +47,8 @@ export default function HomeClient() {
     return categories ? categories.map((c) => c.name) : [];
   }, [categories]);
 
-  const {
-    activeCategory,
-    handleCategoryClick,
-    categoryRefs,
-    categoryHeaderRef,
-  } = useCategoryScroll(categoryNames);
+  const { activeCategory, handleCategoryClick, categoryRefs, categoryHeaderRef } =
+    useCategoryScroll(categoryNames);
 
   return (
     <>

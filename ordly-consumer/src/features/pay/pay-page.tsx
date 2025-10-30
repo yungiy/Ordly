@@ -6,7 +6,6 @@ import { useCartStore } from '@/store/cart.store';
 import Header from '@/components/layout/header';
 import { formatCurrency } from '@/utils/format';
 import Button from '@/components/common/button';
-import { Loader2 } from 'lucide-react';
 import { usePayment } from '../../hooks/usePayment.hooks';
 import type { Iamport } from '@/types/iamport';
 import OrderItem from '../order-history/order-item';
@@ -59,13 +58,10 @@ export default function PayPage() {
           <Button
             onClick={startPayment}
             disabled={isProcessing || items.length === 0}
-            className='w-full bg-black text-white text-lg font-bold py-4 rounded-lg disabled:bg-gray-400 disabled:cursor-not-allowed'
+            className='w-full bg-black text-white text-lg font-bold py-4 rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed'
           >
             {isProcessing ? (
-              <>
-                <Loader2 className='h-5 w-5 animate-spin' />
-                <span>처리 중...</span>
-              </>
+              <span>처리 중...</span>
             ) : (
               `${formatCurrency(totalPrice)} 결제하기`
             )}
