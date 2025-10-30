@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export default function footers() {
+export default function Footers() {
   return (
     <footer>
       <div className='px-4 py-2 bg-gray-100'>
