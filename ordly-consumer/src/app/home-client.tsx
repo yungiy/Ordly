@@ -1,7 +1,6 @@
 'use client';
 
 import Category from '@/features/menus/category';
-import { useMemo, useState, useRef, useEffect } from 'react';
 import { useCategoryScroll } from '@/hooks/useCategoryScroll.hooks';
 import { useMenus } from '@/hooks/useMenus.hooks';
 import dynamic from 'next/dynamic';
