@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]/route';
 import { Order } from '@/types/types';
 import { reverseStatusMap, transformOrder } from '@/utils/order';
+import { authOptions } from '@/lib/auth';
 
 export async function PATCH(
   request: Request,
@@ -22,7 +22,7 @@ export async function PATCH(
     const body = await request.json();
     const newStatus = body.status as Order['status'];
 
-    // 요청 본문 유효성 검사
+
     if (!newStatus || !Object.keys(reverseStatusMap).includes(newStatus)) {
       return NextResponse.json({ error: '잘못된 상태 값입니다.' }, { status: 400 });
     }

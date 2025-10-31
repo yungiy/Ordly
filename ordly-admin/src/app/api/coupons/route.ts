@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../auth/[...nextauth]/route';
 import crypto from 'crypto';
+import { authOptions } from '@/lib/auth';
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -30,17 +30,23 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
 
-  if (!session || !session.user?.storeId) {
+  const storeId = session?.user?.storeId;
+  if (!storeId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
     const body = await req.json();
-    const { title, description, discountType, discountValue, validFrom, validUntil } =
-      body;
+    const {
+      title,
+      description,
+      discountType,
+      discountValue,
+      validFrom,
+      validUntil,
+    } = body;
 
     const code = `COUPON${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
-    const storeId = session.user.storeId as string;
 
     const newCoupon = await prisma.coupon.create({
       data: {
@@ -56,6 +62,7 @@ export async function POST(req: NextRequest) {
     });
     return NextResponse.json(newCoupon, { status: 201 });
   } catch (error) {
+    console.error('Failed to create coupon:', error);
     return NextResponse.json(
       { error: 'Failed to create coupon' },
       { status: 500 }

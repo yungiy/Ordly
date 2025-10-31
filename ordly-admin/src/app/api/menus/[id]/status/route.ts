@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '../../../auth/[...nextauth]/route';
 import { MenuStatus } from '@prisma/client';
+import { authOptions } from '@/lib/auth';
 
 export async function PATCH(
   req: NextRequest,

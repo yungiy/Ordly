@@ -1,11 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { Coupon } from '@prisma/client';
 import CouponTable from './coupons-tables';
 import AddCouponModal, { CouponFormData } from './add-coupons';
 import DeleteCouponModal from './delete-coupon-modal';
+import { useApiQuery } from '@/hooks/useApiQuery';
 import { useApiMutation } from '@/hooks/useApiMutation.hooks';
 import {
   getCoupons,
@@ -18,20 +19,19 @@ import CouponSkeleton from '@/components/skeleton/coupon-skeleton';
 
 export default function Coupons() {
   const queryClient = useQueryClient();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingCoupon, setEditingCoupon] = useState<Coupon | null>(null);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [couponToDelete, setCouponToDelete] = useState<string | null>(null);
+
+  const [modalState, setModalState] = useState<{
+    type: 'add' | 'edit' | 'delete' | null;
+    coupon?: Coupon | null;
+    couponId?: string | null;
+  }>({ type: null });
 
   const {
     data: coupons = [],
     isLoading,
     isError,
     error,
-  } = useQuery<Coupon[]>({
-    queryKey: ['coupons'],
-    queryFn: getCoupons,
-  });
+  } = useApiQuery<Coupon[]>(['coupons'], getCoupons);
 
   const invalidateCouponsQuery = () => {
     queryClient.invalidateQueries({ queryKey: ['coupons'] });
@@ -40,62 +40,57 @@ export default function Coupons() {
   const createCouponMutation = useApiMutation(createCoupon, {
     onSuccess: () => {
       invalidateCouponsQuery();
-      handleCloseModal();
+      handleCloseModals();
     },
   });
 
   const updateCouponMutation = useApiMutation(updateCoupon, {
     onSuccess: () => {
       invalidateCouponsQuery();
-      handleCloseModal();
+      handleCloseModals();
     },
   });
 
   const deleteCouponMutation = useApiMutation(deleteCoupon, {
     onSuccess: () => {
       invalidateCouponsQuery();
+      handleCloseModals();
     },
   });
 
   const handleOpenEditModal = (id: string) => {
     const couponToEdit = coupons.find((c) => c.id === id);
     if (couponToEdit) {
-      setEditingCoupon(couponToEdit);
-      setIsModalOpen(true);
+      setModalState({ type: 'edit', coupon: couponToEdit });
     }
   };
 
   const handleOpenAddModal = () => {
-    setEditingCoupon(null);
-    setIsModalOpen(true);
+    setModalState({ type: 'add' });
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setEditingCoupon(null);
+  const handleOpenDeleteModal = (id: string) => {
+    setModalState({ type: 'delete', couponId: id });
   };
 
-  const handleDelete = (id: string) => {
-    setCouponToDelete(id);
-    setIsDeleteModalOpen(true);
+  const handleCloseModals = () => {
+    setModalState({ type: null });
   };
 
   const confirmDelete = () => {
-    if (couponToDelete) {
-      deleteCouponMutation.mutate(couponToDelete);
+    if (modalState.type === 'delete' && modalState.couponId) {
+      deleteCouponMutation.mutate(modalState.couponId);
     }
-    handleCloseDeleteModal();
   };
 
-  const handleCloseDeleteModal = () => {
-    setIsDeleteModalOpen(false);
-    setCouponToDelete(null);
-  };
+  const editingCoupon = modalState.type === 'edit' ? modalState.coupon : null;
 
   const handleSubmit = (data: CouponFormData) => {
-    const couponPayload = {
+    const couponPayload: CreateCouponDto = {
+      title: data.title,
       description: data.description,
-      discountType: data.discountType,
+      discountType:
+        data.discountType === 'FIXED' ? 'FIXED_AMOUNT' : data.discountType,
       discountValue: Number(data.discountValue),
       validFrom: new Date(data.validFrom),
       validUntil: new Date(data.validUntil),
@@ -111,7 +106,7 @@ export default function Coupons() {
         data: updatePayload,
       });
     } else {
-      createCouponMutation.mutate(couponPayload as CreateCouponDto);
+      createCouponMutation.mutate(couponPayload);
     }
   };
 
@@ -124,20 +119,19 @@ export default function Coupons() {
         coupons={coupons}
         onAddNewCoupon={handleOpenAddModal}
         onEdit={handleOpenEditModal}
-        onDelete={handleDelete}
+        onDelete={handleOpenDeleteModal}
       />
-      {isModalOpen && (
-        <AddCouponModal
-          open={isModalOpen}
-          onClose={handleCloseModal}
-          onSubmit={handleSubmit}
-          initialData={editingCoupon}
-        />
-      )}
+      <AddCouponModal
+        open={modalState.type === 'add' || modalState.type === 'edit'}
+        onClose={handleCloseModals}
+        onSubmit={handleSubmit}
+        initialData={editingCoupon}
+      />
       <DeleteCouponModal
-        open={isDeleteModalOpen}
-        onClose={handleCloseDeleteModal}
+        open={modalState.type === 'delete'}
+        onClose={handleCloseModals}
         onConfirm={confirmDelete}
+        isPending={deleteCouponMutation.isPending}
       />
     </div>
   );

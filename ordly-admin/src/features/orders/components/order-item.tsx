@@ -14,11 +14,16 @@ export default function OrderItem({
   onOpenModal,
   onUpdateStatus,
 }: Props) {
-  const statusBgColor: Record<Order['status'], string> = {
-    준비중: 'bg-blue-50',
-    조리중: 'bg-yellow-50',
-    완료: 'bg-green-50',
-    취소: 'bg-red-50',
+  const statusStyles: Record<Order['status'], string> = {
+    준비중: 'bg-blue-50 border-blue-200',
+    조리중: 'bg-yellow-50 border-yellow-200',
+    완료: 'bg-green-50 border-green-200',
+    취소: 'bg-red-50 border-red-200',
+  };
+
+  const statusButtonStyles: Partial<Record<Order['status'], string>> = {
+    준비중: 'bg-blue-400 text-white',
+    조리중: 'bg-yellow-500 text-white',
   };
 
   const getNextStatus = (): Order['status'] | null => {
@@ -32,6 +37,17 @@ export default function OrderItem({
     }
   };
 
+  const getNextStatusText = (): string => {
+    switch (order.status) {
+      case '준비중':
+        return '조리 시작';
+      case '조리중':
+        return '조리 완료';
+      default:
+        return '완료';
+    }
+  };
+
   const handleStatusUpdate = () => {
     const nextStatus = getNextStatus();
     if (nextStatus) {
@@ -39,35 +55,43 @@ export default function OrderItem({
     }
   };
   return (
-    <div
+    <li
       className={twMerge(
-        'flex justify-between items-center p-3 rounded-lg',
-        statusBgColor[order.status]
+        'flex flex-col p-3 rounded-lg border-l-4',
+        statusStyles[order.status]
       )}
     >
-      <div>
-        <p className='font-bold text-lg text-gray-800'>
-          {order.items[0]?.name ?? '항목 없음'}
-        </p>
-        <p className='text-sm text-gray-500'>주문번호: {order.orderNumber}</p>
+      <div className='flex justify-between items-start w-full'>
+        <div>
+          <p className='font-bold text-md text-gray-800'>
+            #{order.orderNumber}
+          </p>
+          <p className='text-xs text-gray-600 mt-0.5'>
+            {order.items[0]?.name ?? '주문 항목 없음'}
+            {order.items.length > 1 && ` 외 ${order.items.length - 1}개`}
+          </p>
+        </div>
       </div>
 
-      <div className='flex gap-2'>
+      <div className='flex gap-1.5 mt-3 pt-2 border-t border-dashed'>
         <Button
           onClick={() => onOpenModal(order)}
-          className='px-2 text-sm border rounded-xl text-gray-800'
+          className='w-full bg-gray-800 text-white font-semibold py-1.5 rounded-md text-sm hover:bg-gray-700 transition-colors'
         >
           상세
         </Button>
         {order.status !== '완료' && order.status !== '취소' && (
           <Button
             onClick={handleStatusUpdate}
-            className='px-2 border text-sm rounded-xl text-gray-800'
+            className={twMerge(
+              'w-full font-semibold py-1.5 rounded-md text-sm transition-colors disabled:bg-gray-400',
+              statusButtonStyles[order.status]
+            )}
           >
-            완료
+            {getNextStatusText()}
           </Button>
         )}
       </div>
-    </div>
+    </li>
   );
 }

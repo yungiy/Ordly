@@ -3,6 +3,7 @@ import { Coupon } from '@prisma/client';
 const API_BASE_URL = '/api';
 
 export type CreateCouponDto = {
+  title: string;
   description: string;
   discountType: 'FIXED_AMOUNT' | 'PERCENTAGE';
   discountValue: number;

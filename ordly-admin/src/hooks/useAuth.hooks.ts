@@ -3,7 +3,7 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import { useAuthStore } from '@/store/auth.store';
 import { useRouter } from 'next/navigation';
 import { LoginRequest } from '@/types/types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { registerApi } from '@/features/auth/api/auth.api';
 
 export const useAuth = () => {
@@ -15,6 +15,8 @@ export const useAuth = () => {
     isAuthenticated,
     session: localSession,
   } = useAuthStore();
+
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -36,16 +38,23 @@ export const useAuth = () => {
   });
 
   const login = async (data: LoginRequest) => {
-    const result = await signIn('credentials', {
-      ...data,
-      redirect: false,
-    });
+    setIsLoggingIn(true);
+    try {
+      const result = await signIn('credentials', {
+        ...data,
+        redirect: false,
+      });
 
-    if (result?.error) {
-      console.log('로그인에 실패했습니다. 이름 또는 비밀번호를 확인해주세요.');
-      return;
+      if (result?.error) {
+        console.log('로그인에 실패했습니다. 이름 또는 비밀번호를 확인해주세요.');
+        return;
+      }
+      router.replace('/');
+    } catch (error) {
+      console.error('로그인 중 예기치 않은 오류가 발생했습니다:', error);
+    } finally {
+      setIsLoggingIn(false);
     }
-    router.replace('/');
   };
 
   const logout = async () => {
@@ -62,5 +71,6 @@ export const useAuth = () => {
     logout,
     signup,
     isSigningUp,
+    isLoggingIn,
   };
 };

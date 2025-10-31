@@ -1,6 +1,5 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import CardItem from '@/components/common/card-item';
 import ReservationItem from './reservation-item';
@@ -10,7 +9,7 @@ import {
   ReservationStatus as FrontendReservationStatus,
 } from '@/types/types';
 import ReservationSkeleton from '@/components/skeleton/reservation-skeleton';
-import { getReservationsByDate } from '../api/reservations.api';
+import { useReservations } from '@/hooks/useReservations.hooks';
 
 const transformReservation = (res: PrismaReservation): FrontendReservation => {
   let status: FrontendReservationStatus;
@@ -49,10 +48,9 @@ export default function ReservationToday() {
   });
   const title = `${formattedDate}의 예약`;
 
-  const { data: reservations, isLoading } = useQuery<PrismaReservation[]>({
-    queryKey: ['reservations', today.toISOString().split('T')[0]],
-    queryFn: () => getReservationsByDate(today.toISOString().split('T')[0]),
-  });
+  const { data: reservations, isLoading } = useReservations(
+    today.toISOString().split('T')[0]
+  );
 
   useEffect(() => {
     setIsClient(true);

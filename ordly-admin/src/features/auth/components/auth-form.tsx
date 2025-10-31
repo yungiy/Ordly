@@ -16,7 +16,7 @@ type AuthMode = 'login' | 'register';
 
 export default function AuthForm() {
   const [mode, setMode] = useState<AuthMode>('login');
-  const { login, signup, isSigningUp } = useAuth();
+  const { login, signup, isLoggingIn, isSigningUp } = useAuth();
 
   const {
     register,
@@ -176,12 +176,14 @@ export default function AuthForm() {
         <Button
           type='submit'
           className='w-full bg-yellow-400 font-bold py-3 text-xl text-white'
-          disabled={isSigningUp}
+          disabled={isLoggingIn || isSigningUp}
         >
-          {isSigningUp
-            ? '처리 중...'
-            : mode === 'login'
-            ? '로그인'
+          {mode === 'login'
+            ? isLoggingIn
+              ? '로그인 중...'
+              : '로그인'
+            : isSigningUp
+            ? '회원가입 중...'
             : '회원가입'}
         </Button>
       </form>

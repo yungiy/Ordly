@@ -30,7 +30,7 @@ export default function Modal({ open, onClose, children }: Props) {
     <Portal containerId='modal-root'>
       <div className='fixed inset-0 z-50 flex items-center justify-center'>
         <div className='absolute inset-0 bg-black/50' />
-        <div className='relative rounded-lg bg-white w-xl p-8 shadow-lg'>
+        <div className='relative rounded-lg bg-white p-8 shadow-lg'>
           {children}
         </div>
       </div>
