@@ -86,20 +86,30 @@ export default function ReservationToday() {
   );
 
   return (
-    <CardItem title={title} className='flex-grow overflow-y-auto'>
-      <div className='space-y-4'>
-        {scheduled.map((res) => (
-          <ReservationItem key={res.id} reservation={res} />
-        ))}
+    <CardItem title={title} className='flex flex-col flex-grow overflow-hidden'>
+      <ul className='flex-grow overflow-y-auto space-y-2'>
+        {scheduled.length > 0 && (
+          <li>
+            <h3 className='font-semibold text-gray-900 py-2'>
+              예정된 예약 ({scheduled.length})
+            </h3>
+            {scheduled.map((res) => (
+              <ReservationItem key={res.id} reservation={res} />
+            ))}
+          </li>
+        )}
 
         {cancelled.length > 0 && (
-          <div className='flex flex-col gap-2'>
+          <li>
+            <h3 className='font-semibold text-gray-900 py-2 mt-2'>
+              취소된 예약 ({cancelled.length})
+            </h3>
             {cancelled.map((res) => (
               <ReservationItem key={res.id} reservation={res} />
             ))}
-          </div>
+          </li>
         )}
-      </div>
+      </ul>
     </CardItem>
   );
 }

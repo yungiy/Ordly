@@ -23,7 +23,7 @@ export default function MenuList({
   }, {} as Record<string, Menus[]>);
 
   return (
-    <CardItem className='flex flex-col overflow-auto'>
+    <CardItem className='flex flex-col overflow-auto scrollbar-hide '>
       <div className='flex justify-between items-center mb-4'>
         <h2 className='text-2xl font-bold'>메뉴 목록</h2>
         <Button
@@ -36,10 +36,13 @@ export default function MenuList({
       <div className='pr-2 overflow-auto'>
         {Object.entries(groupedMenus).map(([category, items]) => (
           <div key={category} className='mb-6'>
-            <h3 className='font-bold text-lg text-gray-700 border-b border-b-gray-400 pb-2 mb-3'>
-              {category}
-            </h3>
-            <div className='flex flex-col gap-2'>
+            <div className='flex justify-between items-center mb-3 px-1 py-2 border-b border-gray-200'>
+              <h3 className='font-bold text-lg text-gray-800'>{category}</h3>
+              <span className='bg-gray-700 text-white px-2.5 font-bold rounded-full'>
+                {items.length}
+              </span>
+            </div>
+            <div className='flex flex-col'>
               {items.map((item) => (
                 <MenuItem
                   key={item.id}

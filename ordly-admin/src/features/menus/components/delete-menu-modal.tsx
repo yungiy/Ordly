@@ -19,14 +19,14 @@ export default function DeleteMenuModal({
 }: Props) {
   return (
     <Modal open={open} onClose={onClose}>
-      <div className='w-full flex justify-between items-center mb-4'>
+      <div className='min-w-sm flex justify-between items-center mb-4'>
         <h2 className='font-bold text-xl'>메뉴 삭제</h2>
         <Button onClick={onClose} className='w-10 h-10'>
           <X />
         </Button>
       </div>
       <p className='mb-6'>
-        정말로 이 메뉴를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.
+        이 메뉴를 삭제하시겠습니까?
       </p>
       <div className='flex justify-end gap-2'>
         <Button

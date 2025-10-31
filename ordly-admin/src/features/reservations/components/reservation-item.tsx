@@ -1,5 +1,6 @@
-import { Phone } from 'lucide-react';
+import { Clock, Phone, Users } from 'lucide-react';
 import { Reservation, ReservationStatus } from '@/types/types';
+import { twMerge } from 'tailwind-merge';
 
 const statusStyles: { [key in ReservationStatus]: string } = {
   confirmed: 'bg-blue-100 text-blue-800',
@@ -19,25 +20,31 @@ type Props = {
 
 export default function ReservationItem({ reservation }: Props) {
   return (
-    <li className='flex flex-col gap-1'>
+    <li className='flex flex-col gap-2 py-2 border-gray-200 hover:bg-gray-100/50 transition-colors duration-150'>
       <div className='flex justify-between items-center'>
-        <div>
-          <p className='font-bold text-gray-900'>
-            {reservation.time} - {reservation.name} 님 ({reservation.partySize}
-            명)
-          </p>
-          <div className='flex items-center gap-2 text-sm text-gray-600'>
-            <Phone size={12} />
-            <span>{reservation.phone}</span>
-          </div>
-        </div>
+        <p className='font-bold text-gray-800'>{reservation.name} 님</p>
         <span
-          className={`flex my-2 px-3 py-1 items-center rounded-full text-xs font-semibold ${
+          className={twMerge(
+            'px-2.5 py-0.5 rounded-full text-xs font-semibold',
             statusStyles[reservation.status]
-          }`}
+          )}
         >
           {statusLabels[reservation.status]}
         </span>
+      </div>
+      <div className='flex items-center gap-3 text-sm text-gray-600'>
+        <div className='flex items-center gap-1.5'>
+          <Clock size={14} className='text-gray-400' />
+          <span>{reservation.time}</span>
+        </div>
+        <div className='flex items-center gap-1.5'>
+          <Users size={14} className='text-gray-400' />
+          <span>{reservation.partySize}명</span>
+        </div>
+        <div className='flex items-center gap-1.5'>
+          <Phone size={14} className='text-gray-400' />
+          <span>{reservation.phone}</span>
+        </div>
       </div>
     </li>
   );

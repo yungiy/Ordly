@@ -1,5 +1,6 @@
 'use client';
 
+import Button from '@/components/common/button';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import CardItem from '@/components/common/card-item';
@@ -24,6 +25,11 @@ const fetchPopularMenus = async (period: string): Promise<MenuData[]> => {
 
 export default function PopMenuList() {
   const [period, setPeriod] = useState('monthly');
+  const periods = [
+    { value: 'monthly', label: '이번달' },
+    { value: 'six-months', label: '6개월' },
+    { value: 'yearly', label: '1년' },
+  ];
 
   const { data: menus, isLoading } = useQuery({
     queryKey: ['popularMenus', period],
@@ -31,20 +37,30 @@ export default function PopMenuList() {
   });
 
   return (
-    <CardItem>
-      <div className='flex justify-between pb-4'>
-        <h2 className='flex items-center font-bold text-xl'>인기메뉴</h2>
-        <select
-          value={period}
-          onChange={(e) => setPeriod(e.target.value)}
-          className='p-2 rounded-sm border border-gray-400 text-gray-700 font-semibold focus:outline-none'
-        >
-          <option value='monthly'>이번달</option>
-          <option value='six-months'>6개월</option>
-          <option value='yearly'>1년</option>
-        </select>
+    <CardItem className='flex flex-col'>
+      <div className='flex justify-between items-center mb-4'>
+        <h2 className='font-bold text-xl'>인기 메뉴</h2>
+        <div className='flex items-center p-1 bg-gray-100 rounded-lg flex-nowrap'>
+          {periods.map((p) => (
+            <Button
+              key={p.value}
+              onClick={() => setPeriod(p.value)}
+              className={`
+                px-4 py-2 text-xs font-semibold rounded-md transition-colors 
+                w-auto h-auto flex-1 whitespace-nowrap
+                ${
+                  period === p.value
+                    ? 'bg-white text-gray-800 shadow-sm'
+                    : 'bg-transparent text-gray-500 hover:text-gray-700'
+                }
+              `}
+            >
+              {p.label}
+            </Button>
+          ))}
+        </div>
       </div>
-      <div className='space-y-3 pt-2'>
+      <div className='flex-grow overflow-y-auto pr-2'>
         {isLoading ? (
           <MenuListSkeleton />
         ) : (
