@@ -114,16 +114,16 @@ export default function GraphVisualizer({ startDate, endDate }: Props) {
   }, [startDate, endDate]);
 
   return (
-    <div className='flex flex-col space-y-2'>
-      <div>
-        <h2 className='text-lg font-bold mb-2'>메뉴별 매출 현황</h2>
-        <div className='h-[300px]'>
+    <div className='flex flex-col gap-6 mt-4'>
+      <div className='p-2 rounded-lg bg-white'>
+        <h2 className='text-lg font-bold mb-4 text-gray-700'>메뉴별 매출 현황</h2>
+        <div className='h-64'>
           <BarChart data={barChartData} dataKey='name' />
         </div>
       </div>
-      <div>
-        <h2 className='text-lg font-bold mb-2'>월별 매출 추이</h2>
-        <div className='h-[300px]'>
+      <div className='p-2 rounded-lg bg-white'>
+        <h2 className='text-lg font-bold mb-4 text-gray-700'>월별 매출 추이</h2>
+        <div className='h-64'>
           <LineChart data={lineChartData} dataKey='name' />
         </div>
       </div>

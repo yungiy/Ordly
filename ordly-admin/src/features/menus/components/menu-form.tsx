@@ -96,19 +96,15 @@ export default function MenuForm({
   return (
     <CardItem className='overflow-auto scrollbar-hide relative'>
       {isLoading && <div className='absolute inset-0 bg-white/50 z-10' />}
-      <div className='flex justify-between items-center mb-2'>
+      <div className='flex justify-between items-center pb-1'>
         <h3 className='text-2xl font-bold'>{title}</h3>
-        <Button
-          onClick={onClose}
-          className='w-auto h-auto p-1 rounded-full hover:bg-gray-200'
-        >
+        <Button onClick={onClose} className='w-auto'>
           <X size={30} />
         </Button>
       </div>
-
       <form onSubmit={handleSubmit} className='flex flex-col flex-grow'>
-        <div className='flex-grow overflow-y-auto pr-4'>
-          <div className='flex flex-col gap-4'>
+        <div className='flex-grow overflow-y-auto'>
+          <div className='flex flex-col gap-3'>
             <div className='flex flex-col gap-1'>
               <label className='font-semibold'>메뉴 이름</label>
               <Input
@@ -122,7 +118,7 @@ export default function MenuForm({
             <div className='flex flex-col gap-1'>
               <label className='font-semibold'>카테고리</label>
               <select
-                className='border border-gray-400 focus:outline-none px-4 py-2 rounded-md text-black bg-white'
+                className='border border-gray-400 focus:outline-none px-2 py-2.5 rounded-md text-black bg-white'
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
                 required
@@ -156,7 +152,7 @@ export default function MenuForm({
             </div>
             <div className='flex flex-col gap-1'>
               <label className='font-semibold'>이미지 업로드</label>
-              <div className='mt-1 flex justify-center px-6 py-4 border-2 border-gray-300 border-dashed rounded-md'>
+              <div className='mt-1 flex justify-center px-6 py-2 border-2 border-gray-300 border-dashed rounded-md'>
                 <div className='space-y-1 text-center'>
                   {imagePreview ? (
                     <div className='relative group w-32 h-32 mx-auto'>
@@ -183,7 +179,7 @@ export default function MenuForm({
                       htmlFor='image-upload'
                       className='relative cursor-pointer bg-white rounded-md font-medium text-yellow-600 hover:text-yellow-500 focus-within:outline-none'
                     >
-                      <span>파일 선택</span>
+                      <span className='text-lg'>파일 선택</span>
                       <input
                         id='image-upload'
                         name='image-upload'

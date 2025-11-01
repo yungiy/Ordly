@@ -20,7 +20,7 @@ type Props = {
 
 export default function ReservationItem({ reservation }: Props) {
   return (
-    <li className='flex flex-col gap-2 py-2 border-gray-200 hover:bg-gray-100/50 transition-colors duration-150'>
+    <li className='flex flex-col gap-2 py-2 hover:bg-gray-50 transition-colors duration-150'>
       <div className='flex justify-between items-center'>
         <p className='font-bold text-gray-800'>{reservation.name} 님</p>
         <span

@@ -10,27 +10,37 @@ export default function Graph() {
   const [endDate, setEndDate] = useState('2023-11-30');
 
   return (
-    <CardItem className='overflow-auto scrollbar-hide'>
-      <div className='flex justify-between items-center'>
+    <CardItem className='p-4'>
+      <div className='flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4'>
         <h2 className='font-bold text-xl'>각종 그래프로 보기</h2>
-        <div className='flex space-x-2'>
-          <Input
-            type='date'
-            className='border border-gray-400'
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
-          <Input
-            type='date'
-            className='border border-gray-400'
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-          />
+        <div className='flex items-center gap-4 flex-nowrap'>
+          <div className='flex items-center gap-2'>
+            <label htmlFor='startDate' className='text-sm font-medium text-gray-600 whitespace-nowrap'>
+              시작일
+            </label>
+            <Input
+              id='startDate'
+              type='date'
+              className='border border-gray-300 rounded-md p-1.5 text-sm w-full'
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+          </div>
+          <div className='flex items-center gap-2'>
+            <label htmlFor='endDate' className='text-sm font-medium text-gray-600 whitespace-nowrap'>
+              종료일
+            </label>
+            <Input
+              id='endDate'
+              type='date'
+              className='border border-gray-300 rounded-md p-1.5 text-sm w-full'
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+          </div>
         </div>
       </div>
-      <div>
-        <GraphVisualizer startDate={startDate} endDate={endDate} />
-      </div>
+      <GraphVisualizer startDate={startDate} endDate={endDate} />
     </CardItem>
   );
 }
