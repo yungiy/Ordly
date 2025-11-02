@@ -21,7 +21,7 @@ export type Order = {
 };
 
 export type CouponStatus = '활성' | '기간 만료';
-export type CouponType = '정률' | '정액';
+export type CouponType = '정률권' | '정액권';
 
 export type Coupons = {
   id: string;

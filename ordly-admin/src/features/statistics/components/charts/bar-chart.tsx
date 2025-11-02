@@ -83,13 +83,13 @@ export default function BarChart({ data, dataKey }: Props) {
         <XAxis
           dataKey={dataKey}
           stroke='#a0a0a0'
-          fontSize={11}
+          fontSize={12}
           tickLine={false}
           axisLine={false}
         />
         <YAxis
           stroke='#a0a0a0'
-          fontSize={11}
+          fontSize={10}
           tickLine={false}
           axisLine={false}
           tickFormatter={(value: number) =>

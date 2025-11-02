@@ -114,14 +114,14 @@ export default function GraphVisualizer({ startDate, endDate }: Props) {
   }, [startDate, endDate]);
 
   return (
-    <div className='flex flex-col gap-6 mt-4'>
-      <div className='p-2 rounded-lg bg-white'>
+    <div className='flex flex-col gap-3 mt-2'>
+      <div className='rounded-lg bg-white'>
         <h2 className='text-lg font-bold mb-4 text-gray-700'>메뉴별 매출 현황</h2>
         <div className='h-64'>
           <BarChart data={barChartData} dataKey='name' />
         </div>
       </div>
-      <div className='p-2 rounded-lg bg-white'>
+      <div className='rounded-lg bg-white'>
         <h2 className='text-lg font-bold mb-4 text-gray-700'>월별 매출 추이</h2>
         <div className='h-64'>
           <LineChart data={lineChartData} dataKey='name' />
