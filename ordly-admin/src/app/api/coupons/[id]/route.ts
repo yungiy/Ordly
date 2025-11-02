@@ -8,14 +8,12 @@ export async function PUT(
   context: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
-  // @ts-ignore
   if (!session || !session.user?.storeId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
     const id = context.params.id;
-    // @ts-ignore
     const userStoreId = session.user.storeId as string;
 
     const coupon = await prisma.coupon.findUnique({
@@ -67,14 +65,12 @@ export async function DELETE(
   context: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
-  // @ts-ignore
   if (!session || !session.user?.storeId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
     const id = context.params.id;
-    // @ts-ignore
     const userStoreId = session.user.storeId as string;
 
     const coupon = await prisma.coupon.findUnique({
@@ -92,7 +88,7 @@ export async function DELETE(
     await prisma.coupon.delete({
       where: { id: id },
     });
-    return new NextResponse(null, { status: 204 }); // No Content
+    return new NextResponse(null, { status: 204 });
   } catch (error) {
     console.error(`Failed to delete coupon ${context.params.id}:`, error);
     return NextResponse.json(

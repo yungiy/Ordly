@@ -4,7 +4,7 @@ import Button from '@/components/common/button';
 import Input from '@/components/common/input';
 import Modal from '@/components/common/modal';
 import { X } from 'lucide-react';
-import { useForm, SubmitHandler, FieldError, UseFormRegister, Path } from 'react-hook-form';
+import { useForm, SubmitHandler, FieldError, Path } from 'react-hook-form';
 import type { Coupon } from '@prisma/client';
 import { useEffect, ReactNode } from 'react';
 import { formatDateToYYYYMMDD } from '@/utils/date';

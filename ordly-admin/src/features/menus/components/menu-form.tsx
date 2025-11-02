@@ -1,10 +1,19 @@
 import Button from '@/components/common/button';
 import CardItem from '@/components/common/card-item';
 import Input from '@/components/common/input';
-import { useCreateMenu, useUpdateMenu } from '@/hooks/useMenus.hooks';
+import {
+  useCreateMenu,
+  useUpdateMenu,
+} from '@/hooks/useMenus.hooks';
 import { Category, Menus } from '@/types/types';
 import { UploadCloud, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+
+type MenuFormData = Omit<Menus, 'id' | 'price' | 'category' | 'imageUrl' | 'image'> & {
+  price: number;
+  categoryId: string;
+};
 
 type Props = {
   selectedMenu: Menus | 'new';
@@ -22,33 +31,41 @@ export default function MenuForm({
   const isNew = selectedMenu === 'new';
   const title = isNew ? '새 메뉴 추가' : '메뉴 수정';
 
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [categoryId, setCategoryId] = useState('');
-  const [description, setDescription] = useState('');
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<MenuFormData>();
+
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const { mutate: createMenu, isPending: isCreating } = useCreateMenu();
   const { mutate: updateMenu, isPending: isUpdating } = useUpdateMenu();
 
   useEffect(() => {
     if (!isNew) {
-      setName(selectedMenu.name);
-      setPrice(selectedMenu.price.toString());
-      setCategoryId(selectedMenu.category.id);
-      setDescription(selectedMenu.description || '');
+      reset({
+        name: selectedMenu.name,
+        price: selectedMenu.price,
+        categoryId: selectedMenu.category.id,
+        description: selectedMenu.description || '',
+      });
       setImagePreview(selectedMenu.imageUrl || null);
       setImage(null);
     } else {
-      setName('');
-      setPrice('');
-      setCategoryId('');
-      setDescription('');
+      reset({
+        name: '',
+        price: 0,
+        categoryId: '',
+        description: '',
+      });
       setImage(null);
       setImagePreview(null);
     }
-  }, [selectedMenu, isNew]);
+  }, [selectedMenu, isNew, reset]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -61,21 +78,18 @@ export default function MenuForm({
   const handleRemoveImage = () => {
     setImage(null);
     setImagePreview(null);
-    const fileInput = document.getElementById(
-      'image-upload'
-    ) as HTMLInputElement;
-    if (fileInput) fileInput.value = '';
+    if (imageInputRef.current) {
+      imageInputRef.current.value = '';
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const onSubmit: SubmitHandler<MenuFormData> = (data) => {
     const formData = new FormData();
-    formData.append('name', name);
-    formData.append('price', price);
-    formData.append('categoryId', categoryId);
-    if (description) {
-      formData.append('description', description);
+    formData.append('name', data.name);
+    formData.append('price', String(data.price));
+    formData.append('categoryId', data.categoryId);
+    if (data.description) {
+      formData.append('description', data.description);
     }
     if (image) {
       formData.append('image', image);
@@ -85,7 +99,7 @@ export default function MenuForm({
       createMenu(formData, { onSuccess });
     } else {
       updateMenu(
-        { id: (selectedMenu as Menus).id, formData: formData },
+        { id: (selectedMenu as Menus).id, formData },
         { onSuccess }
       );
     }
@@ -102,7 +116,10 @@ export default function MenuForm({
           <X size={30} />
         </Button>
       </div>
-      <form onSubmit={handleSubmit} className='flex flex-col flex-grow'>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className='flex flex-col flex-grow'
+      >
         <div className='flex-grow overflow-y-auto'>
           <div className='flex flex-col gap-3'>
             <div className='flex flex-col gap-1'>
@@ -110,18 +127,19 @@ export default function MenuForm({
               <Input
                 type='text'
                 className='border border-gray-400'
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
+                {...register('name', { required: '메뉴 이름을 입력해주세요.' })}
               />
+              {errors.name && (
+                <p className='text-red-500 text-sm'>{errors.name.message}</p>
+              )}
             </div>
             <div className='flex flex-col gap-1'>
               <label className='font-semibold'>카테고리</label>
               <select
                 className='border border-gray-400 focus:outline-none px-2 py-2.5 rounded-md text-black bg-white'
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-                required
+                {...register('categoryId', {
+                  required: '카테고리를 선택해주세요.',
+                })}
               >
                 <option value=''>카테고리 선택</option>
                 {categories.map((cat) => (
@@ -130,24 +148,32 @@ export default function MenuForm({
                   </option>
                 ))}
               </select>
+              {errors.categoryId && (
+                <p className='text-red-500 text-sm'>
+                  {errors.categoryId.message}
+                </p>
+              )}
             </div>
             <div className='flex flex-col gap-1'>
               <label className='font-semibold'>가격</label>
               <Input
                 type='number'
                 className='border border-gray-400'
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                required
+                {...register('price', {
+                  required: '가격을 입력해주세요.',
+                  valueAsNumber: true,
+                })}
               />
+              {errors.price && (
+                <p className='text-red-500 text-sm'>{errors.price.message}</p>
+              )}
             </div>
             <div className='flex flex-col gap-1'>
               <label className='font-semibold'>설명</label>
               <textarea
                 rows={4}
                 className='border border-gray-400 focus:outline-none px-4 py-2 rounded-md text-black'
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                {...register('description')}
               />
             </div>
             <div className='flex flex-col gap-1'>
@@ -181,11 +207,11 @@ export default function MenuForm({
                     >
                       <span className='text-lg'>파일 선택</span>
                       <input
-                        id='image-upload'
-                        name='image-upload'
                         type='file'
                         className='sr-only'
+                        id='image-upload'
                         onChange={handleImageChange}
+                        ref={imageInputRef}
                         accept='image/*'
                       />
                     </label>
