@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Header from '@/components/layout/header';
 import OrderHistoryEmpty from './order-history-empty';
 import OrderHistoryList from './order-history-list';
+import OrderHistorySkeleton from '../../components/skeleton/order-history-skeleton';
 import type { OrderWithItems } from './order-history-list';
 
 export default function OrderHistoryPage() {
@@ -61,6 +62,7 @@ export default function OrderHistoryPage() {
           {error}
         </div>
       )}
+      {loading && <OrderHistorySkeleton />}
       {!loading &&
         !error &&
         (orders.length === 0 ? (
