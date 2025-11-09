@@ -55,9 +55,9 @@ export default function OrderItem({
     }
   };
   return (
-    <li
+    <div
       className={twMerge(
-        'flex flex-col p-3 rounded-lg border-l-4',
+        'flex flex-col p-3 rounded-md',
         statusStyles[order.status]
       )}
     >
@@ -73,7 +73,7 @@ export default function OrderItem({
         </div>
       </div>
 
-      <div className='flex gap-1.5 mt-3 pt-2 border-t border-dashed'>
+      <div className='flex gap-1.5 mt-3 pt-2 border-t-2 border-gray-400 border-dashed'>
         <Button
           onClick={() => onOpenModal(order)}
           className='w-full bg-gray-800 text-white font-semibold py-1.5 rounded-md text-sm hover:bg-gray-700 transition-colors'
@@ -92,6 +92,6 @@ export default function OrderItem({
           </Button>
         )}
       </div>
-    </li>
+    </div>
   );
 }

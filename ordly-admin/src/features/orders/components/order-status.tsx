@@ -17,7 +17,7 @@ export default function OrderStatus({
 }: Props) {
   return (
     <CardItem title={title}>
-      <ul className='flex flex-col gap-3 overflow-auto'>
+      <ul className='flex flex-col gap-2 overflow-auto'>
         {orders.map((order) => (
           <OrderItem
             key={order.id}
