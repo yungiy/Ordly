@@ -19,7 +19,7 @@ type Props = {
   selectedDate: Date | null;
 };
 
-const transformReservation = (
+export const transformReservation = (
   res: PrismaReservation,
   index: number,
   isPast: boolean

@@ -4,53 +4,25 @@ import { useState, useEffect } from 'react';
 import CardItem from '@/components/common/card-item';
 import ReservationItem from './reservation-item';
 import { Reservation as PrismaReservation } from '@prisma/client';
-import {
-  Reservation as FrontendReservation,
-  ReservationStatus as FrontendReservationStatus,
-} from '@/types/types';
 import ReservationSkeleton from '@/components/skeleton/reservation-skeleton';
-import { useReservations } from '@/hooks/useReservations.hooks';
+import { transformReservation } from './reservation-list';
 
-const transformReservation = (res: PrismaReservation): FrontendReservation => {
-  let status: FrontendReservationStatus;
-
-  status =
-    res.status === 'CONFIRMED' || res.status === 'REQUESTED'
-      ? 'confirmed'
-      : 'cancelled';
-
-  return {
-    id: res.id,
-    time: new Date(res.reservationTime).toLocaleTimeString('ko-KR', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    }),
-    name: res.customerName,
-    partySize: res.numberOfGuests,
-    phone: res.customerPhone,
-    status: status,
-  };
+type Props = {
+  reservations: PrismaReservation[] | undefined;
+  isLoading: boolean;
 };
 
-export default function ReservationToday() {
+export default function ReservationToday({ reservations, isLoading }: Props) {
   const [isClient, setIsClient] = useState(false);
-  const [today] = useState(() => {
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-    return now;
-  });
 
-  const formattedDate = today.toLocaleDateString('ko-KR', {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const title = `${today.toLocaleDateString('ko-KR', {
     year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-  const title = `${formattedDate}의 예약`;
-
-  const { data: reservations, isLoading } = useReservations(
-    today.toISOString().split('T')[0]
-  );
+    month: '2-digit',
+    day: '2-digit',
+  })} 예약`;
 
   useEffect(() => {
     setIsClient(true);
@@ -75,7 +47,7 @@ export default function ReservationToday() {
   }
 
   const transformedReservations = reservations.map((res, i) =>
-    transformReservation(res)
+    transformReservation(res, i, false)
   );
 
   const scheduled = transformedReservations.filter(
